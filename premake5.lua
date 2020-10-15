@@ -9,7 +9,7 @@ workspace("GJGO")
         language("C++")
 
         buildoptions({"-std=c++1z", "-Wall", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code"})
-        files({"premake5.lua", ".gitignore", "src/*.cpp", "include/*"})
+        files({"premake5.lua", ".gitignore", "src/*", "include/*"})
 
         filter("platforms:LinuxARM")
             architecture("ARM")
