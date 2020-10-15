@@ -1,4 +1,5 @@
 workspace("GJGO")
+    toolset("gcc")
     configurations({"Debug", "Release"})
     platforms({"LinuxARM"})
 
