@@ -1,6 +1,6 @@
 workspace("GJGO")
     configurations({"Debug", "Release"})
-    platforms({"Linux"})
+    platforms({"LinuxARM"})
 
     project("GJGO")
         filename("GJGO")
