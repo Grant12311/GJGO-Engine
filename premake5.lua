@@ -8,6 +8,7 @@ workspace("GJGO")
         kind("StaticLib")
         language("C++")
 
+        buildoptions({"-std=c++1z", "-Wall", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code"})
         files({"premake5.lua", ".gitignore", "src/*.cpp", "include/*"})
 
         filter("platforms:LinuxARM")
@@ -15,7 +16,6 @@ workspace("GJGO")
             system("linux")
 
         filter("configurations:Debug")
-            optimize("Off")
             symbols("On")
             linkoptions({"-fsanitize=address", "-fsanitize=leak", "-static-libasan"})
 
