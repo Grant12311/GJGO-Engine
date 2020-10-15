@@ -17,7 +17,8 @@ workspace("GJGO")
 
         filter("configurations:Debug")
             symbols("On")
-            linkoptions({"-fsanitize=address", "-fsanitize=leak", "-static-libasan"})
+            buildoptions({"-pg"})
+            linkoptions({"-pg", "-fsanitize=address", "-fsanitize=leak", "-static-libasan"})
 
         filter("configurations:Release")
             optimize("On")
