@@ -38,6 +38,7 @@ workspace("GJGO")
 
     project("Game")
         filename("Game")
+        targetdir("examples/Game")
 
         links({"GJGO", "Druid"})
         files({"game/src/*"})
