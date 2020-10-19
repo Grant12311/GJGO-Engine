@@ -34,14 +34,16 @@ workspace("GJGO")
         kind("StaticLib")
         links({"Druid"})
 
-        files({"premake5.lua", ".gitignore", "src/*", "include/*"})
+        files({"premake5.lua", ".gitignore", "src/*", "include/**"})
 
     project("Game")
         filename("Game")
-        targetdir("examples/Game")
+        location("examples/Game")
+        targetdir("examples/Game/bin")
 
+        includedirs({"include"})
         links({"GJGO", "Druid"})
-        files({"game/src/*"})
+        files({"examples/Game/src/*"})
 
         filter("configurations:Debug")
             kind("ConsoleApp")
