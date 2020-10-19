@@ -1,0 +1,3 @@
+[submodule "vendor/Druid"]
+	path = vendor/Druid
+	url = https://github.com/Grant12311/Druid.git
