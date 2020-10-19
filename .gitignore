@@ -1,6 +1,12 @@
 /bin
 /obj
 
+Druid.cbp
+Druid.depend
+Druid.layout
+Game.cbp
+Game.depend
+Game.layout
 GJGO.cbp
 GJGO.depend
 GJGO.layout
