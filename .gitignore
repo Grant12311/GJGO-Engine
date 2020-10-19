@@ -4,6 +4,13 @@
 Druid.cbp
 Druid.depend
 Druid.layout
+
+examples/Game/Game.cbp
+examples/Game/Game.layout
+examples/Game/bin
+examples/Game/gmon.out
+examples/Game/obj
+
 GJGO.cbp
 GJGO.depend
 GJGO.layout
