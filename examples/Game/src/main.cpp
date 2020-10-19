@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../../include/app.hpp"
+#include "GJGO/app.hpp"
 
 int main()
 {
