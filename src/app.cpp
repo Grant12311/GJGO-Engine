@@ -7,7 +7,7 @@ namespace GJGO
         while (this->window.isOpen)
         {
             this->window.update();
-            //this->window.clear();
+            this->window.clear();
             this->window.swapBuffers();
         }
     }
