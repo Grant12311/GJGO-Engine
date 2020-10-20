@@ -40,7 +40,7 @@ workspace("GJGO")
         files({"vendor/Druid/src/**", "vendor/Druid/include/**"})
 
         filter({"configurations:Release", "configurations:Dist"})
-        defines({"DRUID_DISABLE_GLCALL"})
+            defines({"DRUID_DISABLE_GLCALL"})
 
     project("GJGO")
         filename("GJGO")
