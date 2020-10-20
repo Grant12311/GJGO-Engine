@@ -39,7 +39,7 @@ workspace("GJGO")
     project("Game")
         filename("Game")
         location("examples/Game")
-        targetdir("%{prj.path}/bin/%{cfg.platform}-%{cfg.buildcfg}")
+        targetdir("examples/Game/bin/%{cfg.platform}/%{cfg.buildcfg}")
 
         includedirs({"include"})
         links({"GJGO", "Druid"})
