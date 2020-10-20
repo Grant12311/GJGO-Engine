@@ -4,7 +4,7 @@ namespace GJGO
 {
     void Application::run()
     {
-        #ifdef GJGO_BUILD_TARGET_DEBUG
+        #ifndef GJGO_BUILD_TARGET_DIST
             std::cout << glGetString(GL_VERSION) << std::endl;
         #endif // GJGO_BUILD_TARGET_DEBUG
 
