@@ -9,6 +9,6 @@ namespace GJGO
 
         void run();
 
-        Application();
+        Application(const Hangar::Config &a_config = Hangar::Config());
     };
 }
