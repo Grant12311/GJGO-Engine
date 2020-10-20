@@ -24,6 +24,7 @@ workspace("GJGO")
     filter({"configurations:Release", "configurations:Dist"})
         optimize("On")
         flags({"LinkTimeOptimization"})
+        defines({"DRUID_DISABLE_GLCALL"})
 
     filter("configurations:Release")
         defines({"GJGO_BUILD_TARGET_RELEASE"})
@@ -31,7 +32,7 @@ workspace("GJGO")
     filter("configurations:Dist")
         defines({"GJGO_BUILD_TARGET_DIST"})
 
-    include("vendor/Druid")
+    include("vendor/Druid/project.lua")
 
     project("GJGO")
         filename("GJGO")
