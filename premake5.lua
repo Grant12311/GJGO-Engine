@@ -26,6 +26,8 @@ workspace("GJGO")
     project("Druid")
         filename("Druid")
         kind("StaticLib")
+        location("vendor/Druid")
+        targetdir("vendor/Druid/bin/%{cfg.platform}/%{cfg.buildcfg}")
 
         files({"vendor/Druid/src/*", "vendor/Druid/include/*"})
 
