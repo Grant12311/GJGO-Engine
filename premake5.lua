@@ -31,16 +31,7 @@ workspace("GJGO")
     filter("configurations:Dist")
         defines({"GJGO_BUILD_TARGET_DIST"})
 
-    project("Druid")
-        filename("Druid")
-        kind("StaticLib")
-        location("vendor/Druid")
-        targetdir("vendor/Druid/bin/%{cfg.platform}/%{cfg.buildcfg}")
-
-        files({"vendor/Druid/src/**", "vendor/Druid/include/**"})
-
-        filter({"configurations:Release", "configurations:Dist"})
-            defines({"DRUID_DISABLE_GLCALL"})
+    include("vendor/Druid")
 
     project("GJGO")
         filename("GJGO")
