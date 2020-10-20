@@ -1,4 +1,4 @@
-#include "../include/app.hpp"
+#include "../include/GJGO/app.hpp"
 
 namespace GJGO
 {
