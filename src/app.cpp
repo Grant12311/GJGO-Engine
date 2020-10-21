@@ -1,12 +1,11 @@
-#include "../include/GJGO/app.hpp"
+#include <GJGO/app.hpp>
+#include <GJGO/log.hpp>
 
 namespace GJGO
 {
     void Application::run()
     {
-        #ifndef GJGO_BUILD_TARGET_DIST
-            std::cout << glGetString(GL_VERSION) << std::endl;
-        #endif // GJGO_BUILD_TARGET_DEBUG
+        GJGO_LOG_INFO(glGetString(GL_VERSION));
 
         while (this->window.isOpen)
         {
