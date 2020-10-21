@@ -7,7 +7,8 @@ workspace("GJGO")
     includedirs({"include", "vendor/Hangar2/include", "vendor/Druid/include"})
     links({"X11", "GL"})
 
-    buildoptions({"-std=c++1z", "-Wall", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code"})
+    flags({"MultiProcessorCompile"})
+    buildoptions({"-std=c++1z", "-pipe", "-Wall", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code"})
 
     filter("platforms:LinuxARM")
         architecture("ARM")
