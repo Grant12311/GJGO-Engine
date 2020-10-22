@@ -1,5 +1,6 @@
 workspace("GJGO")
     language("C++")
+    cppdialect("C++17")
     toolset("gcc")
     configurations({"Debug", "Release", "Dist"})
     platforms({"LinuxARM"})
@@ -8,7 +9,7 @@ workspace("GJGO")
     links({"X11", "GL"})
 
     flags({"MultiProcessorCompile"})
-    buildoptions({"-std=c++1z", "-pipe", "-Wall", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code"})
+    buildoptions({"-pipe", "-Wall", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code"})
 
     filter("platforms:LinuxARM")
         architecture("ARM")
