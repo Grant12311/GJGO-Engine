@@ -4,3 +4,6 @@
 [submodule "vendor/Hangar2"]
 	path = vendor/Hangar2
 	url = https://github.com/Grant12311/Hangar2
+[submodule "vendor/Beacon"]
+	path = vendor/Beacon
+	url = https://github.com/Grant12311/Beacon.git
