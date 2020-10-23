@@ -15,8 +15,6 @@ workspace("GJGO")
         architecture("ARM")
         system("linux")
 
-        libdirs({"/usr/lib"})
-
     filter("configurations:Debug")
         symbols("On")
         buildoptions({{"-pg", "-fsanitize=address", "-fsanitize=leak", "-static-libasan"}})
