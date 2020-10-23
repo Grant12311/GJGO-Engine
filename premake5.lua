@@ -23,15 +23,16 @@ workspace("GJGO")
         linkoptions({"-pg", "-fsanitize=address", "-fsanitize=leak", "-static-libasan"})
         defines({"GJGO_BUILD_TARGET_DEBUG"})
 
-    filter({"configurations:Release", "configurations:Dist"})
+    filter("configurations:Release")
         optimize("On")
         flags({"LinkTimeOptimization"})
         defines({"DRUID_DISABLE_GLCALL"})
-
-    filter("configurations:Release")
         defines({"GJGO_BUILD_TARGET_RELEASE"})
 
     filter("configurations:Dist")
+        optimize("On")
+        flags({"LinkTimeOptimization"})
+        defines({"DRUID_DISABLE_GLCALL"})
         defines({"GJGO_BUILD_TARGET_DIST"})
 
     include("vendor/Druid/project.lua")
