@@ -10,14 +10,12 @@ namespace GJGO
         while (this->window.isOpen)
         {
             this->window.update();
+            this->onUpdateEvent.call(this);
             this->window.clear();
             this->window.swapBuffers();
         }
     }
 
     Application::Application(const Hangar::Config &a_config) :
-        window(a_config)
-    {
-
-    }
+        window(a_config) {}
 }
