@@ -5,8 +5,6 @@ namespace GJGO
 {
     void Application::run()
     {
-        GJGO_LOG_INFO(glGetString(GL_VERSION));
-
         while (this->window.isOpen)
         {
             this->window.update();
@@ -17,5 +15,8 @@ namespace GJGO
     }
 
     Application::Application(const Hangar::Config &a_config) :
-        window(a_config) {}
+        window(a_config)
+    {
+        GJGO_LOG_INFO(glGetString(GL_VERSION));
+    }
 }
