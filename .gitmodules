@@ -7,3 +7,6 @@
 [submodule "vendor/Beacon"]
 	path = vendor/Beacon
 	url = https://github.com/Grant12311/Beacon.git
+[submodule "vendor/entt"]
+	path = vendor/entt
+	url = https://github.com/skypjack/entt.git
