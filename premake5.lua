@@ -5,7 +5,7 @@ workspace("GJGO")
     configurations({"Debug", "Release", "Dist"})
     platforms({"LinuxARM"})
 
-    includedirs({"include", "vendor/Hangar2/include", "vendor/Druid/include", "vendor/Beacon/include"})
+    includedirs({"include", "vendor/Hangar2/include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src"})
     links({"X11", "GL"})
 
     flags({"MultiProcessorCompile"})
