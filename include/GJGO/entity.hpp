@@ -20,6 +20,12 @@ namespace GJGO
         }
 
         template<typename T>
+        void removeComponent()
+        {
+            this->m_registryPtr->remove<T>(this->m_entity);
+        }
+
+        template<typename T>
         const T& getComponent()
         {
             return this->m_registryPtr->get<T>(this->m_entity);
