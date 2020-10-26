@@ -40,7 +40,7 @@
             inline int8_t level = Level::INFO;
             inline bool printFile = true;
             inline bool printFunction = true;
-            inline bool printName = true;
+            inline bool printLine = true;
 
             template<typename... Args>
             static void logInfo(const char* const a_file, const char* const a_function, const int a_line, Args... args)
@@ -51,10 +51,10 @@
                         std::cout << "{" << a_file << "}";
                     if (printFunction)
                         std::cout << "[" << a_function << "]";
-                    if (printName)
+                    if (printLine)
                         std::cout << "(" << a_line << ")";
 
-                    if (printFile || printFunction || printName)
+                    if (printFile || printFunction || printLine)
                         std::cout << ": ";
 
                     ((std::cout << args), ...);
@@ -71,10 +71,10 @@
                         std::cout << "{" << a_file << "}";
                     if (printFunction)
                         std::cout << "[" << a_function << "]";
-                    if (printName)
+                    if (printLine)
                         std::cout << "(" << a_line << ")";
 
-                    if (printFile || printFunction || printName)
+                    if (printFile || printFunction || printLine)
                         std::cout << ": ";
 
                     ((std::cout << args), ...);
@@ -91,10 +91,10 @@
                         std::cout << "{" << a_file << "}";
                     if (printFunction)
                         std::cout << "[" << a_function << "]";
-                    if (printName)
+                    if (printLine)
                         std::cout << "(" << a_line << ")";
 
-                    if (printFile || printFunction || printName)
+                    if (printFile || printFunction || printLine)
                         std::cout << ": ";
 
                     ((std::cout << args), ...);
