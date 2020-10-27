@@ -18,7 +18,7 @@ namespace GJGO
         {
             const int32_t keycode;
             const int8_t mouseButton;
-        }
+        };
     };
 }
 
