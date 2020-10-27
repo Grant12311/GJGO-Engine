@@ -16,10 +16,19 @@ namespace GJGO
 
             for (Event* const l_eventPtr : this->pendingEvents)
             {
-
+                for (auto it = this->layers.rbegin(); it != this->layers.rend(); it++)
+                {
+                    (*it)->onEvent(l_eventPtr);
+                }
             }
 
             this->window.clear();
+
+            for (Layer* const l_layerPtr : this->layers)
+            {
+                l_layerPtr->draw();
+            }
+
             this->window.swapBuffers();
         }
     }
