@@ -8,7 +8,17 @@ namespace GJGO
         while (this->window.isOpen)
         {
             this->window.update();
-            this->onUpdateEvent.call(this);
+
+            for (Layer* const l_layerPtr : this->layers)
+            {
+                l_layerPtr->onUpdate();
+            }
+
+            for (Event* const l_eventPtr : this->pendingEvents)
+            {
+
+            }
+
             this->window.clear();
             this->window.swapBuffers();
         }
