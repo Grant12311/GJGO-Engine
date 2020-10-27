@@ -11,18 +11,14 @@ namespace GJGO
         keyUp
     };
 
-    union EventData
-    {
-        const int32_t keycode;
-        const int8_t mouseButton;
-    };
-
     struct Event
     {
-        Event(const EventType a_type, const EventData &a_data);
-
         const EventType type;
-        const EventData data;
+        union
+        {
+            const int32_t keycode;
+            const int8_t mouseButton;
+        }
     };
 }
 
