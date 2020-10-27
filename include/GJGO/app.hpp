@@ -1,11 +1,16 @@
 #ifndef GJGO_APP_H
 #define GJGO_APP_H
 
+#include <vector>
+
 #include <entt/entity/registry.hpp>
 
 #include <Hangar2/hangar.h>
 
 #include <Beacon/beacon.h>
+
+#include <GJGO/layer.hpp>
+#include <GJGO/event.hpp>
 
 namespace GJGO
 {
@@ -14,8 +19,8 @@ namespace GJGO
     public:
         Hangar::Window window;
         entt::registry registry;
-
-        Beacon::Event<GJGO::Application*> onUpdateEvent;
+        std::vector<Layer*> layers;
+        std::vector<Event*> pendingEvents;
 
         void run();
 
