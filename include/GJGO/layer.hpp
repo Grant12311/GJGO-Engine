@@ -10,6 +10,7 @@ namespace GJGO
     public:
         virtual void onUpdate() {}
         virtual void onEvent(Event* const a_event)  {}
+        virtual void draw() {}
     };
 }
 
