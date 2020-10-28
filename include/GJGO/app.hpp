@@ -19,6 +19,7 @@ namespace GJGO
     public:
         Hangar::Window window;
         entt::registry registry;
+
         std::vector<Layer*> layers;
         std::vector<Event*> pendingEvents;
 
