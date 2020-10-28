@@ -3,10 +3,6 @@
 examples/Game/bin
 examples/Game/obj
 
-Druid.cbp
-Druid.depend
-Druid.layout
-
 examples/Game/Game.cbp
 examples/Game/Game.depend
 examples/Game/Game.layout
