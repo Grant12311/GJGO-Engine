@@ -38,4 +38,12 @@ namespace GJGO
     {
         GJGO_LOG_INFO(glGetString(GL_VERSION));
     }
+
+    Application::~Application()
+    {
+        for (Layer* const l_layerPtr : this->layers)
+        {
+            delete l_layerPtr;
+        }
+    }
 }
