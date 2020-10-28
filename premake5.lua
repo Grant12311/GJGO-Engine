@@ -23,13 +23,11 @@ workspace("GJGO")
 
     filter("configurations:Release")
         optimize("On")
-        flags({"LinkTimeOptimization"})
         defines({"DRUID_DISABLE_GLCALL"})
         defines({"GJGO_BUILD_TARGET_RELEASE"})
 
     filter("configurations:Dist")
         optimize("On")
-        flags({"LinkTimeOptimization"})
         defines({"DRUID_DISABLE_GLCALL"})
         defines({"GJGO_BUILD_TARGET_DIST"})
 
