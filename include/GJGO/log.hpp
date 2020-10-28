@@ -13,6 +13,10 @@
     #define GJGO_SET_LOG_LEVEL_WARN() GJGO::Log::level = GJGO::Log::Level::WARN
     #define GJGO_SET_LOG_LEVEL_ERROR() GJGO::Log::level = GJGO::Log::Level::ERROR
     #define GJGO_SET_LOG_LEVEL_NONE() GJGO::Log::level = GJGO::Log::Level::NONE
+
+    #define GJGO_LOG_SET_PRINT_FILE(x) GJGO::Log::printFile = x
+    #define GJGO_LOG_SET_PRINT_FUNCTION(x) GJGO::Log::printFunction = x
+    #define GJGO_LOG_SET_PRINT_LINE(x) GJGO::Log::printLine = x
 #else
     #define GJGO_LOG_INFO(x...)
     #define GJGO_LOG_WARN(x...)
@@ -22,6 +26,10 @@
     #define GJGO_SET_LOG_LEVEL_WARN()
     #define GJGO_SET_LOG_LEVEL_ERROR()
     #define GJGO_SET_LOG_LEVEL_NONE()
+
+    #define GJGO_LOG_SET_PRINT_FILE(x)
+    #define GJGO_LOG_SET_PRINT_FUNCTION(x)
+    #define GJGO_LOG_SET_PRINT_LINE(x)
 #endif // GJGO_BUILD_TARGET_DIST
 
 #ifndef GJGO_BUILD_TARGET_DIST
