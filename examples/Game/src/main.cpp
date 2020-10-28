@@ -17,7 +17,7 @@ class GameLayer : public GJGO::Layer
 public:
     void onUpdate() override
     {
-        GJGO_LOG_INFO("Game Layer Updated!");
+        GJGO_LOG_INFO(this->parentPtr->window.deltaTime);
     }
 
     void onEvent(GJGO::Event* const a_event) override
@@ -25,21 +25,29 @@ public:
         switch (a_event->type)
         {
             case GJGO::EventType::keyDown:
-                GJGO_LOG_INFO("Key Down: ", a_event->data.keycode);
+                GJGO_LOG_INFO("Key Down: ", a_event->keycode);
                 break;
             case GJGO::EventType::keyUp:
                 break;
         }
     }
+
+    void draw() override
+    {
+        //GJGO_LOG_INFO("Draw!");
+    }
+
+    GameLayer(GJGO::Application* const a_appPtr) :
+        Layer(a_appPtr) {}
 };
 
 int main()
 {
-    GJGO::Log::printFile = false;
-    GJGO::Log::printFunction = false;
+    GJGO_LOG_SET_PRINT_FILE(false);
+    GJGO_LOG_SET_PRINT_FUNCTION(false);
     GJGO::Application app;
 
-    app.layers.emplace_back(new GameLayer);
+    app.layers.emplace_back(new GameLayer(&app));
 
     GJGO::Entity e(&app);
     e.addComponent<Position2D>(5, 5);
