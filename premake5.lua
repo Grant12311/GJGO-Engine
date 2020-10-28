@@ -9,7 +9,7 @@ workspace("GJGO")
     links({"X11", "GL"})
 
     flags({"MultiProcessorCompile"})
-    buildoptions({"-pipe", "-Wall", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code"})
+    buildoptions({"-pipe", "-Wall", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code"})
 
     filter("platforms:LinuxARM")
         architecture("ARM")
