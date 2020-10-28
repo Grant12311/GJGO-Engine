@@ -1,19 +1,22 @@
 #ifndef GJGO_LAYER_H
 #define GJGO_LAYER_H
 
-#include <GJGO/app.hpp>
 #include <GJGO/event.hpp>
 
 namespace GJGO
 {
+    class Application;
+
     class Layer
     {
     public:
-        GJGO::Application* parentPtr;
-
         virtual void onUpdate() {}
         virtual void onEvent(Event* const a_event)  {}
         virtual void draw() {}
+    protected:
+        Application* parentPtr;
+
+        Layer(Application* const a_appPtr);
     };
 }
 
