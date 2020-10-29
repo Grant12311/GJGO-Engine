@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <array>
 
+#include <GJGO/position2D.hpp>
+
 namespace GJGO
 {
     enum class EventType
@@ -16,8 +18,8 @@ namespace GJGO
 
     struct MousePositionEventData
     {
-        std::array<int, 2> relative;
-        std::array<int, 2> absolute;
+        Position2D relative;
+        Position2D absolute;
     };
 
     struct Event
