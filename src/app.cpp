@@ -15,12 +15,20 @@ namespace GJGO
                 l_layerPtr->onUpdate();
             }
 
-            for (Event* const l_eventPtr : this->pendingEvents)
+            for (unsigned int i = 0; i < this->pendingEvents.size(); i++)
             {
+                Event* const currentEvent = this->pendingEvents[i];
+
                 for (auto it = this->layers.rbegin(); it != this->layers.rend(); it++)
                 {
-                    (*it)->onEvent(l_eventPtr);
+                    (*it)->onEvent(currentEvent);
+                    if (currentEvent->handled)
+                        break;
                 }
+
+                delete currentEvent;
+                this->pendingEvents.erase(this->pendingEvents.begin() + i);
+                i--;
             }
 
             this->window.clear();
@@ -39,7 +47,7 @@ namespace GJGO
     {
         GJGO_LOG_INFO(glGetString(GL_VERSION));
 
-        this->window.onKeyDownEvent.addListener(this->hangarOnKeyDownCallback);
+        this->window.onKeyDownEvent.addListener([&](const int a_keycode){this->hangarOnKeyDownCallback(a_keycode);});
     }
 
     Application::~Application()
@@ -50,10 +58,9 @@ namespace GJGO
         }
     }
 
-    Application::hangarOnKeyDownCallback(const int32_t a_keycode)
+    void Application::hangarOnKeyDownCallback(const int32_t a_keycode)
     {
-        Event* const event = new Event;
-        event->type = EventType::keyDown;
+        Event* const event = new Event(EventType::keyDown);
         event->keycode = a_keycode;
         this->pendingEvents.emplace_back(event);
     }
