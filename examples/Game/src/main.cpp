@@ -31,7 +31,10 @@ public:
                 GJGO_LOG_INFO("Key Up: ", a_event->keycode);
                 break;
             case GJGO::EventType::mouseMove:
-                GJGO_LOG_INFO("(", a_event->mousePosition.absolute[0], ", ", a_event->mousePosition.absolute[1], ")");
+                //GJGO_LOG_INFO("(", a_event->mousePosition.absolute[0], ", ", a_event->mousePosition.absolute[1], ")");
+                break;
+            case GJGO::EventType::windowResize:
+                GJGO_LOG_INFO("(", a_event->windowSize[0], ", ", a_event->windowSize[1], ")");
                 break;
         }
     }
