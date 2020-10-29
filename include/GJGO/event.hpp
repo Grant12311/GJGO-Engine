@@ -14,6 +14,7 @@ namespace GJGO
     struct Event
     {
         const EventType type;
+        bool handled = false;
         union
         {
             const int32_t keycode;
