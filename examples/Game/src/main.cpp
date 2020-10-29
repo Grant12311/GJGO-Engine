@@ -17,7 +17,7 @@ class GameLayer : public GJGO::Layer
 public:
     void onUpdate() override
     {
-        GJGO_LOG_INFO(this->parentPtr->window.deltaTime);
+        //GJGO_LOG_INFO(this->parentPtr->window.deltaTime);
     }
 
     void onEvent(GJGO::Event* const a_event) override
@@ -28,6 +28,7 @@ public:
                 GJGO_LOG_INFO("Key Down: ", a_event->keycode);
                 break;
             case GJGO::EventType::keyUp:
+                GJGO_LOG_INFO("Key Up: ", a_event->keycode);
                 break;
         }
     }
