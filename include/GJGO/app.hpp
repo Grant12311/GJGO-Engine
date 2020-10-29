@@ -28,6 +28,7 @@ namespace GJGO
     private:
         void hangarOnKeyDownCallback(const int a_keycode);
         void hangarOnKeyUpCallback(const int a_keycode);
+        void hangarOnMouseMoveCallback(const int a_posX, const int a_posY, const int a_posXAbs, const int a_posYAbs);
     };
 }
 
