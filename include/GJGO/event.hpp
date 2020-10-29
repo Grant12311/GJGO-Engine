@@ -17,9 +17,12 @@ namespace GJGO
         bool handled = false;
         union
         {
-            const int32_t keycode;
-            const int8_t mouseButton;
+            int32_t keycode;
+            int8_t mouseButton;
         };
+
+        Event(const EventType a_type) :
+            type(a_type) {}
     };
 }
 
