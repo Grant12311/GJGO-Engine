@@ -18,7 +18,7 @@ namespace GJGO
         union
         {
             int32_t keycode;
-            int8_t mouseButton;
+            std::array<int32_t, 2> mousePosition;
         };
 
         Event(const EventType a_type) :
