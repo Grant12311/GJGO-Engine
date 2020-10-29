@@ -49,10 +49,13 @@ namespace GJGO
 
         this->window.onKeyDownEvent.addListener([&](const int a_keycode){this->hangarOnKeyDownCallback(a_keycode);});
         this->window.onKeyUpEvent.addListener([&](const int a_keycode){this->hangarOnKeyUpCallback(a_keycode);});
+
         this->window.onMouseMoveEvent.addListener([&](const int a_posX, const int a_posY, const int a_posXAbs, const int a_posYAbs)
         {
             this->hangarOnMouseMoveCallback(a_posX, a_posY, a_posXAbs, a_posYAbs);
         });
+
+        this->window.onResizeEvent.addListener([&](const int a_width, const int a_height){this->hangarOnWindowResizeCallback(a_width, a_height);});
     }
 
     Application::~Application()
@@ -82,6 +85,13 @@ namespace GJGO
         Event* const event = new Event(EventType::mouseMove);
         event->mousePosition.relative = {a_posX, a_posY};
         event->mousePosition.absolute = {a_posXAbs, a_posYAbs};
+        this->pendingEvents.emplace_back(event);
+    }
+
+    void Application::hangarOnWindowResizeCallback(const unsigned int a_width, const unsigned int a_height)
+    {
+        Event* const event = new Event(EventType::windowResize);
+        event->windowSize = {a_width, a_height};
         this->pendingEvents.emplace_back(event);
     }
 }

@@ -10,7 +10,8 @@ namespace GJGO
     {
         keyDown,
         keyUp,
-        mouseMove
+        mouseMove,
+        windowResize
     };
 
     struct MousePositionEventData
@@ -26,7 +27,10 @@ namespace GJGO
         union
         {
             int32_t keycode;
+
             MousePositionEventData mousePosition;
+
+            std::array<unsigned int, 2> windowSize;
         };
 
         Event(const EventType a_type) :
