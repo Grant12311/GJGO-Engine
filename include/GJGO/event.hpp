@@ -2,13 +2,21 @@
 #define GJGO_EVENT_H
 
 #include <cstdint>
+#include <array>
 
 namespace GJGO
 {
     enum class EventType
     {
-        keyDown = 0,
-        keyUp
+        keyDown,
+        keyUp,
+        mouseMove
+    };
+
+    struct MousePositionEventData
+    {
+        std::array<int, 2> relative;
+        std::array<int, 2> absolute;
     };
 
     struct Event
@@ -18,7 +26,7 @@ namespace GJGO
         union
         {
             int32_t keycode;
-            std::array<int32_t, 2> mousePosition;
+            MousePositionEventData mousePosition;
         };
 
         Event(const EventType a_type) :
