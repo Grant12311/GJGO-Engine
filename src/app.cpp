@@ -1,4 +1,5 @@
 #include <GJGO/app.hpp>
+#include <GJGO/event.hpp>
 #include <GJGO/log.hpp>
 
 namespace GJGO
@@ -37,6 +38,8 @@ namespace GJGO
         window(a_config)
     {
         GJGO_LOG_INFO(glGetString(GL_VERSION));
+
+        this->window.onKeyDownEvent.addListener(this->hangarOnKeyDownCallback);
     }
 
     Application::~Application()
@@ -45,5 +48,13 @@ namespace GJGO
         {
             delete l_layerPtr;
         }
+    }
+
+    Application::hangarOnKeyDownCallback(const int32_t a_keycode)
+    {
+        Event* const event = new Event;
+        event->type = EventType::keyDown;
+        event->keycode = a_keycode;
+        this->pendingEvents.emplace_back(event);
     }
 }
