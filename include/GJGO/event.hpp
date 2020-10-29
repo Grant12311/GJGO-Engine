@@ -5,6 +5,7 @@
 #include <array>
 
 #include <GJGO/position2D.hpp>
+#include <GJGO/size2D.hpp>
 
 namespace GJGO
 {
@@ -32,7 +33,7 @@ namespace GJGO
 
             MousePositionEventData mousePosition;
 
-            std::array<unsigned int, 2> windowSize;
+            Size2D windowSize;
         };
 
         Event(const EventType a_type) :
