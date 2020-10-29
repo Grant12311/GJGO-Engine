@@ -7,8 +7,6 @@
 
 #include <Hangar2/hangar.h>
 
-#include <Beacon/beacon.h>
-
 #include <GJGO/layer.hpp>
 #include <GJGO/event.hpp>
 
@@ -16,6 +14,8 @@ namespace GJGO
 {
     class Application
     {
+    private:
+        void hangarOnKeyDownCallback();
     public:
         Hangar::Window window;
         entt::registry registry;
