@@ -5,12 +5,7 @@
 #include <GJGO/entity.hpp>
 #include <GJGO/layer.hpp>
 #include <GJGO/event.hpp>
-
-struct Position2D
-{
-    int x = 0;
-    int y = 0;
-};
+#include <GJGO/position2D.hpp>
 
 class GameLayer : public GJGO::Layer
 {
@@ -57,10 +52,10 @@ int main()
     app.layers.emplace_back(new GameLayer(&app));
 
     GJGO::Entity e(&app);
-    e.addComponent<Position2D>(5, 5);
-    e.editComponent<Position2D>(0, 90);
+    e.addComponent<GJGO::Position2D>(5, 5);
+    e.editComponent<GJGO::Position2D>(0, 90);
 
-    GJGO_LOG_INFO("(", e.getComponent<Position2D>().x, ", ", e.getComponent<Position2D>().y, ")");
+    GJGO_LOG_INFO("(", e.getComponent<GJGO::Position2D>().x, ", ", e.getComponent<GJGO::Position2D>().y, ")");
 
     app.run();
 
