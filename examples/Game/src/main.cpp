@@ -30,6 +30,9 @@ public:
             case GJGO::EventType::keyUp:
                 GJGO_LOG_INFO("Key Up: ", a_event->keycode);
                 break;
+            case GJGO::EventType::mouseMove:
+                GJGO_LOG_INFO("(", a_event->mousePosition.absolute[0], ", ", a_event->mousePosition.absolute[1], ")");
+                break;
         }
     }
 
