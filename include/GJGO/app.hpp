@@ -16,6 +16,7 @@ namespace GJGO
     {
     private:
         void hangarOnKeyDownCallback(const int a_keycode);
+        void hangarOnKeyUpCallback(const int a_keycode);
     public:
         Hangar::Window window;
         entt::registry registry;

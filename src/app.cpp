@@ -48,6 +48,7 @@ namespace GJGO
         GJGO_LOG_INFO(glGetString(GL_VERSION));
 
         this->window.onKeyDownEvent.addListener([&](const int a_keycode){this->hangarOnKeyDownCallback(a_keycode);});
+        this->window.onKeyUpEvent.addListener([&](const int a_keycode){this->hangarOnKeyUpCallback(a_keycode);});
     }
 
     Application::~Application()
@@ -61,6 +62,13 @@ namespace GJGO
     void Application::hangarOnKeyDownCallback(const int32_t a_keycode)
     {
         Event* const event = new Event(EventType::keyDown);
+        event->keycode = a_keycode;
+        this->pendingEvents.emplace_back(event);
+    }
+
+    void Application::hangarOnKeyUpCallback(const int32_t a_keycode)
+    {
+        Event* const event = new Event(EventType::keyUp);
         event->keycode = a_keycode;
         this->pendingEvents.emplace_back(event);
     }
