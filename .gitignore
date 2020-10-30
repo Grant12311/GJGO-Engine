@@ -11,5 +11,7 @@ examples/Game/gmon.out
 GJGO.cbp
 GJGO.depend
 GJGO.layout
+GJGO.make
 GJGO.workspace
 GJGO.workspace.layout
+Makefile
