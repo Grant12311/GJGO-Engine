@@ -5,7 +5,7 @@ workspace("GJGO")
     configurations({"Debug", "Release", "Dist"})
     platforms({"LinuxARM"})
 
-    includedirs({"include", "vendor/Hangar2/include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src"})
+    includedirs({"include", "vendor/Hangar2/include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui"})
     links({"X11", "GL"})
 
     flags({"MultiProcessorCompile"})
@@ -31,12 +31,13 @@ workspace("GJGO")
         defines({"DRUID_DISABLE_GLCALL"})
         defines({"GJGO_BUILD_TARGET_DIST"})
 
+    include("vendor/imgui/project.lua")
     include("vendor/Druid/project.lua")
 
     project("GJGO")
         filename("GJGO")
         kind("StaticLib")
-        links({"Druid"})
+        links({"Druid", "imgui"})
 
         files({"premake5.lua", ".gitignore", "src/*", "include/**"})
 
