@@ -47,15 +47,33 @@ namespace GJGO
     {
         GJGO_LOG_INFO(glGetString(GL_VERSION));
 
-        this->window.onKeyDownEvent.addListener([&](const int a_keycode){this->hangarOnKeyDownCallback(a_keycode);});
-        this->window.onKeyUpEvent.addListener([&](const int a_keycode){this->hangarOnKeyUpCallback(a_keycode);});
+        this->window.onKeyDownEvent.addListener([&](const int a_keycode)
+        {
+            Event* const event = new Event(EventType::keyDown);
+            event->keycode = a_keycode;
+            this->pendingEvents.emplace_back(event);
+        });
+        this->window.onKeyUpEvent.addListener([&](const int a_keycode)
+        {
+            Event* const event = new Event(EventType::keyUp);
+            event->keycode = a_keycode;
+            this->pendingEvents.emplace_back(event);
+        });
 
         this->window.onMouseMoveEvent.addListener([&](const int a_posX, const int a_posY, const int a_posXAbs, const int a_posYAbs)
         {
-            this->hangarOnMouseMoveCallback(a_posX, a_posY, a_posXAbs, a_posYAbs);
+            Event* const event = new Event(EventType::mouseMove);
+            event->mousePosition.relative = {a_posX, a_posY};
+            event->mousePosition.absolute = {a_posXAbs, a_posYAbs};
+            this->pendingEvents.emplace_back(event);
         });
 
-        this->window.onResizeEvent.addListener([&](const int a_width, const int a_height){this->hangarOnWindowResizeCallback(a_width, a_height);});
+        this->window.onResizeEvent.addListener([&](const int a_width, const int a_height)
+        {
+            Event* const event = new Event(EventType::windowResize);
+            event->windowSize = {a_width, a_height};
+            this->pendingEvents.emplace_back(event);
+        });
     }
 
     Application::~Application()
@@ -64,34 +82,5 @@ namespace GJGO
         {
             delete l_layerPtr;
         }
-    }
-
-    void Application::hangarOnKeyDownCallback(const int32_t a_keycode)
-    {
-        Event* const event = new Event(EventType::keyDown);
-        event->keycode = a_keycode;
-        this->pendingEvents.emplace_back(event);
-    }
-
-    void Application::hangarOnKeyUpCallback(const int32_t a_keycode)
-    {
-        Event* const event = new Event(EventType::keyUp);
-        event->keycode = a_keycode;
-        this->pendingEvents.emplace_back(event);
-    }
-
-    void Application::hangarOnMouseMoveCallback(const int a_posX, const int a_posY, const int a_posXAbs, const int a_posYAbs)
-    {
-        Event* const event = new Event(EventType::mouseMove);
-        event->mousePosition.relative = {a_posX, a_posY};
-        event->mousePosition.absolute = {a_posXAbs, a_posYAbs};
-        this->pendingEvents.emplace_back(event);
-    }
-
-    void Application::hangarOnWindowResizeCallback(const unsigned int a_width, const unsigned int a_height)
-    {
-        Event* const event = new Event(EventType::windowResize);
-        event->windowSize = {a_width, a_height};
-        this->pendingEvents.emplace_back(event);
     }
 }
