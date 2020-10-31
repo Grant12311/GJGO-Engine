@@ -10,6 +10,7 @@ workspace("GJGO")
 
     flags({"MultiProcessorCompile"})
     buildoptions({"-pipe", "-Wall", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion"})
+    defines({"IMGUI_IMPL_OPENGL_ES3"})
 
     filter("platforms:LinuxARM")
         architecture("ARM")
@@ -46,7 +47,7 @@ workspace("GJGO")
         location("examples/Game")
         targetdir("examples/Game/bin/%{cfg.platform}/%{cfg.buildcfg}")
 
-        links({"GJGO", "Druid"})
+        links({"GJGO", "Druid", "imgui"})
         files({"examples/Game/src/*"})
 
         filter("configurations:Debug")
