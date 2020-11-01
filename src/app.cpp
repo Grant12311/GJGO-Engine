@@ -59,6 +59,12 @@ namespace GJGO
             event->keycode = a_keycode;
             this->pendingEvents.emplace_back(event);
         });
+        this->window.onKeyTypedEvent.addListener([&](const int a_keycode)
+        {
+            Event* const event = new Event(EventType::keyTyped);
+            event->keycode = a_keycode;
+            this->pendingEvents.emplace_back(event);
+        });
 
         this->window.onMouseMoveEvent.addListener([&](const int a_posX, const int a_posY, const int a_posXAbs, const int a_posYAbs)
         {
@@ -68,10 +74,23 @@ namespace GJGO
             this->pendingEvents.emplace_back(event);
         });
 
+        this->window.onMouseButtonDownEvent.addListener([&](const uint8_t a_mouseButton)
+        {
+            Event* const event = new Event(EventType::mouseButtonDown);
+            event->mouseButton = a_mouseButton;
+            this->pendingEvents.emplace_back(event);
+        });
+        this->window.onMouseButtonUpEvent.addListener([&](const uint8_t a_mouseButton)
+        {
+            Event* const event = new Event(EventType::mouseButtonUp);
+            event->mouseButton = a_mouseButton;
+            this->pendingEvents.emplace_back(event);
+        });
+
         this->window.onResizeEvent.addListener([&](const int a_width, const int a_height)
         {
             Event* const event = new Event(EventType::windowResize);
-            event->windowSize = {a_width, a_height};
+            event->windowSize = {static_cast<uint32_t>(a_width), static_cast<uint32_t>(a_height)};
             this->pendingEvents.emplace_back(event);
         });
     }
