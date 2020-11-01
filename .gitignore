@@ -7,6 +7,7 @@ examples/Game/Game.cbp
 examples/Game/Game.depend
 examples/Game/Game.layout
 examples/Game/gmon.out
+examples/Game/imgui.ini
 
 GJGO.cbp
 GJGO.depend
