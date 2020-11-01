@@ -13,7 +13,10 @@ namespace GJGO
     {
         keyDown,
         keyUp,
+        keyTyped,
         mouseMove,
+        mouseButtonDown,
+        mouseButtonUp,
         windowResize
     };
 
@@ -29,9 +32,10 @@ namespace GJGO
         bool handled = false;
         union
         {
-            int32_t keycode;
+            uint16_t keycode;
 
             MousePositionEventData mousePosition;
+            uint8_t mouseButton;
 
             Size2D windowSize;
         };
