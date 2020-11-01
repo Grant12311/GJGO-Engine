@@ -4,6 +4,7 @@ workspace("GJGO")
     toolset("gcc")
     configurations({"Debug", "Release", "Dist"})
     platforms({"LinuxARM"})
+    startproject("Game")
 
     includedirs({"include", "vendor/Hangar2/include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui"})
     links({"X11", "GL"})
