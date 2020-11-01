@@ -32,7 +32,7 @@ namespace GJGO
         bool handled = false;
         union
         {
-            uint16_t keycode;
+            uint32_t keycode;
 
             MousePositionEventData mousePosition;
             uint8_t mouseButton;
