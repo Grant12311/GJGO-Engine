@@ -72,7 +72,7 @@ public:
                 this->m_ioPtr->AddInputCharacter(static_cast<unsigned short>(a_eventPtr->keycode));
                 break;
             case GJGO::EventType::mouseMove:
-                this->m_ioPtr->MousePos = ImVec2(a_eventPtr->mousePosition.relative.x, this->parentPtr->window.height - a_eventPtr->mousePosition.relative.y);
+                this->m_ioPtr->MousePos = ImVec2(static_cast<float>(a_eventPtr->mousePosition.relative.x), static_cast<float>(this->parentPtr->window.height - a_eventPtr->mousePosition.relative.y));
                 break;
             case GJGO::EventType::mouseButtonDown:
                 this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = true;
@@ -81,15 +81,15 @@ public:
                 this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = false;
                 break;
             case GJGO::EventType::windowResize:
-                this->m_ioPtr->DisplaySize = ImVec2(a_eventPtr->windowSize.width, a_eventPtr->windowSize.height);
+                this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(a_eventPtr->windowSize.width), static_cast<float>(a_eventPtr->windowSize.height));
                 break;
         }
     }
 
     void draw() override
     {
-        this->m_ioPtr->DisplaySize = ImVec2(this->parentPtr->window.width, this->parentPtr->window.height);
-        this->m_ioPtr->DeltaTime = this->parentPtr->window.deltaTime;
+        this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(this->parentPtr->window.width), static_cast<float>(this->parentPtr->window.height));
+        this->m_ioPtr->DeltaTime = static_cast<float>(this->parentPtr->window.deltaTime);
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui::NewFrame();
