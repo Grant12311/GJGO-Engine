@@ -50,12 +50,46 @@ public:
 
 class ImguiLayer : public GJGO::Layer
 {
+private:
+    ImGuiIO* m_ioPtr;
 public:
+    void onEvent(GJGO::Event* const a_eventPtr) override
+    {
+        switch (a_eventPtr->type)
+        {
+            case GJGO::EventType::keyDown:
+                this->m_ioPtr->KeysDown[a_eventPtr->keycode] = true;
+
+                this->m_ioPtr->KeyCtrl = this->m_ioPtr->KeysDown[HGR_control_left] || this->m_ioPtr->KeysDown[HGR_control_right];
+                this->m_ioPtr->KeyShift = this->m_ioPtr->KeysDown[HGR_shift_left] || this->m_ioPtr->KeysDown[HGR_shift_right];
+                this->m_ioPtr->KeyAlt = this->m_ioPtr->KeysDown[HGR_alt_left] || this->m_ioPtr->KeysDown[HGR_alt_right];
+                this->m_ioPtr->KeySuper = this->m_ioPtr->KeysDown[HGR_super];
+                break;
+            case GJGO::EventType::keyUp:
+                this->m_ioPtr->KeysDown[a_eventPtr->keycode] = false;
+                break;
+            case GJGO::EventType::keyTyped:
+                this->m_ioPtr->AddInputCharacter(static_cast<unsigned short>(a_eventPtr->keycode));
+                break;
+            case GJGO::EventType::mouseMove:
+                this->m_ioPtr->MousePos = ImVec2(a_eventPtr->mousePosition.relative.x, this->parentPtr->window.height - a_eventPtr->mousePosition.relative.y);
+                break;
+            case GJGO::EventType::mouseButtonDown:
+                this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = true;
+                break;
+            case GJGO::EventType::mouseButtonUp:
+                this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = false;
+                break;
+            case GJGO::EventType::windowResize:
+                this->m_ioPtr->DisplaySize = ImVec2(a_eventPtr->windowSize.width, a_eventPtr->windowSize.height);
+                break;
+        }
+    }
+
     void draw() override
     {
-        ImGuiIO& io = ImGui::GetIO();
-        io.DisplaySize = ImVec2(this->parentPtr->window.width, this->parentPtr->window.height);
-        io.DeltaTime = this->parentPtr->window.deltaTime;
+        this->m_ioPtr->DisplaySize = ImVec2(this->parentPtr->window.width, this->parentPtr->window.height);
+        this->m_ioPtr->DeltaTime = this->parentPtr->window.deltaTime;
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui::NewFrame();
@@ -73,32 +107,33 @@ public:
         ImGui::CreateContext();
         ImGui::StyleColorsDark();
 
-        ImGuiIO& io = ImGui::GetIO();
-        io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
-        io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
+        this->m_ioPtr = &ImGui::GetIO();
 
-        io.KeyMap[ImGuiKey_Tab] = HGR_tab;
-        io.KeyMap[ImGuiKey_LeftArrow] = HGR_left;
-        io.KeyMap[ImGuiKey_RightArrow] = HGR_right;
-        io.KeyMap[ImGuiKey_UpArrow] = HGR_up;
-        io.KeyMap[ImGuiKey_DownArrow] = HGR_down;
+        this->m_ioPtr->BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
+        this->m_ioPtr->BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
+
+        this->m_ioPtr->KeyMap[ImGuiKey_Tab] = HGR_tab;
+        this->m_ioPtr->KeyMap[ImGuiKey_LeftArrow] = HGR_left;
+        this->m_ioPtr->KeyMap[ImGuiKey_RightArrow] = HGR_right;
+        this->m_ioPtr->KeyMap[ImGuiKey_UpArrow] = HGR_up;
+        this->m_ioPtr->KeyMap[ImGuiKey_DownArrow] = HGR_down;
         //io.KeyMap[ImGuiKey_PageUp] = GLFW_KEY_PAGE_UP;
         //io.KeyMap[ImGuiKey_PageDown] = GLFW_KEY_PAGE_DOWN;
         //io.KeyMap[ImGuiKey_Home] = GLFW_KEY_HOME;
         //io.KeyMap[ImGuiKey_End] = GLFW_KEY_END;
         //io.KeyMap[ImGuiKey_Insert] = GLFW_KEY_INSERT;
-        io.KeyMap[ImGuiKey_Delete] = HGR_delete;
-        io.KeyMap[ImGuiKey_Backspace] = HGR_backspace;
-        io.KeyMap[ImGuiKey_Space] = HGR_space;
-        io.KeyMap[ImGuiKey_Enter] = HGR_enter;
-        io.KeyMap[ImGuiKey_Escape] = HGR_escape;
+        this->m_ioPtr->KeyMap[ImGuiKey_Delete] = HGR_delete;
+        this->m_ioPtr->KeyMap[ImGuiKey_Backspace] = HGR_backspace;
+        this->m_ioPtr->KeyMap[ImGuiKey_Space] = HGR_space;
+        this->m_ioPtr->KeyMap[ImGuiKey_Enter] = HGR_enter;
+        this->m_ioPtr->KeyMap[ImGuiKey_Escape] = HGR_escape;
         //io.KeyMap[ImGuiKey_KeyPadEnter] = GLFW_KEY_KP_ENTER;
-        io.KeyMap[ImGuiKey_A] = HGR_a;
-        io.KeyMap[ImGuiKey_C] = HGR_c;
-        io.KeyMap[ImGuiKey_V] = HGR_v;
-        io.KeyMap[ImGuiKey_X] = HGR_x;
-        io.KeyMap[ImGuiKey_Y] = HGR_y;
-        io.KeyMap[ImGuiKey_Z] = HGR_z;
+        this->m_ioPtr->KeyMap[ImGuiKey_A] = HGR_a;
+        this->m_ioPtr->KeyMap[ImGuiKey_C] = HGR_c;
+        this->m_ioPtr->KeyMap[ImGuiKey_V] = HGR_v;
+        this->m_ioPtr->KeyMap[ImGuiKey_X] = HGR_x;
+        this->m_ioPtr->KeyMap[ImGuiKey_Y] = HGR_y;
+        this->m_ioPtr->KeyMap[ImGuiKey_Z] = HGR_z;
 
         ImGui_ImplOpenGL3_Init("#version 300 es");
     }
