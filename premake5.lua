@@ -9,7 +9,7 @@ workspace("GJGO")
     links({"X11", "GL"})
 
     flags({"MultiProcessorCompile"})
-    buildoptions({"-pipe", "-Wall", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion"})
+    buildoptions({"-pipe", "-Wall", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion", "-Wno-switch"})
     defines({"IMGUI_IMPL_OPENGL_ES3"})
 
     filter("platforms:LinuxARM")
