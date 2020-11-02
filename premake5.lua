@@ -7,7 +7,7 @@ workspace("GJGO")
     startproject("Game")
 
     includedirs({"include", "vendor/Hangar2/include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip"})
-    links({"X11", "GL"})
+    links({"X11", "xcb", "xcb-randr", "GL"})
 
     flags({"MultiProcessorCompile"})
     buildoptions({"-pipe", "-Wall", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion", "-Wno-switch"})
@@ -40,7 +40,7 @@ workspace("GJGO")
     project("GJGO")
         filename("GJGO")
         kind("StaticLib")
-        links({"Druid", "imgui"})
+        links({"Druid", "imgui", "clip"})
 
         files({"premake5.lua", ".gitignore", "src/*", "include/**"})
 
@@ -49,7 +49,7 @@ workspace("GJGO")
         location("examples/Game")
         targetdir("examples/Game/bin/%{cfg.platform}/%{cfg.buildcfg}")
 
-        links({"GJGO", "Druid", "imgui"})
+        links({"GJGO", "Druid", "imgui", "clip"})
         files({"examples/Game/src/*"})
 
         filter("configurations:Debug")
