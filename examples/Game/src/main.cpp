@@ -3,6 +3,7 @@
 #include <Hangar2/keycodes.h>
 
 #include <GJGO/app.hpp>
+#include <GJGO/clipboard.hpp>
 #include <GJGO/entity.hpp>
 #include <GJGO/event.hpp>
 #include <GJGO/imgui_layer.hpp>
