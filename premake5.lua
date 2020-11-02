@@ -6,7 +6,7 @@ workspace("GJGO")
     platforms({"LinuxARM"})
     startproject("Game")
 
-    includedirs({"include", "vendor/Hangar2/include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui"})
+    includedirs({"include", "vendor/Hangar2/include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip"})
     links({"X11", "GL"})
 
     flags({"MultiProcessorCompile"})
@@ -35,6 +35,7 @@ workspace("GJGO")
 
     include("vendor/imgui/project.lua")
     include("vendor/Druid/project.lua")
+    include("vendor/clip/project.lua")
 
     project("GJGO")
         filename("GJGO")
