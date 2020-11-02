@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <array>
 
+#include <Hangar2/window.h>
+
 #include <GJGO/position2D.hpp>
 #include <GJGO/size2D.hpp>
 
@@ -13,7 +15,8 @@ namespace GJGO
     {
         keyDown,
         keyUp,
-        keyTyped,
+        keyTypedDown,
+        keyTypedUp,
         mouseMove,
         mouseButtonDown,
         mouseButtonUp,
@@ -32,7 +35,7 @@ namespace GJGO
         bool handled = false;
         union
         {
-            uint32_t keycode;
+            int keycode;
 
             MousePositionEventData mousePosition;
             uint8_t mouseButton;
