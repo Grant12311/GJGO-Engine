@@ -1,6 +1,7 @@
 #include <backends/imgui_impl_opengl3.h>
 
 #include <GJGO/app.hpp>
+#include <GJGO/clipboard.hpp>
 #include <GJGO/imgui_layer.hpp>
 
 namespace GJGO
