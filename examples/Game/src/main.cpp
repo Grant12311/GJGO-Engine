@@ -52,33 +52,67 @@ class ImguiLayer : public GJGO::Layer
 {
 private:
     ImGuiIO* m_ioPtr;
+
+    std::array<int, 6> noDrawKeycodes = {
+        HGR_delete, HGR_enter, HGR_right, HGR_left, HGR_up, HGR_down
+    };
 public:
+    void onUpdate() override
+    {
+        this->m_ioPtr->KeyCtrl = this->parentPtr->window.keyIsDown(HGR_control_left) || this->parentPtr->window.keyIsDown(HGR_control_right);
+        this->m_ioPtr->KeyShift = this->parentPtr->window.keyIsDown(HGR_shift_left) || this->parentPtr->window.keyIsDown(HGR_shift_right);
+        this->m_ioPtr->KeyAlt = this->parentPtr->window.keyIsDown(HGR_alt_left) || this->parentPtr->window.keyIsDown(HGR_alt_right);
+        this->m_ioPtr->KeySuper = this->parentPtr->window.keyIsDown(HGR_super);
+    }
+
     void onEvent(GJGO::Event* const a_eventPtr) override
     {
         switch (a_eventPtr->type)
         {
             case GJGO::EventType::keyDown:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = true;
-
-                this->m_ioPtr->KeyCtrl = this->m_ioPtr->KeysDown[HGR_control_left] || this->m_ioPtr->KeysDown[HGR_control_right];
-                this->m_ioPtr->KeyShift = this->m_ioPtr->KeysDown[HGR_shift_left] || this->m_ioPtr->KeysDown[HGR_shift_right];
-                this->m_ioPtr->KeyAlt = this->m_ioPtr->KeysDown[HGR_alt_left] || this->m_ioPtr->KeysDown[HGR_alt_right];
-                this->m_ioPtr->KeySuper = this->m_ioPtr->KeysDown[HGR_super];
                 break;
             case GJGO::EventType::keyUp:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = false;
                 break;
-            case GJGO::EventType::keyTyped:
-                this->m_ioPtr->AddInputCharacter(static_cast<unsigned short>(a_eventPtr->keycode));
+            case GJGO::EventType::keyTypedDown:
+                if (std::find(this->noDrawKeycodes.begin(), this->noDrawKeycodes.end(), a_eventPtr->keycode) == this->noDrawKeycodes.end())
+                    this->m_ioPtr->AddInputCharacter(static_cast<unsigned short>(a_eventPtr->keycode));
+                this->m_ioPtr->KeysDown[a_eventPtr->keycode] = true;
+                break;
+            case GJGO::EventType::keyTypedUp:
+                this->m_ioPtr->KeysDown[a_eventPtr->keycode] = false;
                 break;
             case GJGO::EventType::mouseMove:
                 this->m_ioPtr->MousePos = ImVec2(static_cast<float>(a_eventPtr->mousePosition.relative.x), static_cast<float>(this->parentPtr->window.height - a_eventPtr->mousePosition.relative.y));
                 break;
             case GJGO::EventType::mouseButtonDown:
-                this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = true;
+                switch (a_eventPtr->mouseButton)
+                {
+                    case 0:
+                        this->m_ioPtr->MouseDown[0] = true;
+                        break;
+                    case 1:
+                        this->m_ioPtr->MouseDown[2] = true;
+                        break;
+                    case 2:
+                        this->m_ioPtr->MouseDown[1] = true;
+                        break;
+                }
                 break;
             case GJGO::EventType::mouseButtonUp:
-                this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = false;
+                switch (a_eventPtr->mouseButton)
+                {
+                    case 0:
+                        this->m_ioPtr->MouseDown[0] = false;
+                        break;
+                    case 1:
+                        this->m_ioPtr->MouseDown[2] = false;
+                        break;
+                    case 2:
+                        this->m_ioPtr->MouseDown[1] = false;
+                        break;
+                }
                 break;
             case GJGO::EventType::windowResize:
                 this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(a_eventPtr->windowSize.width), static_cast<float>(a_eventPtr->windowSize.height));
@@ -89,7 +123,7 @@ public:
     void draw() override
     {
         this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(this->parentPtr->window.width), static_cast<float>(this->parentPtr->window.height));
-        this->m_ioPtr->DeltaTime = static_cast<float>(this->parentPtr->window.deltaTime);
+        this->m_ioPtr->DeltaTime = static_cast<float>(this->parentPtr->window.deltaTime) / 1000.0f;
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui::NewFrame();
@@ -108,6 +142,8 @@ public:
         ImGui::StyleColorsDark();
 
         this->m_ioPtr = &ImGui::GetIO();
+
+        this->m_ioPtr->BackendPlatformName = "GJGO-Hangar2";
 
         this->m_ioPtr->BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
         this->m_ioPtr->BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
