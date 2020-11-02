@@ -59,9 +59,14 @@ namespace GJGO
             event->keycode = a_keycode;
             this->pendingEvents.emplace_back(event);
         });
-        this->window.onKeyTypedEvent.addListener([&](const int a_keycode)
+        this->window.onKeyTypedDownEvent.addListener([&](const int a_keycode)
         {
-            Event* const event = new Event(EventType::keyTyped);
+            Event* const event = new Event(EventType::keyTypedDown);
+            event->keycode = a_keycode;
+            this->pendingEvents.emplace_back(event);
+        });this->window.onKeyTypedUpEvent.addListener([&](const int a_keycode)
+        {
+            Event* const event = new Event(EventType::keyTypedUp);
             event->keycode = a_keycode;
             this->pendingEvents.emplace_back(event);
         });
