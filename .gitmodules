@@ -13,6 +13,3 @@
 [submodule "vendor/imgui"]
 	path = vendor/imgui
 	url = https://github.com/Grant12311/imgui.git
-[submodule "vendor/clip"]
-	path = vendor/clip
-	url = https://github.com/dacap/clip.git
