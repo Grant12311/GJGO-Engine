@@ -41,9 +41,6 @@ public:
     {
         //GJGO_LOG_INFO("Draw!");
     }
-
-    GameLayer(GJGO::Application* const a_appPtr) :
-        Layer(a_appPtr) {}
 };
 
 int main()
@@ -52,8 +49,8 @@ int main()
     GJGO_LOG_SET_PRINT_FUNCTION(false);
     GJGO::Application app;
 
-    app.layers.emplace_back(new GameLayer(&app));
-    app.layers.emplace_back(new GJGO::ImGuiLayer(&app));
+    app.layers.emplace_back(new GameLayer);
+    app.layers.emplace_back(new GJGO::ImGuiLayer);
 
     GJGO::Entity e(&app);
     e.addComponent<GJGO::Position2D>(5, 5);

@@ -15,10 +15,6 @@ namespace GJGO
         virtual void draw() {}
 
         virtual ~Layer() = default;
-    protected:
-        Application* parentPtr;
-
-        Layer(Application* const a_appPtr);
     };
 }
 

@@ -7,10 +7,10 @@ namespace GJGO
 {
     void ImGuiLayer::onUpdate()
     {
-        this->m_ioPtr->KeyCtrl = this->parentPtr->window.keyIsDown(HGR_control_left) || this->parentPtr->window.keyIsDown(HGR_control_right);
-        this->m_ioPtr->KeyShift = this->parentPtr->window.keyIsDown(HGR_shift_left) || this->parentPtr->window.keyIsDown(HGR_shift_right);
-        this->m_ioPtr->KeyAlt = this->parentPtr->window.keyIsDown(HGR_alt_left) || this->parentPtr->window.keyIsDown(HGR_alt_right);
-        this->m_ioPtr->KeySuper = this->parentPtr->window.keyIsDown(HGR_super);
+        this->m_ioPtr->KeyCtrl = g_appInstancePtr->window.keyIsDown(HGR_control_left) || g_appInstancePtr->window.keyIsDown(HGR_control_right);
+        this->m_ioPtr->KeyShift = g_appInstancePtr->window.keyIsDown(HGR_shift_left) || g_appInstancePtr->window.keyIsDown(HGR_shift_right);
+        this->m_ioPtr->KeyAlt = g_appInstancePtr->window.keyIsDown(HGR_alt_left) || g_appInstancePtr->window.keyIsDown(HGR_alt_right);
+        this->m_ioPtr->KeySuper = g_appInstancePtr->window.keyIsDown(HGR_super);
     }
 
     void ImGuiLayer::onEvent(GJGO::Event* const a_eventPtr)
@@ -32,7 +32,7 @@ namespace GJGO
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = false;
                 break;
             case GJGO::EventType::mouseMove:
-                this->m_ioPtr->MousePos = ImVec2(static_cast<float>(a_eventPtr->mousePosition.relative.x), static_cast<float>(this->parentPtr->window.height - a_eventPtr->mousePosition.relative.y));
+                this->m_ioPtr->MousePos = ImVec2(static_cast<float>(a_eventPtr->mousePosition.relative.x), static_cast<float>(g_appInstancePtr->window.height - a_eventPtr->mousePosition.relative.y));
                 break;
             case GJGO::EventType::mouseButtonDown:
                 switch (a_eventPtr->mouseButton)
@@ -70,8 +70,8 @@ namespace GJGO
 
     void ImGuiLayer::draw()
     {
-        this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(this->parentPtr->window.width), static_cast<float>(this->parentPtr->window.height));
-        this->m_ioPtr->DeltaTime = static_cast<float>(this->parentPtr->window.deltaTime) / 1000.0f;
+        this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(g_appInstancePtr->window.width), static_cast<float>(g_appInstancePtr->window.height));
+        this->m_ioPtr->DeltaTime = static_cast<float>(g_appInstancePtr->window.deltaTime) / 1000.0f;
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui::NewFrame();
@@ -83,8 +83,7 @@ namespace GJGO
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
 
-    ImGuiLayer::ImGuiLayer(GJGO::Application* const a_appPtr) :
-        Layer(a_appPtr)
+    ImGuiLayer::ImGuiLayer()
     {
         ImGui::CreateContext();
         ImGui::StyleColorsDark();

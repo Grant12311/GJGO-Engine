@@ -26,6 +26,8 @@ namespace GJGO
         Application(const Hangar::Config &a_config = Hangar::Config());
         ~Application();
     };
+
+    inline Application* g_appInstancePtr = nullptr;
 }
 
 #endif

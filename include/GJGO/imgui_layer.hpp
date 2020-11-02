@@ -23,7 +23,7 @@ namespace GJGO
         virtual void onEvent(Event* const a_eventPtr) override;
         virtual void draw() override;
 
-        ImGuiLayer(Application* const a_appPtr);
+        ImGuiLayer();
     };
 }
 

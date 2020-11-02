@@ -98,6 +98,8 @@ namespace GJGO
             event->windowSize = {static_cast<uint32_t>(a_width), static_cast<uint32_t>(a_height)};
             this->pendingEvents.emplace_back(event);
         });
+
+        g_appInstancePtr = this;
     }
 
     Application::~Application()
