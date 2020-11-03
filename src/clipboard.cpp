@@ -6,11 +6,12 @@ namespace GJGO
 {
     namespace Clipboard
     {
-        std::string readText()
+        static std::string s_lastRead;
+
+        const char* readText()
         {
-            std::string toReturn;
-            clip::get_text(toReturn);
-            return toReturn;
+            clip::get_text(s_lastRead);
+            return s_lastRead.c_str();
         }
 
         void writeText(const char* const a_text)

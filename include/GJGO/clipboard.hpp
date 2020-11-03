@@ -7,7 +7,7 @@ namespace GJGO
 {
     namespace Clipboard
     {
-        std::string readText();
+        const char* readText();
         void writeText(const char* const a_text);
     }
 }
