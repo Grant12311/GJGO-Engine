@@ -79,7 +79,7 @@ namespace GJGO
         }
     }
 
-    void ImGuiLayer::draw()
+    void ImGuiLayer::drawGui()
     {
         this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(g_appInstancePtr->window.width), static_cast<float>(g_appInstancePtr->window.height));
         this->m_ioPtr->DeltaTime = static_cast<float>(g_appInstancePtr->window.deltaTime) / 1000.0f;
@@ -87,8 +87,29 @@ namespace GJGO
         ImGui_ImplOpenGL3_NewFrame();
         ImGui::NewFrame();
 
-        bool show = true;
-        ImGui::ShowDemoWindow(&show);
+        if (ImGui::BeginMainMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("New")) {}
+                if (ImGui::MenuItem("Open", "Ctrl+O")) {}
+
+                ImGui::EndMenu();
+            }
+
+            ImGui::EndMainMenuBar();
+        }
+
+        // Overlay
+        ImGuiWindowFlags overlayFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
+                                        ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoInputs;
+        ImGui::SetNextWindowPos({g_appInstancePtr->window.width - ImGui::CalcTextSize("16.667 ms/frame (60.0 FPS)").x - 10, 10.0f});
+        if (ImGui::Begin("Example: Simple overlay", NULL, overlayFlags))
+        {
+            ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / this->m_ioPtr->Framerate, this->m_ioPtr->Framerate);
+
+            ImGui::End();
+        }
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -105,6 +126,7 @@ namespace GJGO
 
         this->m_ioPtr->BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
         this->m_ioPtr->BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
+        this->m_ioPtr->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
         this->m_ioPtr->KeyMap[ImGuiKey_Tab] = HGR_tab;
         this->m_ioPtr->KeyMap[ImGuiKey_LeftArrow] = HGR_left;

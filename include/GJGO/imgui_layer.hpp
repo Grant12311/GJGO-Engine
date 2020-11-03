@@ -21,7 +21,7 @@ namespace GJGO
     public:
         virtual void onUpdate() override;
         virtual void onEvent(Event* const a_eventPtr) override;
-        virtual void draw() override;
+        virtual void drawGui() override;
 
         ImGuiLayer();
     };
