@@ -34,8 +34,8 @@ workspace("GJGO")
         defines({"GJGO_BUILD_TARGET_DIST"})
 
     include("vendor/imgui/project.lua")
-    include("vendor/Druid/project.lua")
     include("vendor/clip/project.lua")
+    include("vendor/Druid/project.lua")
 
     project("GJGO")
         filename("GJGO")
