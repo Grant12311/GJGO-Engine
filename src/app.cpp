@@ -38,6 +38,11 @@ namespace GJGO
                 l_layerPtr->draw();
             }
 
+            for (Layer* const l_layerPtr : this->layers)
+            {
+                l_layerPtr->drawGui();
+            }
+
             this->window.swapBuffers();
         }
     }
