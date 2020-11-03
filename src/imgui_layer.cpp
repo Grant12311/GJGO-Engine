@@ -6,6 +6,16 @@
 
 namespace GJGO
 {
+    static void ImGuiClipboardReadTextCallback(void* const a_userData, const char* const a_text)
+    {
+        GJGO::Clipboard::writeText(a_text);
+    }
+
+    static const char* ImGuiClipboardGetTextCallback(void* const a_userData)
+    {
+        return GJGO::Clipboard::readText();
+    }
+
     void ImGuiLayer::onUpdate()
     {
         this->m_ioPtr->KeyCtrl = g_appInstancePtr->window.keyIsDown(HGR_control_left) || g_appInstancePtr->window.keyIsDown(HGR_control_right);
@@ -118,6 +128,9 @@ namespace GJGO
         this->m_ioPtr->KeyMap[ImGuiKey_X] = HGR_x;
         this->m_ioPtr->KeyMap[ImGuiKey_Y] = HGR_y;
         this->m_ioPtr->KeyMap[ImGuiKey_Z] = HGR_z;
+
+        this->m_ioPtr->SetClipboardTextFn = ImGuiClipboardReadTextCallback;
+        this->m_ioPtr->GetClipboardTextFn = ImGuiClipboardGetTextCallback;
 
         ImGui_ImplOpenGL3_Init("#version 300 es");
     }
