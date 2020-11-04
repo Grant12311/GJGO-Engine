@@ -92,7 +92,25 @@ namespace GJGO
             if (ImGui::BeginMenu("File"))
             {
                 if (ImGui::MenuItem("New")) {}
+                ImGui::Separator();
+
                 if (ImGui::MenuItem("Open", "Ctrl+O")) {}
+                if (ImGui::BeginMenu("Open Recent"))
+                {
+                    ImGui::MenuItem("Game");
+
+                    ImGui::EndMenu();
+                }
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Save", "Ctrl+S")) {}
+                if (ImGui::MenuItem("Save as...")) {}
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Close")) {}
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Quit", "Ctrl+Q")) {}
 
                 ImGui::EndMenu();
             }
