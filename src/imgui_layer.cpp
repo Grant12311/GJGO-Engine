@@ -30,17 +30,21 @@ namespace GJGO
         {
             case GJGO::EventType::keyDown:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = true;
+                a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
             case GJGO::EventType::keyUp:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = false;
+                a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
             case GJGO::EventType::keyTypedDown:
                 if (std::find(this->noDrawKeycodes.begin(), this->noDrawKeycodes.end(), a_eventPtr->keycode) == this->noDrawKeycodes.end())
                     this->m_ioPtr->AddInputCharacter(static_cast<unsigned short>(a_eventPtr->keycode));
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = true;
+                a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
             case GJGO::EventType::keyTypedUp:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = false;
+                a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
             case GJGO::EventType::mouseMove:
                 this->m_ioPtr->MousePos = ImVec2(static_cast<float>(a_eventPtr->mousePosition.relative.x), static_cast<float>(g_appInstancePtr->window.height - a_eventPtr->mousePosition.relative.y));
@@ -58,7 +62,7 @@ namespace GJGO
                         this->m_ioPtr->MouseDown[1] = true;
                         break;
                 }
-                a_eventPtr->handled = static_cast<bool>(this->m_ioPtr->WantCaptureMouse);
+                a_eventPtr->handled = this->m_ioPtr->WantCaptureMouse;
                 break;
             case GJGO::EventType::mouseButtonUp:
                 switch (a_eventPtr->mouseButton)
@@ -73,6 +77,7 @@ namespace GJGO
                         this->m_ioPtr->MouseDown[1] = false;
                         break;
                 }
+                a_eventPtr->handled = this->m_ioPtr->WantCaptureMouse;
                 break;
             case GJGO::EventType::windowResize:
                 this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(a_eventPtr->windowSize.width), static_cast<float>(a_eventPtr->windowSize.height));
@@ -87,6 +92,9 @@ namespace GJGO
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui::NewFrame();
+
+        static bool show = true;
+        ImGui::ShowDemoWindow(&show);
 
         if (ImGui::BeginMainMenuBar())
         {
