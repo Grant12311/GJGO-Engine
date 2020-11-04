@@ -1,7 +1,0 @@
-namespace GJGO
-{
-    namespace Gui
-    {
-
-    }
-}
