@@ -7,6 +7,8 @@ namespace GJGO
 {
     class EditorLayer : public GJGO::Layer
     {
+    private:
+        bool showEntitiesWindow = true;
     public:
         void drawGui();
     };
