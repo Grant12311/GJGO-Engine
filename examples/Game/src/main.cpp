@@ -30,7 +30,10 @@ public:
                 GJGO_LOG_INFO("Key Up: ", a_event->keycode);
                 break;
             case GJGO::EventType::mouseMove:
-                GJGO_LOG_INFO("(", a_event->mousePosition.absolute.x, ", ", a_event->mousePosition.absolute.y, ")");
+                //GJGO_LOG_INFO("(", a_event->mousePosition.absolute.x, ", ", a_event->mousePosition.absolute.y, ")");
+                break;
+            case GJGO::EventType::mouseButtonDown:
+                GJGO_LOG_INFO("down!");
                 break;
             case GJGO::EventType::windowResize:
                 GJGO_LOG_INFO("Window Size: (", a_event->windowSize.width, ", ", a_event->windowSize.height, ")");
