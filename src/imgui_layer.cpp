@@ -58,6 +58,7 @@ namespace GJGO
                         this->m_ioPtr->MouseDown[1] = true;
                         break;
                 }
+                a_eventPtr->handled = static_cast<bool>(this->m_ioPtr->WantCaptureMouse);
                 break;
             case GJGO::EventType::mouseButtonUp:
                 switch (a_eventPtr->mouseButton)
