@@ -1,12 +1,13 @@
 #include <iostream>
 
+#include <imgui.h>
+
 #include <Hangar2/keycodes.h>
 
 #include <GJGO/app.hpp>
 #include <GJGO/clipboard.hpp>
 #include <GJGO/entity.hpp>
 #include <GJGO/event.hpp>
-#include <GJGO/imgui_layer.hpp>
 #include <GJGO/layer.hpp>
 #include <GJGO/log.hpp>
 #include <GJGO/position2D.hpp>
@@ -30,10 +31,7 @@ public:
                 GJGO_LOG_INFO("Key Up: ", a_event->keycode);
                 break;
             case GJGO::EventType::mouseMove:
-                //GJGO_LOG_INFO("(", a_event->mousePosition.absolute.x, ", ", a_event->mousePosition.absolute.y, ")");
-                break;
-            case GJGO::EventType::mouseButtonDown:
-                GJGO_LOG_INFO("down!");
+                GJGO_LOG_INFO("(", a_event->mousePosition.absolute.x, ", ", a_event->mousePosition.absolute.y, ")");
                 break;
             case GJGO::EventType::windowResize:
                 GJGO_LOG_INFO("Window Size: (", a_event->windowSize.width, ", ", a_event->windowSize.height, ")");
@@ -47,6 +45,57 @@ public:
     }
 };
 
+class EditorLayer : public GJGO::Layer
+{
+public:
+    void drawGui()
+    {
+        ImGuiIO& io = ImGui::GetIO();
+
+        if (ImGui::BeginMainMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("New")) {}
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Open", "Ctrl+O")) {}
+                if (ImGui::BeginMenu("Open Recent"))
+                {
+                    ImGui::MenuItem("Game");
+
+                    ImGui::EndMenu();
+                }
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Save", "Ctrl+S")) {}
+                if (ImGui::MenuItem("Save as...")) {}
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Close")) {}
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Quit", "Ctrl+Q")) {}
+
+                ImGui::EndMenu();
+            }
+
+            ImGui::EndMainMenuBar();
+        }
+
+        // Overlay
+        ImGuiWindowFlags overlayFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
+                                        ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoInputs;
+        ImGui::SetNextWindowPos({GJGO::g_appInstancePtr->window.width - ImGui::CalcTextSize("16.667 ms/frame (60.0 FPS)").x - 10, 10.0f});
+        if (ImGui::Begin("Example: Simple overlay", NULL, overlayFlags))
+        {
+            ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
+            ImGui::End();
+        }
+    }
+};
+
 int main()
 {
     GJGO_LOG_SET_PRINT_FILE(false);
@@ -54,7 +103,7 @@ int main()
     GJGO::Application app;
 
     app.layers.emplace_back(new GameLayer);
-    app.layers.emplace_back(new GJGO::ImGuiLayer);
+    app.layers.emplace_back(new EditorLayer);
 
     GJGO::Entity e(&app);
     e.addComponent<GJGO::Position2D>(5, 5);
