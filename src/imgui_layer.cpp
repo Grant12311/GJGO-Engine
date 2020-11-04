@@ -22,6 +22,9 @@ namespace GJGO
         this->m_ioPtr->KeyShift = g_appInstancePtr->window.keyIsDown(HGR_shift_left) || g_appInstancePtr->window.keyIsDown(HGR_shift_right);
         this->m_ioPtr->KeyAlt = g_appInstancePtr->window.keyIsDown(HGR_alt_left) || g_appInstancePtr->window.keyIsDown(HGR_alt_right);
         this->m_ioPtr->KeySuper = g_appInstancePtr->window.keyIsDown(HGR_super);
+
+        this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(g_appInstancePtr->window.width), static_cast<float>(g_appInstancePtr->window.height));
+        this->m_ioPtr->DeltaTime = static_cast<float>(g_appInstancePtr->window.deltaTime) / 1000.0f;
     }
 
     void ImGuiLayer::onEvent(GJGO::Event* const a_eventPtr)
@@ -83,63 +86,6 @@ namespace GJGO
                 this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(a_eventPtr->windowSize.width), static_cast<float>(a_eventPtr->windowSize.height));
                 break;
         }
-    }
-
-    void ImGuiLayer::drawGui()
-    {
-        this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(g_appInstancePtr->window.width), static_cast<float>(g_appInstancePtr->window.height));
-        this->m_ioPtr->DeltaTime = static_cast<float>(g_appInstancePtr->window.deltaTime) / 1000.0f;
-
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui::NewFrame();
-
-        static bool show = true;
-        ImGui::ShowDemoWindow(&show);
-
-        if (ImGui::BeginMainMenuBar())
-        {
-            if (ImGui::BeginMenu("File"))
-            {
-                if (ImGui::MenuItem("New")) {}
-                ImGui::Separator();
-
-                if (ImGui::MenuItem("Open", "Ctrl+O")) {}
-                if (ImGui::BeginMenu("Open Recent"))
-                {
-                    ImGui::MenuItem("Game");
-
-                    ImGui::EndMenu();
-                }
-                ImGui::Separator();
-
-                if (ImGui::MenuItem("Save", "Ctrl+S")) {}
-                if (ImGui::MenuItem("Save as...")) {}
-                ImGui::Separator();
-
-                if (ImGui::MenuItem("Close")) {}
-                ImGui::Separator();
-
-                if (ImGui::MenuItem("Quit", "Ctrl+Q")) {}
-
-                ImGui::EndMenu();
-            }
-
-            ImGui::EndMainMenuBar();
-        }
-
-        // Overlay
-        ImGuiWindowFlags overlayFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
-                                        ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoInputs;
-        ImGui::SetNextWindowPos({g_appInstancePtr->window.width - ImGui::CalcTextSize("16.667 ms/frame (60.0 FPS)").x - 10, 10.0f});
-        if (ImGui::Begin("Example: Simple overlay", NULL, overlayFlags))
-        {
-            ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / this->m_ioPtr->Framerate, this->m_ioPtr->Framerate);
-
-            ImGui::End();
-        }
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
 
     ImGuiLayer::ImGuiLayer()
