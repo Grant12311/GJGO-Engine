@@ -1,11 +1,16 @@
+#include <backends/imgui_impl_opengl3.h>
+
 #include <GJGO/app.hpp>
 #include <GJGO/event.hpp>
+#include <GJGO/imgui_layer.hpp>
 #include <GJGO/log.hpp>
 
 namespace GJGO
 {
     void Application::run()
     {
+        this->layers.emplace_back(new ImGuiLayer);
+
         while (this->window.isOpen)
         {
             this->window.update();
@@ -38,10 +43,14 @@ namespace GJGO
                 l_layerPtr->draw();
             }
 
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui::NewFrame();
             for (Layer* const l_layerPtr : this->layers)
             {
                 l_layerPtr->drawGui();
             }
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
             this->window.swapBuffers();
         }
