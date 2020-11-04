@@ -103,7 +103,9 @@ int main()
     GJGO::Application app;
 
     app.layers.emplace_back(new GameLayer);
-    app.layers.emplace_back(new EditorLayer);
+    #ifndef GJGO_BUILD_TARGET_DIST
+        app.layers.emplace_back(new EditorLayer);
+    #endif // GJGO_BUILD_TARGET_DIST
 
     GJGO::Entity e(&app);
     e.addComponent<GJGO::Position2D>(5, 5);
