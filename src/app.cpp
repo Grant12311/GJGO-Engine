@@ -1,6 +1,7 @@
 #include <backends/imgui_impl_opengl3.h>
 
 #include <GJGO/app.hpp>
+#include <GJGO/editor_layer.hpp>
 #include <GJGO/event.hpp>
 #include <GJGO/imgui_layer.hpp>
 #include <GJGO/log.hpp>
@@ -10,6 +11,9 @@ namespace GJGO
     void Application::run()
     {
         this->layers.emplace_back(new ImGuiLayer);
+        #ifndef GJGO_BUILD_TARGET_DIST
+            this->layers.emplace_back(new EditorLayer);
+        #endif // GJGO_BUILD_TARGET_DIST
 
         while (this->window.isOpen)
         {

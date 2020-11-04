@@ -1,6 +1,54 @@
-#include <GJGO/editor_layer.hpp
+#include <imgui.h>
+
+#include <GJGO/app.hpp>
+#include <GJGO/editor_layer.hpp>
 
 namespace GJGO
 {
+    void EditorLayer::drawGui()
+    {
+        ImGuiIO& io = ImGui::GetIO();
 
+        if (ImGui::BeginMainMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("New")) {}
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Open", "Ctrl+O")) {}
+                if (ImGui::BeginMenu("Open Recent"))
+                {
+                    ImGui::MenuItem("Game");
+
+                    ImGui::EndMenu();
+                }
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Save", "Ctrl+S")) {}
+                if (ImGui::MenuItem("Save as...")) {}
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Close")) {}
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Quit", "Ctrl+Q")) {}
+
+                ImGui::EndMenu();
+            }
+
+            ImGui::EndMainMenuBar();
+
+            // Overlay
+            ImGuiWindowFlags overlayFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
+                                            ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoInputs;
+            ImGui::SetNextWindowPos({GJGO::g_appInstancePtr->window.width - ImGui::CalcTextSize("16.667 ms/frame (60.0 FPS)").x - 10, 10.0f});
+            if (ImGui::Begin("Example: Simple overlay", NULL, overlayFlags))
+            {
+                ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
+                ImGui::End();
+            }
+        }
+    }
 }
