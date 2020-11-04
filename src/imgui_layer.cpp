@@ -100,6 +100,7 @@ namespace GJGO
         this->m_ioPtr->BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
         this->m_ioPtr->BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
         this->m_ioPtr->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        this->m_ioPtr->ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
         this->m_ioPtr->KeyMap[ImGuiKey_Tab] = HGR_tab;
         this->m_ioPtr->KeyMap[ImGuiKey_LeftArrow] = HGR_left;
