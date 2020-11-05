@@ -6,7 +6,7 @@
 
 namespace GJGO
 {
-    static void ImGuiClipboardReadTextCallback(void* const a_userData, const char* const a_text)
+    static void ImGuiClipboardReadTextCallback(void* const /*a_userData*/, const char* const a_text)
     {
         GJGO::Clipboard::writeText(a_text);
     }
