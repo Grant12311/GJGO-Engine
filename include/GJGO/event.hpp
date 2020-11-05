@@ -6,8 +6,7 @@
 
 #include <Hangar2/window.h>
 
-#include <GJGO/position2D.hpp>
-#include <GJGO/size2D.hpp>
+#include <GJGO/transform2D.hpp>
 
 namespace GJGO
 {
