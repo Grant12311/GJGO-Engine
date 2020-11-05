@@ -32,12 +32,6 @@ public:
                     GJGO::g_appInstancePtr->window.setVsync(1);
                     GJGO::g_appInstancePtr->window.setFramerateCap(30);
                 }
-
-                if (a_event->keycode == HGR_up){
-                    GJGO::g_appInstancePtr->window.setSize(100, 100);
-                }else if (a_event->keycode == HGR_down){
-                    GJGO::g_appInstancePtr->window.setSize(1000, 1000);
-                }
                 break;
             case GJGO::EventType::keyUp:
                 GJGO_LOG_INFO("Key Up: ", a_event->keycode);
