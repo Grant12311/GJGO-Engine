@@ -15,10 +15,7 @@
 class GameLayer : public GJGO::Layer
 {
 public:
-    void onUpdate() override
-    {
-        //GJGO_LOG_INFO(this->parentPtr->window.deltaTime);
-    }
+    void onUpdate() override {}
 
     void onEvent(GJGO::Event* const a_event) override
     {
@@ -41,9 +38,6 @@ public:
                 break;
             case GJGO::EventType::mouseMove:
                 GJGO_LOG_INFO("(", a_event->mousePosition.absolute.x, ", ", a_event->mousePosition.absolute.y, ")");
-                break;
-            case GJGO::EventType::windowResize:
-                GJGO_LOG_INFO("Window Size: (", a_event->windowSize.width, ", ", a_event->windowSize.height, ")");
                 break;
         }
     }
