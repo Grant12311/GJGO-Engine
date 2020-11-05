@@ -21,7 +21,7 @@ namespace GJGO
     {
         Position2D position;
         Size2D size;
-        glm::mat4 = glm::mat4(1.0f);
+        glm::mat4 matrix = glm::mat4(1.0f);
     };
 }
 
