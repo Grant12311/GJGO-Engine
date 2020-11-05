@@ -23,7 +23,7 @@ namespace GJGO
         this->m_ioPtr->KeyAlt = g_appInstancePtr->window.keyIsDown(HGR_alt_left) || g_appInstancePtr->window.keyIsDown(HGR_alt_right);
         this->m_ioPtr->KeySuper = g_appInstancePtr->window.keyIsDown(HGR_super);
 
-        this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(g_appInstancePtr->window.width), static_cast<float>(g_appInstancePtr->window.height));
+        this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(g_appInstancePtr->window.getWidth()), static_cast<float>(g_appInstancePtr->window.getHeight()));
         this->m_ioPtr->DeltaTime = static_cast<float>(g_appInstancePtr->window.deltaTime) / 1000.0f;
     }
 
@@ -50,7 +50,7 @@ namespace GJGO
                 a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
             case GJGO::EventType::mouseMove:
-                this->m_ioPtr->MousePos = ImVec2(static_cast<float>(a_eventPtr->mousePosition.relative.x), static_cast<float>(g_appInstancePtr->window.height - a_eventPtr->mousePosition.relative.y));
+                this->m_ioPtr->MousePos = ImVec2(static_cast<float>(a_eventPtr->mousePosition.relative.x), static_cast<float>(g_appInstancePtr->window.getHeight() - a_eventPtr->mousePosition.relative.y));
                 break;
             case GJGO::EventType::mouseButtonDown:
                 switch (a_eventPtr->mouseButton)
