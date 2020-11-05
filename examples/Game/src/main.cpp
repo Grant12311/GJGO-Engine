@@ -26,6 +26,15 @@ public:
         {
             case GJGO::EventType::keyDown:
                 GJGO_LOG_INFO("Key Down: ", a_event->keycode);
+                if (a_event->keycode == HGR_0){
+                    GJGO::g_appInstancePtr->window.setVsync(0);
+                }else if (a_event->keycode == HGR_1){
+                    GJGO::g_appInstancePtr->window.setVsync(1);
+                    GJGO::g_appInstancePtr->window.setFramerateCap(60);
+                }else if (a_event->keycode == HGR_2){
+                    GJGO::g_appInstancePtr->window.setVsync(1);
+                    GJGO::g_appInstancePtr->window.setFramerateCap(30);
+                }
                 break;
             case GJGO::EventType::keyUp:
                 GJGO_LOG_INFO("Key Up: ", a_event->keycode);
@@ -49,7 +58,9 @@ int main()
 {
     GJGO_LOG_SET_PRINT_FILE(false);
     GJGO_LOG_SET_PRINT_FUNCTION(false);
-    GJGO::Application app;
+    Hangar::Config winConfig;
+    winConfig.vsync = false;
+    GJGO::Application app(winConfig);
 
     app.layers.emplace_back(new GameLayer);
 
