@@ -1,8 +1,15 @@
 #include <iostream>
 
+#include <GLES3/gl31.h>
+
 #include <imgui.h>
 
 #include <Hangar2/keycodes.h>
+
+#include <Druid/vao.h>
+#include <Druid/vbo.h>
+#include <Druid/ibo.h>
+#include <Druid/shader.h>
 
 #include <GJGO/app.hpp>
 #include <GJGO/clipboard.hpp>
@@ -14,6 +21,14 @@
 
 class GameLayer : public GJGO::Layer
 {
+private:
+    Druid::VAO m_vao;
+    Druid::VBO m_vbo;
+    Druid::Shader shader = Druid::Shader("sprite.shader");
+
+    unsigned int fbo;
+    unsigned int depthBuffer;
+    unsigned int texture;
 public:
     void onUpdate() override {}
 
@@ -44,7 +59,40 @@ public:
 
     void draw() override
     {
-        //GJGO_LOG_INFO("Draw!");
+        this->m_vao.bind();
+        this->shader.bind();
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
+
+    GameLayer()
+    {
+        glGenFramebuffers(1, &this->fbo);
+        glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
+
+        glGenTextures(1, &this->texture);
+        glBindTexture(GL_TEXTURE_2D, this->texture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+        glGenRenderbuffers(1, &this->depthBuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, this->depthBuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 1024, 768);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this->depthBuffer);
+
+        this->m_vao.bind();
+        this->m_vbo.bind();
+
+        std::array<float, 6> vertices = {
+             0.0f,  0.5f,
+             0.5f, -0.5f,
+            -0.5f, -0.5f
+        };
+
+        this->m_vbo.fill(6 * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+        this->m_vao.setAttrib(0, 2, GL_FLOAT, false, 2 * sizeof(float), 0);
     }
 };
 
