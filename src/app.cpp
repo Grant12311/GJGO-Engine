@@ -8,6 +8,25 @@
 
 namespace GJGO
 {
+    static void openglDebugLogger(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+    {
+        switch (severity)
+        {
+            case GL_DEBUG_SEVERITY_HIGH:
+                GJGO_LOG_ERROR(message);
+                break;
+            case GL_DEBUG_SEVERITY_MEDIUM:
+                GJGO_LOG_WARN(message);
+                break;
+            case GL_DEBUG_SEVERITY_LOW:
+                GJGO_LOG_WARN(message);
+                break;
+            case GL_DEBUG_SEVERITY_NOTIFICATION:
+                GJGO_LOG_INFO(message);
+                break;
+        }
+    }
+
     void Application::run()
     {
         this->layers.emplace_back(new ImGuiLayer);
@@ -64,6 +83,10 @@ namespace GJGO
         window(a_config)
     {
         GJGO_LOG_INFO(glGetString(GL_VERSION));
+
+        glEnable(GL_DEBUG_OUTPUT);
+        PFNGLDEBUGMESSAGECALLBACKPROC glDebugMessageCallback = reinterpret_cast<PFNGLDEBUGMESSAGECALLBACKPROC>(glXGetProcAddress(reinterpret_cast<const unsigned char*>("glDebugMessageCallback")));
+        glDebugMessageCallback(openglDebugLogger, 0);
 
         this->window.onKeyDownEvent.addListener([&](const int a_keycode)
         {
