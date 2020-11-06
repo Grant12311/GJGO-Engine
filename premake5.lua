@@ -42,7 +42,7 @@ workspace("GJGO")
         kind("StaticLib")
         links({"Druid", "imgui", "clip"})
 
-        files({"premake5.lua", ".gitignore", "src/*", "include/**"})
+        files({"premake5.lua", ".gitignore", "src/**", "include/**"})
 
     project("Game")
         filename("Game")
