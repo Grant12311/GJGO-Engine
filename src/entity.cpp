@@ -1,13 +1,14 @@
+#include <GJGO/app.hpp>
 #include <GJGO/entity.hpp>
 
 namespace GJGO
 {
-    Entity::Entity(GJGO::Application* const a_appPtr) :
-        m_registryPtr(&a_appPtr->registry), m_entity(m_registryPtr->create()) {}
+    Entity::Entity() :
+        m_entity(g_appInstancePtr->registry.create()) {}
 
     Entity::~Entity()
     {
-        auto curr = this->m_registryPtr->version(this->m_entity);
-        this->m_registryPtr->destroy(this->m_entity, ++curr);
+        auto curr = g_appInstancePtr->registry.version(this->m_entity);
+        g_appInstancePtr->registry.destroy(this->m_entity, ++curr);
     }
 }
