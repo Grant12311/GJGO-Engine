@@ -58,11 +58,8 @@ int main()
 
     app.layers.emplace_back(new GameLayer);
 
-    GJGO::Entity e(&app);
-    e.addComponent<GJGO::Position2D>(5, 5);
-    e.editComponent<GJGO::Position2D>(0, 90);
-
-    GJGO_LOG_INFO("(", e.getComponent<GJGO::Position2D>().x, ", ", e.getComponent<GJGO::Position2D>().y, ")");
+    GJGO::Entity e;
+    e.addComponent<GJGO::Transform2D>();
 
     app.run();
 
