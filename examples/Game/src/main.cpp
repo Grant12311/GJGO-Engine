@@ -10,7 +10,7 @@
 #include <GJGO/event.hpp>
 #include <GJGO/layer.hpp>
 #include <GJGO/log.hpp>
-#include <GJGO/transform2D.hpp>
+#include <GJGO/2D/transform2D.hpp>
 
 class GameLayer : public GJGO::Layer
 {
