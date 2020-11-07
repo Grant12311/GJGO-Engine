@@ -31,7 +31,7 @@ namespace GJGO
     {
         this->layers.emplace_back(new ImGuiLayer);
         #ifndef GJGO_BUILD_TARGET_DIST
-            //this->layers.emplace_back(new EditorLayer);
+            this->layers.emplace_back(new EditorLayer);
         #endif // GJGO_BUILD_TARGET_DIST
 
         while (this->window.isOpen)
