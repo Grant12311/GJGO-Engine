@@ -59,10 +59,22 @@ public:
 
     void draw() override
     {
+        glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
         this->m_vao.bind();
         this->shader.bind();
+        glViewport(0, 0, 1600, 900);
         glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
+
+    /*void drawGui() override
+    {
+        ImGui::Begin("Renderer", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+
+        ImGui::Image((void*)this->texture, {100, 100}, {0, 1}, {1, 0});
+
+        ImGui::End();
+    }*/
 
     GameLayer()
     {
@@ -71,15 +83,27 @@ public:
 
         glGenTextures(1, &this->texture);
         glBindTexture(GL_TEXTURE_2D, this->texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1024, 768, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1600, 900, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
         glGenRenderbuffers(1, &this->depthBuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, this->depthBuffer);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 1024, 768);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 1600, 900);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, this->depthBuffer);
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->texture, 0);
+
+        GLenum DrawBuffers[1] = {GL_COLOR_ATTACHMENT0};
+        glDrawBuffers(1, DrawBuffers);
+
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        {
+            exit(1);
+        }
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         this->m_vao.bind();
         this->m_vbo.bind();
