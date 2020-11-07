@@ -13,16 +13,16 @@ namespace GJGO
         switch (severity)
         {
             case GL_DEBUG_SEVERITY_HIGH:
-                GJGO_LOG_ERROR(message);
+                GJGO_LOG_ERROR("HIGH: ", message);
                 break;
             case GL_DEBUG_SEVERITY_MEDIUM:
-                GJGO_LOG_WARN(message);
+                GJGO_LOG_WARN("Med: ", message);
                 break;
             case GL_DEBUG_SEVERITY_LOW:
-                GJGO_LOG_WARN(message);
+                GJGO_LOG_WARN("Low: ", message);
                 break;
             case GL_DEBUG_SEVERITY_NOTIFICATION:
-                GJGO_LOG_INFO(message);
+                GJGO_LOG_INFO("Info: ", message);
                 break;
         }
     }
@@ -31,7 +31,7 @@ namespace GJGO
     {
         this->layers.emplace_back(new ImGuiLayer);
         #ifndef GJGO_BUILD_TARGET_DIST
-            this->layers.emplace_back(new EditorLayer);
+            //this->layers.emplace_back(new EditorLayer);
         #endif // GJGO_BUILD_TARGET_DIST
 
         while (this->window.isOpen)
@@ -85,6 +85,7 @@ namespace GJGO
         GJGO_LOG_INFO(glGetString(GL_VERSION));
 
         glEnable(GL_DEBUG_OUTPUT);
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
         PFNGLDEBUGMESSAGECALLBACKPROC glDebugMessageCallback = reinterpret_cast<PFNGLDEBUGMESSAGECALLBACKPROC>(glXGetProcAddress(reinterpret_cast<const unsigned char*>("glDebugMessageCallback")));
         glDebugMessageCallback(openglDebugLogger, 0);
 
