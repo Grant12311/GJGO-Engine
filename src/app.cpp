@@ -5,6 +5,7 @@
 #include <GJGO/event.hpp>
 #include <GJGO/imgui_layer.hpp>
 #include <GJGO/log.hpp>
+#include <GJGO/2D/renderer2D.hpp>
 
 namespace GJGO
 {
@@ -140,6 +141,8 @@ namespace GJGO
             event->windowSize = {static_cast<uint32_t>(a_width), static_cast<uint32_t>(a_height)};
             this->pendingEvents.emplace_back(event);
         });
+
+        Renderer::init2D();
 
         g_appInstancePtr = this;
     }
