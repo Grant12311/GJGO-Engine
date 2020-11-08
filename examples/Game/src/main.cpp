@@ -18,6 +18,7 @@
 #include <GJGO/event.hpp>
 #include <GJGO/layer.hpp>
 #include <GJGO/log.hpp>
+#include <GJGO/2D/renderer2D.hpp>
 #include <GJGO/2D/transform2D.hpp>
 
 class GameLayer : public GJGO::Layer
@@ -27,8 +28,21 @@ private:
     Druid::VAO m_vao;
     Druid::VBO m_vbo;
     Druid::Shader m_shader;
+
+    GJGO::Position2D m_playerPosition;
 public:
-    void onUpdate() override {}
+    void onUpdate() override
+    {
+        if (GJGO::g_appInstancePtr->window.keyIsDown(HGR_w))
+            this->m_playerPosition.y += GJGO::g_appInstancePtr->window.deltaTime;
+        else if (GJGO::g_appInstancePtr->window.keyIsDown(HGR_s))
+            this->m_playerPosition.y -= GJGO::g_appInstancePtr->window.deltaTime;
+
+        if (GJGO::g_appInstancePtr->window.keyIsDown(HGR_a))
+            this->m_playerPosition.x -= GJGO::g_appInstancePtr->window.deltaTime;
+        else if (GJGO::g_appInstancePtr->window.keyIsDown(HGR_d))
+            this->m_playerPosition.x += GJGO::g_appInstancePtr->window.deltaTime;
+    }
 
     void onEvent(GJGO::Event* const a_event) override
     {
@@ -36,14 +50,19 @@ public:
         {
             case GJGO::EventType::keyDown:
                 GJGO_LOG_INFO("Key Down: ", a_event->keycode);
-                if (a_event->keycode == HGR_0){
-                    GJGO::g_appInstancePtr->window.setVsync(0);
-                }else if (a_event->keycode == HGR_1){
-                    GJGO::g_appInstancePtr->window.setVsync(1);
-                    GJGO::g_appInstancePtr->window.setFramerateCap(60);
-                }else if (a_event->keycode == HGR_2){
-                    GJGO::g_appInstancePtr->window.setVsync(1);
-                    GJGO::g_appInstancePtr->window.setFramerateCap(30);
+                switch (a_event->keycode)
+                {
+                    case HGR_0:
+                        GJGO::g_appInstancePtr->window.setVsync(0);
+                        break;
+                    case HGR_1:
+                        GJGO::g_appInstancePtr->window.setVsync(1);
+                        GJGO::g_appInstancePtr->window.setFramerateCap(60);
+                        break;
+                    case HGR_2:
+                        GJGO::g_appInstancePtr->window.setVsync(1);
+                        GJGO::g_appInstancePtr->window.setFramerateCap(30);
+                        break;
                 }
                 break;
             case GJGO::EventType::keyUp:
@@ -57,25 +76,26 @@ public:
 
     void draw() override
     {
-        this->m_fbo.bind();
-        this->m_vao.bind();
+        //this->m_fbo.bind();
+        //this->m_vao.bind();
         this->m_shader.bind();
-        glViewport(0, 0, 1600, 900);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        this->m_fbo.unbind();
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
+        GJGO::Renderer::genOrthoMatrix(GJGO::g_appInstancePtr->window.getWidth(), GJGO::g_appInstancePtr->window.getHeight());
+        GJGO::Renderer::drawQuad(&this->m_shader, this->m_playerPosition, {100, 100});
+        //this->m_fbo.unbind();
     }
 
     void drawGui() override
     {
-        ImGui::Begin("Renderer", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+        /*ImGui::Begin("Renderer", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
         ImGui::Image((void*)this->m_fbo.colorAttachment, {100, 100}, {0, 1}, {1, 0});
 
-        ImGui::End();
+        ImGui::End();*/
     }
 
     GameLayer() :
-        m_fbo(1600, 900), m_shader("sprite.shader")
+        m_fbo(1600, 900), m_shader("renderer.shader")
     {
         this->m_vao.bind();
         this->m_vbo.bind();
