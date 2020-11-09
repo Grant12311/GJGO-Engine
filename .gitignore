@@ -8,6 +8,8 @@ examples/Game/Game.depend
 examples/Game/Game.layout
 examples/Game/gmon.out
 examples/Game/imgui.ini
+examples/Game/renderer.shader
+examples/Game/sprite.shader
 
 GJGO.cbp
 GJGO.depend
