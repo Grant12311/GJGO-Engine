@@ -5,7 +5,7 @@
 
 #include <entt/entity/registry.hpp>
 
-#include <Hangar2/hangar.h>
+#include <GLFW/glfw3.h>
 
 #include <GJGO/layer.hpp>
 #include <GJGO/event.hpp>
@@ -15,7 +15,7 @@ namespace GJGO
     class Application
     {
     public:
-        Hangar::Window window;
+        GLFWwindow* windowPtr;
         entt::registry registry;
 
         std::vector<Layer*> layers;

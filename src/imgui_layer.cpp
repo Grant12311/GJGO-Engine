@@ -1,3 +1,5 @@
+#include <GLFW/glfw3.h>
+
 #include <backends/imgui_impl_opengl3.h>
 
 #include <GJGO/app.hpp>
@@ -18,10 +20,10 @@ namespace GJGO
 
     void ImGuiLayer::onUpdate()
     {
-        this->m_ioPtr->KeyCtrl = g_appInstancePtr->window.keyIsDown(HGR_control_left) || g_appInstancePtr->window.keyIsDown(HGR_control_right);
-        this->m_ioPtr->KeyShift = g_appInstancePtr->window.keyIsDown(HGR_shift_left) || g_appInstancePtr->window.keyIsDown(HGR_shift_right);
-        this->m_ioPtr->KeyAlt = g_appInstancePtr->window.keyIsDown(HGR_alt_left) || g_appInstancePtr->window.keyIsDown(HGR_alt_right);
-        this->m_ioPtr->KeySuper = g_appInstancePtr->window.keyIsDown(HGR_super);
+        this->m_ioPtr->KeyCtrl = glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_CONTROL);
+        this->m_ioPtr->KeyShift = glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_SHIFT) || glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_SHIFT));
+        this->m_ioPtr->KeyAlt = glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_ALT) || glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_ALT);
+        this->m_ioPtr->KeySuper = glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_SUPER) || glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_SUPER);
 
         this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(g_appInstancePtr->window.getWidth()), static_cast<float>(g_appInstancePtr->window.getHeight()));
         this->m_ioPtr->DeltaTime = static_cast<float>(g_appInstancePtr->window.deltaTime) / 1000.0f;
@@ -29,7 +31,7 @@ namespace GJGO
 
     void ImGuiLayer::onEvent(GJGO::Event* const a_eventPtr)
     {
-        switch (a_eventPtr->type)
+        /*switch (a_eventPtr->type)
         {
             case GJGO::EventType::keyDown:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = true;
@@ -85,7 +87,7 @@ namespace GJGO
             case GJGO::EventType::windowResize:
                 this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(a_eventPtr->windowSize.width), static_cast<float>(a_eventPtr->windowSize.height));
                 break;
-        }
+        }*/
     }
 
     ImGuiLayer::ImGuiLayer()

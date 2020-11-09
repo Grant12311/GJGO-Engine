@@ -1,3 +1,5 @@
+#include <GLFW/glfw3.h>
+
 #include <backends/imgui_impl_opengl3.h>
 
 #include <GJGO/app.hpp>
@@ -30,14 +32,14 @@ namespace GJGO
 
     void Application::run()
     {
-        this->layers.emplace_back(new ImGuiLayer);
+        //this->layers.emplace_back(new ImGuiLayer);
         #ifndef GJGO_BUILD_TARGET_DIST
             //this->layers.emplace_back(new EditorLayer);
         #endif // GJGO_BUILD_TARGET_DIST
 
-        while (this->window.isOpen)
+        while (!glfwWindowShouldClose(this->windowPtr))
         {
-            this->window.update();
+            glfwPollEvents();
 
             for (Layer* const l_layerPtr : this->layers)
             {
@@ -60,29 +62,117 @@ namespace GJGO
                 i--;
             }
 
-            this->window.clear();
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
             for (Layer* const l_layerPtr : this->layers)
             {
                 l_layerPtr->draw();
             }
 
-            ImGui_ImplOpenGL3_NewFrame();
+            /*ImGui_ImplOpenGL3_NewFrame();
             ImGui::NewFrame();
             for (Layer* const l_layerPtr : this->layers)
             {
                 l_layerPtr->drawGui();
             }
             ImGui::Render();
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());*/
 
-            this->window.swapBuffers();
+            glfwSwapBuffers(this->windowPtr);
         }
     }
 
-    Application::Application(const Hangar::Config &a_config) :
-        window(a_config)
+    static void error_callback(int error, const char* description)
     {
+        fprintf(stderr, "Error: %s\n", description);
+    }
+
+    static void keyCallback(GLFWwindow* const a_windowPtr, const int a_key, const int a_scancode, const int a_action, const int a_mods)
+    {
+        if (a_action == GLFW_PRESS)
+        {
+            Event* const event = new Event(EventType::keyDown);
+            event->keycode = a_key;
+            g_appInstancePtr->pendingEvents.emplace_back(event);
+        }else{
+            Event* const event = new Event(EventType::keyUp);
+            event->keycode = a_key;
+            g_appInstancePtr->pendingEvents.emplace_back(event);
+        }
+    }
+
+    static void mousePositionCallback(GLFWwindow* const a_windowPtr, const double a_x, const double a_y)
+    {
+        int windowPosX;
+        int windowPosY;
+        glfwGetWindowPos(g_appInstancePtr->windowPtr, &windowPosX, &windowPosY);
+
+        int windowWidth;
+        int windowHeight;
+        glfwGetWindowSize(GJGO::g_appInstancePtr->windowPtr, &windowWidth, &windowHeight);
+
+        int screenHeight = glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
+
+        windowPosY += windowHeight;
+        windowPosY = screenHeight - windowPosY;
+
+        Event* const event = new Event(EventType::mouseMove);
+        event->mousePosition.relative = {static_cast<int>(a_x), windowHeight - static_cast<int>(a_y) - 1};
+
+        event->mousePosition.absolute = {windowPosX + static_cast<int>(a_x), windowPosY + event->mousePosition.relative.y};
+
+        g_appInstancePtr->pendingEvents.emplace_back(event);
+    }
+
+    static void mouseButtonCallback(GLFWwindow* const a_windowPtr, const int a_button, const int a_action, const int a_mods)
+    {
+        Event* event;
+
+        if (a_action == GLFW_PRESS)
+        {
+            event = new Event(EventType::mouseButtonDown);
+        }else{
+            event = new Event(EventType::mouseButtonUp);
+        }
+
+        event->mouseButton = a_button;
+        g_appInstancePtr->pendingEvents.emplace_back(event);
+    }
+
+    static void windowSizeCallback(GLFWwindow* const a_windowPtr, const int a_width, const int a_height)
+    {
+        Event* const event = new Event(EventType::windowResize);
+        event->windowSize = {static_cast<unsigned int>(a_width), static_cast<unsigned int>(a_height)};
+        g_appInstancePtr->pendingEvents.emplace_back(event);
+    }
+
+    Application::Application(const Hangar::Config &a_config)
+    {
+        g_appInstancePtr = this;
+
+        if (!glfwInit())
+            exit(1);
+
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+        glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+
+        this->windowPtr = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+        if (!this->windowPtr)
+        {
+            glfwTerminate();
+            exit(1);
+        }
+
+        glfwMakeContextCurrent(this->windowPtr);
+
+        glfwSetErrorCallback(error_callback);
+        glfwSetKeyCallback(this->windowPtr, keyCallback);
+        glfwSetCursorPosCallback(this->windowPtr, mousePositionCallback);
+        glfwSetMouseButtonCallback(this->windowPtr, mouseButtonCallback);
+        glfwSetWindowSizeCallback(this->windowPtr, windowSizeCallback);
+
         GJGO_LOG_INFO(glGetString(GL_VERSION));
 
         glEnable(GL_DEBUG_OUTPUT);
@@ -90,18 +180,7 @@ namespace GJGO
         PFNGLDEBUGMESSAGECALLBACKPROC glDebugMessageCallback = reinterpret_cast<PFNGLDEBUGMESSAGECALLBACKPROC>(glXGetProcAddress(reinterpret_cast<const unsigned char*>("glDebugMessageCallback")));
         glDebugMessageCallback(openglDebugLogger, 0);
 
-        this->window.onKeyDownEvent.addListener([&](const int a_keycode)
-        {
-            Event* const event = new Event(EventType::keyDown);
-            event->keycode = a_keycode;
-            this->pendingEvents.emplace_back(event);
-        });
-        this->window.onKeyUpEvent.addListener([&](const int a_keycode)
-        {
-            Event* const event = new Event(EventType::keyUp);
-            event->keycode = a_keycode;
-            this->pendingEvents.emplace_back(event);
-        });
+        /*
         this->window.onKeyTypedDownEvent.addListener([&](const int a_keycode)
         {
             Event* const event = new Event(EventType::keyTypedDown);
@@ -112,39 +191,9 @@ namespace GJGO
             Event* const event = new Event(EventType::keyTypedUp);
             event->keycode = a_keycode;
             this->pendingEvents.emplace_back(event);
-        });
-
-        this->window.onMouseMoveEvent.addListener([&](const int a_posX, const int a_posY, const int a_posXAbs, const int a_posYAbs)
-        {
-            Event* const event = new Event(EventType::mouseMove);
-            event->mousePosition.relative = {a_posX, a_posY};
-            event->mousePosition.absolute = {a_posXAbs, a_posYAbs};
-            this->pendingEvents.emplace_back(event);
-        });
-
-        this->window.onMouseButtonDownEvent.addListener([&](const uint8_t a_mouseButton)
-        {
-            Event* const event = new Event(EventType::mouseButtonDown);
-            event->mouseButton = a_mouseButton;
-            this->pendingEvents.emplace_back(event);
-        });
-        this->window.onMouseButtonUpEvent.addListener([&](const uint8_t a_mouseButton)
-        {
-            Event* const event = new Event(EventType::mouseButtonUp);
-            event->mouseButton = a_mouseButton;
-            this->pendingEvents.emplace_back(event);
-        });
-
-        this->window.onResizeEvent.addListener([&](const int a_width, const int a_height)
-        {
-            Event* const event = new Event(EventType::windowResize);
-            event->windowSize = {static_cast<uint32_t>(a_width), static_cast<uint32_t>(a_height)};
-            this->pendingEvents.emplace_back(event);
-        });
+        });*/
 
         Renderer::init2D();
-
-        g_appInstancePtr = this;
     }
 
     Application::~Application()
@@ -153,5 +202,8 @@ namespace GJGO
         {
             delete l_layerPtr;
         }
+
+        glfwDestroyWindow(this->windowPtr);
+        glfwTerminate();
     }
 }

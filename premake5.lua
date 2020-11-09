@@ -7,11 +7,11 @@ workspace("GJGO")
     startproject("Game")
 
     includedirs({"include", "vendor/Hangar2/include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip", "vendor/glm"})
-    links({"X11", "xcb", "xcb-randr", "GL", "pthread"})
+    links({"X11", "xcb", "xcb-randr", "GL", "pthread", "glfw"})
 
     flags({"MultiProcessorCompile"})
     buildoptions({"-pipe", "-Wall", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion", "-Wno-switch", "-Wno-unused-variable"})
-    defines({"IMGUI_IMPL_OPENGL_ES3"})
+    defines({"IMGUI_IMPL_OPENGL_ES3", "GLFW_INCLUDE_ES31"})
 
     filter("platforms:LinuxARM")
         architecture("ARM")
