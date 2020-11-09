@@ -42,6 +42,8 @@ public:
             this->m_playerPosition.x -= GJGO::g_appInstancePtr->window.deltaTime;
         else if (GJGO::g_appInstancePtr->window.keyIsDown(HGR_d))
             this->m_playerPosition.x += GJGO::g_appInstancePtr->window.deltaTime;
+
+        std::cout << GJGO::g_appInstancePtr->window.deltaTime << std::endl;
     }
 
     void onEvent(GJGO::Event* const a_event) override
