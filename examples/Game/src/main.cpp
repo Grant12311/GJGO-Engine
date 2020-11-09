@@ -33,22 +33,22 @@ private:
 public:
     void onUpdate() override
     {
-        if (GJGO::g_appInstancePtr->window.keyIsDown(HGR_w))
+        /*if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_W))
             this->m_playerPosition.y += GJGO::g_appInstancePtr->window.deltaTime;
-        else if (GJGO::g_appInstancePtr->window.keyIsDown(HGR_s))
+        else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_S))
             this->m_playerPosition.y -= GJGO::g_appInstancePtr->window.deltaTime;
 
-        if (GJGO::g_appInstancePtr->window.keyIsDown(HGR_a))
+        if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_A))
             this->m_playerPosition.x -= GJGO::g_appInstancePtr->window.deltaTime;
-        else if (GJGO::g_appInstancePtr->window.keyIsDown(HGR_d))
+        else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_D))
             this->m_playerPosition.x += GJGO::g_appInstancePtr->window.deltaTime;
 
-        std::cout << GJGO::g_appInstancePtr->window.deltaTime << std::endl;
+        std::cout << GJGO::g_appInstancePtr->window.deltaTime << std::endl;*/
     }
 
     void onEvent(GJGO::Event* const a_event) override
     {
-        switch (a_event->type)
+        /*switch (a_event->type)
         {
             case GJGO::EventType::keyDown:
                 GJGO_LOG_INFO("Key Down: ", a_event->keycode);
@@ -73,18 +73,18 @@ public:
             case GJGO::EventType::mouseMove:
                 GJGO_LOG_INFO("(", a_event->mousePosition.absolute.x, ", ", a_event->mousePosition.absolute.y, ")");
                 break;
-        }
+        }*/
     }
 
     void draw() override
-    {
+    {/*
         //this->m_fbo.bind();
         //this->m_vao.bind();
         this->m_shader.bind();
         //glDrawArrays(GL_TRIANGLES, 0, 6);
         GJGO::Renderer::genOrthoMatrix(GJGO::g_appInstancePtr->window.getWidth(), GJGO::g_appInstancePtr->window.getHeight());
         GJGO::Renderer::drawQuad(&this->m_shader, this->m_playerPosition, {100, 100});
-        //this->m_fbo.unbind();
+        //this->m_fbo.unbind();*/
     }
 
     void drawGui() override
@@ -122,7 +122,7 @@ int main()
     winConfig.vsync = false;
     GJGO::Application app(winConfig);
 
-    app.layers.emplace_back(new GameLayer);
+    //app.layers.emplace_back(new GameLayer);
 
     GJGO::Entity e;
     e.addComponent<GJGO::Transform2D>();
