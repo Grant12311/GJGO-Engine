@@ -104,7 +104,7 @@ namespace GJGO
             Event* const event = new Event(EventType::keyDown);
             event->keycode = a_key;
             g_appInstancePtr->pendingEvents.emplace_back(event);
-        }else{
+        }else if (a_action == GLFW_RELEASE){
             Event* const event = new Event(EventType::keyUp);
             event->keycode = a_key;
             g_appInstancePtr->pendingEvents.emplace_back(event);
