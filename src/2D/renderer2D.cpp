@@ -20,6 +20,7 @@ namespace GJGO
         static std::unique_ptr<Druid::VBO> vboPtr;
         static std::unique_ptr<Druid::IBO> iboPtr;
 
+        Druid::Shader* currentShader;
         glm::mat4 orthoMatrix;
 
         static glm::mat4 genTransformer2D(const Position2D &a_position, const Size2D &a_size)
@@ -28,20 +29,22 @@ namespace GJGO
             return glm::scale(toReturn, glm::vec3((1 + a_size.width) / 1.0f, (1 + a_size.height) / 1.0f, 1.0f));
         }
 
+        void begin(Druid::Shader* const a_shader, const unsigned int a_width, const unsigned int a_height)
+        {
+            currentShader = a_shader;
+            currentShader->bind();
+            orthoMatrix = glm::ortho(0.0f, static_cast<float>(a_width), 0.0f, static_cast<float>(a_height));
+            currentShader->fillUniform("orthoMatrix", 1, false, orthoMatrix);
+            glViewport(0, 0, a_width, a_height);
+        }
+
         void drawQuad(Druid::Shader* const a_shader, const Position2D &a_position, const Size2D &a_size, const Color3 a_color = {1.0f, 1.0f, 1.0f})
         {
             vaoPtr->bind();
 
-            a_shader->fillUniform("orthoMatrix", 1, false, orthoMatrix);
-
             a_shader->fillUniform("transformer", 1, false, genTransformer2D(a_position, a_size));
             a_shader->fillUniform("quadColor", a_color.red, a_color.green, a_color.blue);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-        }
-
-        void genOrthoMatrix(const unsigned int a_width, const unsigned int a_height)
-        {
-            orthoMatrix = glm::ortho(0.0f, static_cast<float>(a_width), 0.0f, static_cast<float>(a_height));
         }
 
         void init2D()

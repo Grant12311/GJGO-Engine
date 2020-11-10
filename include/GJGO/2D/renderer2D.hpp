@@ -10,6 +10,8 @@ namespace GJGO
 {
     namespace Renderer
     {
+        void begin(Druid::Shader* const a_shader, const unsigned int a_width, const unsigned int a_height);
+
         void drawQuad(Druid::Shader* const a_shader, const Position2D &a_position, const Size2D &a_size, const Color3 a_color = {1.0f, 1.0f, 1.0f});
 
         void genOrthoMatrix(const unsigned int a_width, const unsigned int a_height);
