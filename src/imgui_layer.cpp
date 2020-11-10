@@ -65,6 +65,9 @@ namespace GJGO
                 this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = false;
                 //a_eventPtr->handled = this->m_ioPtr->WantCaptureMouse;
                 break;
+            case EventType::mouseWheelScroll:
+                this->m_ioPtr->MouseWheel += static_cast<float>(a_eventPtr->mouseWheelDirection);
+                break;
             case EventType::windowResize:
                 this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(Window::getWidth()), static_cast<float>(Window::getHeight()));
                 break;
