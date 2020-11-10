@@ -156,6 +156,13 @@ namespace GJGO
         g_appInstancePtr->pendingEvents.emplace_back(event);
     }
 
+    static void mouseWheelCallback(GLFWwindow* const a_window, const double a_xOffset, const double a_yOffset)
+    {
+        Event* const event = new Event(EventType::mouseWheelScroll);
+        event->mouseWheelDirection = a_yOffset;
+        g_appInstancePtr->pendingEvents.emplace_back(event);
+    }
+
     static void windowSizeCallback(GLFWwindow* const a_windowPtr, const int a_width, const int a_height)
     {
         Event* const event = new Event(EventType::windowResize);
@@ -190,6 +197,7 @@ namespace GJGO
         glfwSetCharCallback(this->windowPtr, keyTypedCallback);
         glfwSetCursorPosCallback(this->windowPtr, mousePositionCallback);
         glfwSetMouseButtonCallback(this->windowPtr, mouseButtonCallback);
+        glfwSetScrollCallback(this->windowPtr, mouseWheelCallback);
         glfwSetWindowSizeCallback(this->windowPtr, windowSizeCallback);
 
         GJGO_LOG_INFO(glGetString(GL_VERSION));

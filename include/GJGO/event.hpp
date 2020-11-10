@@ -17,6 +17,7 @@ namespace GJGO
         mouseMove,
         mouseButtonDown,
         mouseButtonUp,
+        mouseWheelScroll,
         windowResize
     };
 
@@ -36,6 +37,7 @@ namespace GJGO
 
             MousePositionEventData mousePosition;
             uint8_t mouseButton;
+            signed char mouseWheelDirection;
 
             Size2D windowSize;
         };

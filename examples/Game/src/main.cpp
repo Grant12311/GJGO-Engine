@@ -66,8 +66,8 @@ public:
             case GJGO::EventType::keyUp:
                 GJGO_LOG_INFO("Key Up: ", a_event->keycode);
                 break;
-            case GJGO::EventType::mouseMove:
-                GJGO_LOG_INFO("(", a_event->mousePosition.absolute.x, ", ", a_event->mousePosition.absolute.y, ")");
+            case GJGO::EventType::mouseWheelScroll:
+                GJGO_LOG_INFO("Mouse Wheel Scroll: ", static_cast<short>(a_event->mouseWheelDirection));
                 break;
         }
     }
