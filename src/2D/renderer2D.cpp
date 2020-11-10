@@ -29,7 +29,7 @@ namespace GJGO
             return glm::scale(toReturn, glm::vec3((1 + a_size.width) / 1.0f, (1 + a_size.height) / 1.0f, 1.0f));
         }
 
-        void begin(Druid::Shader* const a_shader, const unsigned int a_width, const unsigned int a_height)
+        void begin2D(Druid::Shader* const a_shader, const unsigned int a_width, const unsigned int a_height)
         {
             currentShader = a_shader;
             currentShader->bind();

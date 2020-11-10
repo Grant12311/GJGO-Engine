@@ -79,7 +79,7 @@ public:
 
             glClear(GL_COLOR_BUFFER_BIT);
 
-            GJGO::Renderer::begin(&this->m_shader, 1600, 900);
+            GJGO::Renderer::begin2D(&this->m_shader, 1600, 900);
 
             GJGO::Renderer::drawQuad(&this->m_shader, this->m_playerPosition, {100, 100});
 
