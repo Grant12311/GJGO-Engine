@@ -25,6 +25,8 @@ private:
     Druid::Shader m_shader;
 
     GJGO::Position2D m_playerPosition;
+
+    bool m_showRendererWindow = true;
 public:
     void onUpdate() override
     {
@@ -71,24 +73,30 @@ public:
 
     void draw() override
     {
-        this->m_fbo.bind();
-        this->m_shader.bind();
+        if (this->m_showRendererWindow)
+        {
+            this->m_fbo.bind();
 
-        glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT);
 
-        GJGO::Renderer::genOrthoMatrix(GJGO::Window::getWidth(), GJGO::Window::getHeight());
-        GJGO::Renderer::drawQuad(&this->m_shader, this->m_playerPosition, {100, 100});
+            GJGO::Renderer::begin(&this->m_shader, 1600, 900);
 
-        this->m_fbo.unbind();
+            GJGO::Renderer::drawQuad(&this->m_shader, this->m_playerPosition, {100, 100});
+
+            this->m_fbo.unbind();
+        }
     }
 
     void drawGui() override
     {
-        ImGui::Begin("Renderer", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+        if (this->m_showRendererWindow)
+        {
+            ImGui::Begin("Renderer", &this->m_showRendererWindow, ImGuiWindowFlags_AlwaysAutoResize);
 
-        ImGui::Image((void*)this->m_fbo.colorAttachment, {100, 100}, {0, 1}, {1, 0});
+            ImGui::Image((void*)this->m_fbo.colorAttachment, {100, 100}, {0, 1}, {1, 0});
 
-        ImGui::End();
+            ImGui::End();
+        }
 
         ImGui::ShowDemoWindow(nullptr);
     }
