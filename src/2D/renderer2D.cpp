@@ -26,7 +26,7 @@ namespace GJGO
         static glm::mat4 genTransformer2D(const Position2D &a_position, const Size2D &a_size)
         {
             glm::mat4 toReturn = glm::translate(glm::mat4(1.0f), glm::vec3(a_position.x, a_position.y, 0.0f));
-            return glm::scale(toReturn, glm::vec3((1 + a_size.width) / 1.0f, (1 + a_size.height) / 1.0f, 1.0f));
+            return glm::scale(toReturn, glm::vec3(static_cast<float>((1 + a_size.width)) / 1.0f, static_cast<float>((1 + a_size.height)) / 1.0f, 1.0f));
         }
 
         void begin2D(Druid::Shader* const a_shader, const unsigned int a_width, const unsigned int a_height)
