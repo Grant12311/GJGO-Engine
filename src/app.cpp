@@ -111,6 +111,13 @@ namespace GJGO
         }
     }
 
+    static void keyTypedCallback(GLFWwindow* const a_windowPtr, const unsigned int a_char)
+    {
+        Event* const event = new Event(EventType::keyTypedDown);
+        event->keycode = a_char;
+        g_appInstancePtr->pendingEvents.emplace_back(event);
+    }
+
     static void mousePositionCallback(GLFWwindow* const a_windowPtr, const double a_x, const double a_y)
     {
         int windowPosX;
@@ -179,6 +186,7 @@ namespace GJGO
 
         glfwSetErrorCallback(error_callback);
         glfwSetKeyCallback(this->windowPtr, keyCallback);
+        glfwSetCharCallback(this->windowPtr, keyTypedCallback);
         glfwSetCursorPosCallback(this->windowPtr, mousePositionCallback);
         glfwSetMouseButtonCallback(this->windowPtr, mouseButtonCallback);
         glfwSetWindowSizeCallback(this->windowPtr, windowSizeCallback);

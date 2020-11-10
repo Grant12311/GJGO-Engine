@@ -46,12 +46,11 @@ namespace GJGO
                 a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
             case EventType::keyTypedDown:
-                /*if (std::find(this->noDrawKeycodes.begin(), this->noDrawKeycodes.end(), a_eventPtr->keycode) == this->noDrawKeycodes.end())
-                    this->m_ioPtr->AddInputCharacter(static_cast<unsigned short>(a_eventPtr->keycode));
+                this->m_ioPtr->AddInputCharacter(static_cast<unsigned short>(a_eventPtr->keycode));
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = true;
                 a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
-            case EventType::keyTypedUp:
+            /*case EventType::keyTypedUp:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = false;
                 a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;*/
@@ -59,38 +58,10 @@ namespace GJGO
                 this->m_ioPtr->MousePos = ImVec2(static_cast<float>(a_eventPtr->mousePosition.relative.x), static_cast<float>(Window::getHeight() - a_eventPtr->mousePosition.relative.y));
                 break;
             case EventType::mouseButtonDown:
-                /*switch (a_eventPtr->mouseButton)
-                {
-                    case 0:
-                        this->m_ioPtr->MouseDown[0] = true;
-                        break;
-                    case 1:
-                        this->m_ioPtr->MouseDown[2] = true;
-                        break;
-                    case 2:
-                        this->m_ioPtr->MouseDown[1] = true;
-                        break;
-
-                    this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = true;
-                }*/
                 this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = true;
                 a_eventPtr->handled = this->m_ioPtr->WantCaptureMouse;
                 break;
             case EventType::mouseButtonUp:
-                /*switch (a_eventPtr->mouseButton)
-                {
-                    case 0:
-                        this->m_ioPtr->MouseDown[0] = false;
-                        break;
-                    case 1:
-                        this->m_ioPtr->MouseDown[2] = false;
-                        break;
-                    case 2:
-                        this->m_ioPtr->MouseDown[1] = false;
-                        break;
-
-                    this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = false;
-                }*/
                 this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = false;
                 a_eventPtr->handled = this->m_ioPtr->WantCaptureMouse;
                 break;
