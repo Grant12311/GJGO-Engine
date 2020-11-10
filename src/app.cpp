@@ -183,6 +183,7 @@ namespace GJGO
         }
 
         glfwMakeContextCurrent(this->windowPtr);
+        glfwSwapInterval(1);
 
         glfwSetErrorCallback(error_callback);
         glfwSetKeyCallback(this->windowPtr, keyCallback);
@@ -197,19 +198,6 @@ namespace GJGO
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_KHR);
         PFNGLDEBUGMESSAGECALLBACKKHRPROC glDebugMessageCallback = reinterpret_cast<PFNGLDEBUGMESSAGECALLBACKKHRPROC>(glfwGetProcAddress("glDebugMessageCallback"));
         glDebugMessageCallback(openglDebugLogger, 0);
-
-        /*
-        this->window.onKeyTypedDownEvent.addListener([&](const int a_keycode)
-        {
-            Event* const event = new Event(EventType::keyTypedDown);
-            event->keycode = a_keycode;
-            this->pendingEvents.emplace_back(event);
-        });this->window.onKeyTypedUpEvent.addListener([&](const int a_keycode)
-        {
-            Event* const event = new Event(EventType::keyTypedUp);
-            event->keycode = a_keycode;
-            this->pendingEvents.emplace_back(event);
-        });*/
 
         Renderer::init2D();
     }
