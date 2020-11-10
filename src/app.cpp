@@ -92,12 +92,12 @@ namespace GJGO
         }
     }
 
-    static void error_callback(int error, const char* description)
+    static void error_callback(int /*error*/, const char* description)
     {
         fprintf(stderr, "Error: %s\n", description);
     }
 
-    static void keyCallback(GLFWwindow* const a_windowPtr, const int a_key, const int a_scancode, const int a_action, const int a_mods)
+    static void keyCallback(GLFWwindow* const /*a_windowPtr*/, const int a_key, const int /*a_scancode*/, const int a_action, const int /*a_mods*/)
     {
         if (a_action == GLFW_PRESS)
         {
@@ -111,14 +111,14 @@ namespace GJGO
         }
     }
 
-    static void keyTypedCallback(GLFWwindow* const a_windowPtr, const unsigned int a_char)
+    static void keyTypedCallback(GLFWwindow* const /*a_windowPtr*/, const unsigned int a_char)
     {
         Event* const event = new Event(EventType::keyTypedDown);
         event->keycode = a_char;
         g_appInstancePtr->pendingEvents.emplace_back(event);
     }
 
-    static void mousePositionCallback(GLFWwindow* const a_windowPtr, const double a_x, const double a_y)
+    static void mousePositionCallback(GLFWwindow* const /*a_windowPtr*/, const double a_x, const double a_y)
     {
         int windowPosX;
         int windowPosY;
@@ -141,7 +141,7 @@ namespace GJGO
         g_appInstancePtr->pendingEvents.emplace_back(event);
     }
 
-    static void mouseButtonCallback(GLFWwindow* const a_windowPtr, const int a_button, const int a_action, const int a_mods)
+    static void mouseButtonCallback(GLFWwindow* const /*a_windowPtr*/, const int a_button, const int a_action, const int /*a_mods*/)
     {
         Event* event;
 
@@ -156,14 +156,14 @@ namespace GJGO
         g_appInstancePtr->pendingEvents.emplace_back(event);
     }
 
-    static void mouseWheelCallback(GLFWwindow* const a_window, const double a_xOffset, const double a_yOffset)
+    static void mouseWheelCallback(GLFWwindow* const /*a_window*/, const double /*a_xOffset*/, const double a_yOffset)
     {
         Event* const event = new Event(EventType::mouseWheelScroll);
         event->mouseWheelDirection = a_yOffset;
         g_appInstancePtr->pendingEvents.emplace_back(event);
     }
 
-    static void windowSizeCallback(GLFWwindow* const a_windowPtr, const int a_width, const int a_height)
+    static void windowSizeCallback(GLFWwindow* const /*a_windowPtr*/, const int a_width, const int a_height)
     {
         Event* const event = new Event(EventType::windowResize);
         event->windowSize = {static_cast<unsigned int>(a_width), static_cast<unsigned int>(a_height)};
