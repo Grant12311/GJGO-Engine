@@ -1,10 +1,6 @@
 #include <iostream>
 
-#include <GLES3/gl31.h>
-
 #include <imgui.h>
-
-#include <Hangar2/keycodes.h>
 
 #include <Druid/fbo.h>
 #include <Druid/vao.h>
@@ -20,6 +16,7 @@
 #include <GJGO/log.hpp>
 #include <GJGO/2D/renderer2D.hpp>
 #include <GJGO/2D/transform2D.hpp>
+#include <GJGO/window.hpp>
 
 class GameLayer : public GJGO::Layer
 {
@@ -33,37 +30,35 @@ private:
 public:
     void onUpdate() override
     {
-        /*if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_W))
-            this->m_playerPosition.y += GJGO::g_appInstancePtr->window.deltaTime;
+        if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_W))
+            this->m_playerPosition.y += GJGO::Window::deltaTime;
         else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_S))
-            this->m_playerPosition.y -= GJGO::g_appInstancePtr->window.deltaTime;
+            this->m_playerPosition.y -= GJGO::Window::deltaTime;
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_A))
-            this->m_playerPosition.x -= GJGO::g_appInstancePtr->window.deltaTime;
+            this->m_playerPosition.x -= GJGO::Window::deltaTime;
         else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_D))
-            this->m_playerPosition.x += GJGO::g_appInstancePtr->window.deltaTime;
-
-        std::cout << GJGO::g_appInstancePtr->window.deltaTime << std::endl;*/
+            this->m_playerPosition.x += GJGO::Window::deltaTime;
     }
 
     void onEvent(GJGO::Event* const a_event) override
     {
-        /*switch (a_event->type)
+        switch (a_event->type)
         {
             case GJGO::EventType::keyDown:
                 GJGO_LOG_INFO("Key Down: ", a_event->keycode);
                 switch (a_event->keycode)
                 {
-                    case HGR_0:
-                        GJGO::g_appInstancePtr->window.setVsync(0);
+                    case GLFW_KEY_0:
+                        GJGO::setVsync(false);
                         break;
-                    case HGR_1:
-                        GJGO::g_appInstancePtr->window.setVsync(1);
-                        GJGO::g_appInstancePtr->window.setFramerateCap(60);
+                    case GLFW_KEY_1:
+                        GJGO::setVsync(true);
+                        GJGO::setFramerateCap(60);
                         break;
-                    case HGR_2:
-                        GJGO::g_appInstancePtr->window.setVsync(1);
-                        GJGO::g_appInstancePtr->window.setFramerateCap(30);
+                    case GLFW_KEY_2:
+                        GJGO::setVsync(true);
+                        GJGO::setFramerateCap(30);
                         break;
                 }
                 break;
@@ -73,27 +68,27 @@ public:
             case GJGO::EventType::mouseMove:
                 GJGO_LOG_INFO("(", a_event->mousePosition.absolute.x, ", ", a_event->mousePosition.absolute.y, ")");
                 break;
-        }*/
+        }
     }
 
     void draw() override
-    {/*
-        //this->m_fbo.bind();
+    {
+        this->m_fbo.bind();
         //this->m_vao.bind();
         this->m_shader.bind();
         //glDrawArrays(GL_TRIANGLES, 0, 6);
-        GJGO::Renderer::genOrthoMatrix(GJGO::g_appInstancePtr->window.getWidth(), GJGO::g_appInstancePtr->window.getHeight());
+        GJGO::Renderer::genOrthoMatrix(GJGO::Window::getWidth(), GJGO::Window::getHeight());
         GJGO::Renderer::drawQuad(&this->m_shader, this->m_playerPosition, {100, 100});
-        //this->m_fbo.unbind();*/
+        this->m_fbo.unbind();
     }
 
     void drawGui() override
     {
-        /*ImGui::Begin("Renderer", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+        ImGui::Begin("Renderer", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
 
         ImGui::Image((void*)this->m_fbo.colorAttachment, {100, 100}, {0, 1}, {1, 0});
 
-        ImGui::End();*/
+        ImGui::End();
     }
 
     GameLayer() :
@@ -118,11 +113,9 @@ int main()
 {
     GJGO_LOG_SET_PRINT_FILE(false);
     GJGO_LOG_SET_PRINT_FUNCTION(false);
-    Hangar::Config winConfig;
-    winConfig.vsync = false;
-    GJGO::Application app(winConfig);
+    GJGO::Application app;
 
-    //app.layers.emplace_back(new GameLayer);
+    app.layers.emplace_back(new GameLayer);
 
     GJGO::Entity e;
     e.addComponent<GJGO::Transform2D>();
