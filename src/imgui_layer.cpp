@@ -39,16 +39,16 @@ namespace GJGO
         {
             case EventType::keyDown:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = true;
-                a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
+                //a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
             case EventType::keyUp:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = false;
-                a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
+                //a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
             case EventType::keyTypedDown:
                 this->m_ioPtr->AddInputCharacter(static_cast<unsigned short>(a_eventPtr->keycode));
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = true;
-                a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
+                //a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
             /*case EventType::keyTypedUp:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = false;
@@ -59,11 +59,11 @@ namespace GJGO
                 break;
             case EventType::mouseButtonDown:
                 this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = true;
-                a_eventPtr->handled = this->m_ioPtr->WantCaptureMouse;
+                //a_eventPtr->handled = this->m_ioPtr->WantCaptureMouse;
                 break;
             case EventType::mouseButtonUp:
                 this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = false;
-                a_eventPtr->handled = this->m_ioPtr->WantCaptureMouse;
+                //a_eventPtr->handled = this->m_ioPtr->WantCaptureMouse;
                 break;
             case EventType::windowResize:
                 this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(Window::getWidth()), static_cast<float>(Window::getHeight()));
