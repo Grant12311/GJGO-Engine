@@ -77,8 +77,12 @@ public:
         //this->m_vao.bind();
         this->m_shader.bind();
         //glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glClear(GL_COLOR_BUFFER_BIT);
+
         GJGO::Renderer::genOrthoMatrix(GJGO::Window::getWidth(), GJGO::Window::getHeight());
         GJGO::Renderer::drawQuad(&this->m_shader, this->m_playerPosition, {100, 100});
+
         this->m_fbo.unbind();
     }
 
