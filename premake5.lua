@@ -6,7 +6,7 @@ workspace("GJGO")
     platforms({"LinuxARM"})
     startproject("Game")
 
-    includedirs({"include", "vendor/Hangar2/include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip", "vendor/glm"})
+    includedirs({"include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip", "vendor/glm"})
     links({"X11", "xcb", "xcb-randr", "GL", "pthread", "glfw"})
 
     flags({"MultiProcessorCompile"})
