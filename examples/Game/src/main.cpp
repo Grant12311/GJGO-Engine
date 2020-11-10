@@ -22,8 +22,6 @@ class GameLayer : public GJGO::Layer
 {
 private:
     Druid::FBO m_fbo;
-    Druid::VAO m_vao;
-    Druid::VBO m_vbo;
     Druid::Shader m_shader;
 
     GJGO::Position2D m_playerPosition;
@@ -74,9 +72,7 @@ public:
     void draw() override
     {
         this->m_fbo.bind();
-        //this->m_vao.bind();
         this->m_shader.bind();
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -98,21 +94,7 @@ public:
     }
 
     GameLayer() :
-        m_fbo(1600, 900), m_shader("renderer.shader")
-    {
-        this->m_vao.bind();
-        this->m_vbo.bind();
-
-        std::array<float, 6> vertices = {
-             0.0f,  0.5f,
-             0.5f, -0.5f,
-            -0.5f, -0.5f
-        };
-
-        this->m_vbo.fill(6 * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-
-        this->m_vao.setAttrib(0, 2, GL_FLOAT, false, 2 * sizeof(float), 0);
-    }
+        m_fbo(1600, 900), m_shader("renderer.shader") {}
 };
 
 int main()
