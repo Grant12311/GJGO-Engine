@@ -21,13 +21,14 @@
 class GameLayer : public GJGO::Layer
 {
 private:
-    Druid::FBO m_fbo;
     Druid::Shader m_shader;
 
     GJGO::Position2D m_playerPosition;
 
     bool m_showRendererWindow = true;
 public:
+    Druid::FBO fbo;
+
     void onUpdate() override
     {
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_W))
@@ -75,7 +76,7 @@ public:
     {
         if (this->m_showRendererWindow)
         {
-            this->m_fbo.bind();
+            this->fbo.bind();
 
             glClear(GL_COLOR_BUFFER_BIT);
 
@@ -83,26 +84,26 @@ public:
 
             GJGO::Renderer::drawQuad(&this->m_shader, this->m_playerPosition, {100, 100});
 
-            this->m_fbo.unbind();
+            this->fbo.unbind();
         }
     }
 
     void drawGui() override
     {
+        ImGui::ShowDemoWindow(nullptr);
+
         if (this->m_showRendererWindow)
         {
-            ImGui::Begin("Renderer", &this->m_showRendererWindow, ImGuiWindowFlags_AlwaysAutoResize);
+            ImGui::Begin("Renderer", &this->m_showRendererWindow);
 
-            ImGui::Image((void*)this->m_fbo.colorAttachment, {100, 100}, {0, 1}, {1, 0});
+            ImGui::Image((void*)this->fbo.colorAttachment, {100, 100}, {0, 1}, {1, 0});
 
             ImGui::End();
         }
-
-        ImGui::ShowDemoWindow(nullptr);
     }
 
     GameLayer() :
-        m_fbo(1600, 900), m_shader("renderer.shader") {}
+        fbo(1600, 900), m_shader("renderer.shader") {}
 };
 
 int main()
