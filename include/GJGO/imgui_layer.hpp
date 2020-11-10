@@ -15,9 +15,9 @@ namespace GJGO
     private:
         ImGuiIO* m_ioPtr;
 
-        std::array<int, 6> noDrawKeycodes = {
+        /*std::array<int, 6> noDrawKeycodes = {
             HGR_delete, HGR_enter, HGR_right, HGR_left, HGR_up, HGR_down
-        };
+        };*/
     public:
         virtual void onUpdate() override;
         virtual void onEvent(Event* const a_eventPtr) override;

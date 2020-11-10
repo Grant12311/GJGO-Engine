@@ -1,61 +1,65 @@
+#include <iostream>
+
 #include <GLFW/glfw3.h>
 
 #include <backends/imgui_impl_opengl3.h>
 
 #include <GJGO/app.hpp>
 #include <GJGO/clipboard.hpp>
+#include <GJGO/display.hpp>
 #include <GJGO/imgui_layer.hpp>
+#include <GJGO/window.hpp>
 
 namespace GJGO
 {
     static void ImGuiClipboardReadTextCallback(void* const /*a_userData*/, const char* const a_text)
     {
-        GJGO::Clipboard::writeText(a_text);
+        Clipboard::writeText(a_text);
     }
 
     static const char* ImGuiClipboardGetTextCallback(void* const /*a_userData*/)
     {
-        return GJGO::Clipboard::readText();
+        return Clipboard::readText();
     }
 
     void ImGuiLayer::onUpdate()
     {
         this->m_ioPtr->KeyCtrl = glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_CONTROL);
-        this->m_ioPtr->KeyShift = glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_SHIFT) || glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_SHIFT));
+        this->m_ioPtr->KeyShift = glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_SHIFT) || glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_SHIFT);
         this->m_ioPtr->KeyAlt = glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_ALT) || glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_ALT);
         this->m_ioPtr->KeySuper = glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_SUPER) || glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_SUPER);
 
-        this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(g_appInstancePtr->window.getWidth()), static_cast<float>(g_appInstancePtr->window.getHeight()));
-        this->m_ioPtr->DeltaTime = static_cast<float>(g_appInstancePtr->window.deltaTime) / 1000.0f;
+        this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(Window::getWidth()), static_cast<float>(Window::getHeight()));
+        this->m_ioPtr->DeltaTime = static_cast<float>(Window::deltaTime) / 1000.0f;
     }
 
-    void ImGuiLayer::onEvent(GJGO::Event* const a_eventPtr)
+    void ImGuiLayer::onEvent(Event* const a_eventPtr)
     {
-        /*switch (a_eventPtr->type)
+        switch (a_eventPtr->type)
         {
-            case GJGO::EventType::keyDown:
+            case EventType::keyDown:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = true;
                 a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
-            case GJGO::EventType::keyUp:
+            case EventType::keyUp:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = false;
                 a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
-            case GJGO::EventType::keyTypedDown:
-                if (std::find(this->noDrawKeycodes.begin(), this->noDrawKeycodes.end(), a_eventPtr->keycode) == this->noDrawKeycodes.end())
+            case EventType::keyTypedDown:
+                /*if (std::find(this->noDrawKeycodes.begin(), this->noDrawKeycodes.end(), a_eventPtr->keycode) == this->noDrawKeycodes.end())
                     this->m_ioPtr->AddInputCharacter(static_cast<unsigned short>(a_eventPtr->keycode));
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = true;
                 a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
-            case GJGO::EventType::keyTypedUp:
+            case EventType::keyTypedUp:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = false;
                 a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
+                break;*/
+            case EventType::mouseMove:
+                this->m_ioPtr->MousePos = ImVec2(static_cast<float>(a_eventPtr->mousePosition.relative.x), static_cast<float>(Window::getHeight() - a_eventPtr->mousePosition.relative.y));
                 break;
-            case GJGO::EventType::mouseMove:
-                this->m_ioPtr->MousePos = ImVec2(static_cast<float>(a_eventPtr->mousePosition.relative.x), static_cast<float>(g_appInstancePtr->window.getHeight() - a_eventPtr->mousePosition.relative.y));
-                break;
-            case GJGO::EventType::mouseButtonDown:
-                switch (a_eventPtr->mouseButton)
+            case EventType::mouseButtonDown:
+                /*switch (a_eventPtr->mouseButton)
                 {
                     case 0:
                         this->m_ioPtr->MouseDown[0] = true;
@@ -66,11 +70,14 @@ namespace GJGO
                     case 2:
                         this->m_ioPtr->MouseDown[1] = true;
                         break;
-                }
+
+                    this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = true;
+                }*/
+                this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = true;
                 a_eventPtr->handled = this->m_ioPtr->WantCaptureMouse;
                 break;
-            case GJGO::EventType::mouseButtonUp:
-                switch (a_eventPtr->mouseButton)
+            case EventType::mouseButtonUp:
+                /*switch (a_eventPtr->mouseButton)
                 {
                     case 0:
                         this->m_ioPtr->MouseDown[0] = false;
@@ -81,13 +88,16 @@ namespace GJGO
                     case 2:
                         this->m_ioPtr->MouseDown[1] = false;
                         break;
-                }
+
+                    this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = false;
+                }*/
+                this->m_ioPtr->MouseDown[a_eventPtr->mouseButton] = false;
                 a_eventPtr->handled = this->m_ioPtr->WantCaptureMouse;
                 break;
-            case GJGO::EventType::windowResize:
-                this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(a_eventPtr->windowSize.width), static_cast<float>(a_eventPtr->windowSize.height));
+            case EventType::windowResize:
+                this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(Window::getWidth()), static_cast<float>(Window::getHeight()));
                 break;
-        }*/
+        }
     }
 
     ImGuiLayer::ImGuiLayer()
@@ -104,28 +114,28 @@ namespace GJGO
         this->m_ioPtr->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
         this->m_ioPtr->ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
-        this->m_ioPtr->KeyMap[ImGuiKey_Tab] = HGR_tab;
-        this->m_ioPtr->KeyMap[ImGuiKey_LeftArrow] = HGR_left;
-        this->m_ioPtr->KeyMap[ImGuiKey_RightArrow] = HGR_right;
-        this->m_ioPtr->KeyMap[ImGuiKey_UpArrow] = HGR_up;
-        this->m_ioPtr->KeyMap[ImGuiKey_DownArrow] = HGR_down;
-        //io.KeyMap[ImGuiKey_PageUp] = GLFW_KEY_PAGE_UP;
-        //io.KeyMap[ImGuiKey_PageDown] = GLFW_KEY_PAGE_DOWN;
-        //io.KeyMap[ImGuiKey_Home] = GLFW_KEY_HOME;
-        //io.KeyMap[ImGuiKey_End] = GLFW_KEY_END;
-        //io.KeyMap[ImGuiKey_Insert] = GLFW_KEY_INSERT;
-        this->m_ioPtr->KeyMap[ImGuiKey_Delete] = HGR_delete;
-        this->m_ioPtr->KeyMap[ImGuiKey_Backspace] = HGR_backspace;
-        this->m_ioPtr->KeyMap[ImGuiKey_Space] = HGR_space;
-        this->m_ioPtr->KeyMap[ImGuiKey_Enter] = HGR_enter;
-        this->m_ioPtr->KeyMap[ImGuiKey_Escape] = HGR_escape;
-        //io.KeyMap[ImGuiKey_KeyPadEnter] = GLFW_KEY_KP_ENTER;
-        this->m_ioPtr->KeyMap[ImGuiKey_A] = HGR_a;
-        this->m_ioPtr->KeyMap[ImGuiKey_C] = HGR_c;
-        this->m_ioPtr->KeyMap[ImGuiKey_V] = HGR_v;
-        this->m_ioPtr->KeyMap[ImGuiKey_X] = HGR_x;
-        this->m_ioPtr->KeyMap[ImGuiKey_Y] = HGR_y;
-        this->m_ioPtr->KeyMap[ImGuiKey_Z] = HGR_z;
+        this->m_ioPtr->KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;
+        this->m_ioPtr->KeyMap[ImGuiKey_LeftArrow] = GLFW_KEY_LEFT;
+        this->m_ioPtr->KeyMap[ImGuiKey_RightArrow] = GLFW_KEY_RIGHT;
+        this->m_ioPtr->KeyMap[ImGuiKey_UpArrow] = GLFW_KEY_UP;
+        this->m_ioPtr->KeyMap[ImGuiKey_DownArrow] = GLFW_KEY_DOWN;
+        this->m_ioPtr->KeyMap[ImGuiKey_PageUp] = GLFW_KEY_PAGE_UP;
+        this->m_ioPtr->KeyMap[ImGuiKey_PageDown] = GLFW_KEY_PAGE_DOWN;
+        this->m_ioPtr->KeyMap[ImGuiKey_Home] = GLFW_KEY_HOME;
+        this->m_ioPtr->KeyMap[ImGuiKey_End] = GLFW_KEY_END;
+        this->m_ioPtr->KeyMap[ImGuiKey_Insert] = GLFW_KEY_INSERT;
+        this->m_ioPtr->KeyMap[ImGuiKey_Delete] = GLFW_KEY_DELETE;
+        this->m_ioPtr->KeyMap[ImGuiKey_Backspace] = GLFW_KEY_BACKSPACE;
+        this->m_ioPtr->KeyMap[ImGuiKey_Space] = GLFW_KEY_SPACE;
+        this->m_ioPtr->KeyMap[ImGuiKey_Enter] = GLFW_KEY_ENTER;
+        this->m_ioPtr->KeyMap[ImGuiKey_Escape] = GLFW_KEY_ESCAPE;
+        this->m_ioPtr->KeyMap[ImGuiKey_KeyPadEnter] = GLFW_KEY_KP_ENTER;
+        this->m_ioPtr->KeyMap[ImGuiKey_A] = GLFW_KEY_A;
+        this->m_ioPtr->KeyMap[ImGuiKey_C] = GLFW_KEY_C;
+        this->m_ioPtr->KeyMap[ImGuiKey_V] = GLFW_KEY_V;
+        this->m_ioPtr->KeyMap[ImGuiKey_X] = GLFW_KEY_X;
+        this->m_ioPtr->KeyMap[ImGuiKey_Y] = GLFW_KEY_Y;
+        this->m_ioPtr->KeyMap[ImGuiKey_Z] = GLFW_KEY_Z;
 
         this->m_ioPtr->SetClipboardTextFn = ImGuiClipboardReadTextCallback;
         this->m_ioPtr->GetClipboardTextFn = ImGuiClipboardGetTextCallback;

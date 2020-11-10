@@ -4,8 +4,6 @@
 #include <cstdint>
 #include <array>
 
-#include <Hangar2/window.h>
-
 #include <GJGO/2D/transform2D.hpp>
 
 namespace GJGO

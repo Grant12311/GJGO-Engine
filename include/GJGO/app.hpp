@@ -7,8 +7,8 @@
 
 #include <GLFW/glfw3.h>
 
-#include <GJGO/layer.hpp>
 #include <GJGO/event.hpp>
+#include <GJGO/layer.hpp>
 
 namespace GJGO
 {
@@ -21,13 +21,19 @@ namespace GJGO
         std::vector<Layer*> layers;
         std::vector<Event*> pendingEvents;
 
+        bool vsyncEnabled = true;
+        double framerateCap = 1000.0d / 60.0d;
+
         void run();
 
-        Application(const Hangar::Config &a_config = Hangar::Config());
+        Application();
         ~Application();
     };
 
     inline Application* g_appInstancePtr = nullptr;
+
+    void setVsync(const bool a_vsync);
+    void setFramerateCap(const double a_cap);
 }
 
 #endif

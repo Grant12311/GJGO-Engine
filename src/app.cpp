@@ -8,6 +8,7 @@
 #include <GJGO/imgui_layer.hpp>
 #include <GJGO/log.hpp>
 #include <GJGO/2D/renderer2D.hpp>
+#include <GJGO/window.hpp>
 
 namespace GJGO
 {
@@ -15,16 +16,16 @@ namespace GJGO
     {
         switch (severity)
         {
-            case GL_DEBUG_SEVERITY_HIGH:
+            case GL_DEBUG_SEVERITY_HIGH_KHR:
                 GJGO_LOG_ERROR("HIGH: ", message);
                 break;
-            case GL_DEBUG_SEVERITY_MEDIUM:
+            case GL_DEBUG_SEVERITY_MEDIUM_KHR:
                 GJGO_LOG_WARN("Med: ", message);
                 break;
-            case GL_DEBUG_SEVERITY_LOW:
+            case GL_DEBUG_SEVERITY_LOW_KHR:
                 GJGO_LOG_WARN("Low: ", message);
                 break;
-            case GL_DEBUG_SEVERITY_NOTIFICATION:
+            case GL_DEBUG_SEVERITY_NOTIFICATION_KHR:
                 GJGO_LOG_INFO("Info: ", message);
                 break;
         }
@@ -32,9 +33,11 @@ namespace GJGO
 
     void Application::run()
     {
-        //this->layers.emplace_back(new ImGuiLayer);
+        double lastTime = glfwGetTime();
+
+        this->layers.emplace_back(new ImGuiLayer);
         #ifndef GJGO_BUILD_TARGET_DIST
-            //this->layers.emplace_back(new EditorLayer);
+            this->layers.emplace_back(new EditorLayer);
         #endif // GJGO_BUILD_TARGET_DIST
 
         while (!glfwWindowShouldClose(this->windowPtr))
@@ -69,16 +72,23 @@ namespace GJGO
                 l_layerPtr->draw();
             }
 
-            /*ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplOpenGL3_NewFrame();
             ImGui::NewFrame();
             for (Layer* const l_layerPtr : this->layers)
             {
                 l_layerPtr->drawGui();
             }
             ImGui::Render();
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());*/
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
             glfwSwapBuffers(this->windowPtr);
+
+            if (this->vsyncEnabled)
+                while ((glfwGetTime() - lastTime) * 1000.0d < this->framerateCap) {}
+
+            Window::deltaTime = (glfwGetTime() - lastTime) * 1000.0d;
+
+            lastTime = glfwGetTime();
         }
     }
 
@@ -146,7 +156,7 @@ namespace GJGO
         g_appInstancePtr->pendingEvents.emplace_back(event);
     }
 
-    Application::Application(const Hangar::Config &a_config)
+    Application::Application()
     {
         g_appInstancePtr = this;
 
@@ -175,9 +185,9 @@ namespace GJGO
 
         GJGO_LOG_INFO(glGetString(GL_VERSION));
 
-        glEnable(GL_DEBUG_OUTPUT);
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-        PFNGLDEBUGMESSAGECALLBACKPROC glDebugMessageCallback = reinterpret_cast<PFNGLDEBUGMESSAGECALLBACKPROC>(glXGetProcAddress(reinterpret_cast<const unsigned char*>("glDebugMessageCallback")));
+        glEnable(GL_DEBUG_OUTPUT_KHR);
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_KHR);
+        PFNGLDEBUGMESSAGECALLBACKKHRPROC glDebugMessageCallback = reinterpret_cast<PFNGLDEBUGMESSAGECALLBACKKHRPROC>(glfwGetProcAddress("glDebugMessageCallback"));
         glDebugMessageCallback(openglDebugLogger, 0);
 
         /*
@@ -205,5 +215,16 @@ namespace GJGO
 
         glfwDestroyWindow(this->windowPtr);
         glfwTerminate();
+    }
+
+    void setVsync(const bool a_vsync)
+    {
+        g_appInstancePtr->vsyncEnabled = a_vsync;
+        glfwSwapInterval(a_vsync);
+    }
+
+    void setFramerateCap(const double a_cap)
+    {
+        g_appInstancePtr->framerateCap = 1000.0d / a_cap;
     }
 }

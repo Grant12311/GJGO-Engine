@@ -11,7 +11,7 @@ workspace("GJGO")
 
     flags({"MultiProcessorCompile"})
     buildoptions({"-pipe", "-Wall", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion", "-Wno-switch", "-Wno-unused-variable"})
-    defines({"IMGUI_IMPL_OPENGL_ES3", "GLFW_INCLUDE_ES31"})
+    defines({"IMGUI_IMPL_OPENGL_ES3", "GLFW_INCLUDE_ES31", "GLFW_INCLUDE_GLEXT"})
 
     filter("platforms:LinuxARM")
         architecture("ARM")
