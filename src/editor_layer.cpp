@@ -50,8 +50,6 @@ namespace GJGO
 
         if (this->showEntitiesWindow)
         {
-            ImGui::SetNextWindowPos({0.0f, 20.0f}, ImGuiCond_Once);
-            ImGui::SetNextWindowSize({100.0f, static_cast<float>(GJGO::Window::getHeight()) - 20.0f}, ImGuiCond_Once);
             if (ImGui::Begin("Entities", &this->showEntitiesWindow))
             {
 
