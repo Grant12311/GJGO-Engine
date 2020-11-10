@@ -113,4 +113,9 @@ namespace GJGO
 
         ImGui_ImplOpenGL3_Init("#version 300 es");
     }
+
+    ImGuiLayer::~ImGuiLayer()
+    {
+        ImGui_ImplOpenGL3_Shutdown();
+    }
 }

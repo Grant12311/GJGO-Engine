@@ -19,6 +19,7 @@ namespace GJGO
         virtual void onEvent(Event* const a_eventPtr) override;
 
         ImGuiLayer();
+        ~ImGuiLayer();
     };
 }
 
