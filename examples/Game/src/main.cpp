@@ -89,6 +89,8 @@ public:
         ImGui::Image((void*)this->m_fbo.colorAttachment, {100, 100}, {0, 1}, {1, 0});
 
         ImGui::End();
+
+        ImGui::ShowDemoWindow(nullptr);
     }
 
     GameLayer() :
