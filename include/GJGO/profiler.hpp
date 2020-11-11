@@ -7,8 +7,13 @@
 #include <algorithm>
 #include <chrono>
 
-#define GJGO_PROFILE_SCOPE(x) GJGO::ProfilerTimer timer##__LINE__(x)
-#define GJGO_PROFILE_FUNCTION() GJGO::ProfilerTimer timer##__LINE__(__PRETTY_FUNCTION__)
+#ifndef GJGO_BUILD_TARGET_DIST
+    #define GJGO_PROFILE_SCOPE(x) GJGO::ProfilerTimer timer(x)
+    #define GJGO_PROFILE_FUNCTION() GJGO::ProfilerTimer timer(__PRETTY_FUNCTION__)
+#else
+    #define GJGO_PROFILE_SCOPE(x)
+    #define GJGO_PROFILE_FUNCTION()
+#endif // GJGO_BUILD_TARGET_DIST
 
 namespace GJGO
 {
