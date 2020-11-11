@@ -7,6 +7,7 @@
 #include <GJGO/event.hpp>
 #include <GJGO/imgui_layer.hpp>
 #include <GJGO/log.hpp>
+#include <GJGO/profiler.hpp>
 #include <GJGO/2D/renderer2D.hpp>
 #include <GJGO/window.hpp>
 
@@ -33,6 +34,10 @@ namespace GJGO
 
     void Application::run()
     {
+        Profiler::Get().BeginSession("main");
+
+        GJGO_PROFILE_FUNCTION();
+
         double lastTime = glfwGetTime();
 
         this->layers.emplace_back(new ImGuiLayer);
@@ -44,51 +49,71 @@ namespace GJGO
         {
             glfwPollEvents();
 
-            for (Layer* const l_layerPtr : this->layers)
             {
-                l_layerPtr->onUpdate();
-            }
+                GJGO_PROFILE_SCOPE("Update");
 
-            for (unsigned int i = 0; i < this->pendingEvents.size(); i++)
-            {
-                Event* const currentEvent = this->pendingEvents[i];
-
-                for (auto it = this->layers.rbegin(); it != this->layers.rend(); it++)
+                for (Layer* const l_layerPtr : this->layers)
                 {
-                    (*it)->onEvent(currentEvent);
-                    if (currentEvent->handled)
-                        break;
+                    l_layerPtr->onUpdate();
                 }
-
-                delete currentEvent;
-                this->pendingEvents.erase(this->pendingEvents.begin() + i);
-                i--;
             }
 
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-            for (Layer* const l_layerPtr : this->layers)
             {
-                l_layerPtr->draw();
+                GJGO_PROFILE_SCOPE("Event Dispatch");
+
+                for (unsigned int i = 0; i < this->pendingEvents.size(); i++)
+                {
+                    Event* const currentEvent = this->pendingEvents[i];
+
+                    for (auto it = this->layers.rbegin(); it != this->layers.rend(); it++)
+                    {
+                        (*it)->onEvent(currentEvent);
+                        if (currentEvent->handled)
+                            break;
+                    }
+
+                    delete currentEvent;
+                    this->pendingEvents.erase(this->pendingEvents.begin() + i);
+                    i--;
+                }
             }
 
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui::NewFrame();
-            for (Layer* const l_layerPtr : this->layers)
             {
-                l_layerPtr->drawGui();
+                GJGO_PROFILE_SCOPE("Draw");
+
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+                for (Layer* const l_layerPtr : this->layers)
+                {
+                    l_layerPtr->draw();
+                }
             }
-            ImGui::Render();
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-            glfwSwapBuffers(this->windowPtr);
+            {
+                GJGO_PROFILE_SCOPE("ImGui");
 
-            if (this->vsyncEnabled)
-                while ((glfwGetTime() - lastTime) * 1000.0d < this->framerateCap) {}
+                ImGui_ImplOpenGL3_NewFrame();
+                ImGui::NewFrame();
+                for (Layer* const l_layerPtr : this->layers)
+                {
+                    l_layerPtr->drawGui();
+                }
+                ImGui::Render();
+                ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+            }
 
-            Window::deltaTime = (glfwGetTime() - lastTime) * 1000.0d;
+            {
+                GJGO_PROFILE_SCOPE("VSYNC");
 
-            lastTime = glfwGetTime();
+                glfwSwapBuffers(this->windowPtr);
+
+                if (this->vsyncEnabled)
+                    while ((glfwGetTime() - lastTime) * 1000.0d < this->framerateCap) {}
+
+                Window::deltaTime = (glfwGetTime() - lastTime) * 1000.0d;
+
+                lastTime = glfwGetTime();
+            }
         }
     }
 
@@ -212,6 +237,8 @@ namespace GJGO
 
     Application::~Application()
     {
+        Profiler::Get().EndSession();
+
         for (Layer* const l_layerPtr : this->layers)
         {
             delete l_layerPtr;

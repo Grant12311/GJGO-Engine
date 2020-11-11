@@ -1,4 +1,5 @@
 #include <iostream>
+#include <thread>
 
 #include <GJGO/profiler.hpp>
 
@@ -6,17 +7,19 @@ namespace GJGO
 {
     void ProfilerTimer::stop()
     {
-        auto endPoint = std::chrono::high_resolution_clock::now();
+        auto endTimepoint = std::chrono::high_resolution_clock::now();
 
-        long long start = std::chrono::time_point_cast<std::chrono::microseconds>(this->m_startPoint).time_since_epoch().count();
-        long long end = std::chrono::time_point_cast<std::chrono::microseconds>(endPoint).time_since_epoch().count();
+        long long start = std::chrono::time_point_cast<std::chrono::microseconds>(this->m_startTimepoint).time_since_epoch().count();
+        long long end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch().count();
+
+        uint32_t threadID = std::hash<std::thread::id>{}(std::this_thread::get_id());
+        Profiler::Get().WriteProfile({this->m_name, start, end, threadID});
 
         this->m_stopped = true;
-        std::cout << "Duration: " << static_cast<double>(end - start) * 0.001d << "ms" <<std::endl;
     }
 
-    ProfilerTimer::ProfilerTimer(const char* const a_name) :
-        m_name(a_name), m_startPoint(std::chrono::high_resolution_clock::now()), m_stopped(false) {}
+    ProfilerTimer::ProfilerTimer(const char* name)
+        : m_name(name), m_startTimepoint(std::chrono::high_resolution_clock::now()), m_stopped(false) {}
 
     ProfilerTimer::~ProfilerTimer()
     {
