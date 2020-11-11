@@ -7,7 +7,7 @@ workspace("GJGO")
     startproject("Game")
 
     includedirs({"include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip", "vendor/glm"})
-    links({"X11", "xcb", "xcb-randr", "GL", "pthread", "glfw3"})
+    links({"X11", "xcb", "xcb-randr", "GL", "pthread", "glfw3", "dl"})
 
     flags({"MultiProcessorCompile"})
     buildoptions({"-pipe", "-Wall", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion", "-Wno-switch", "-Wno-unused-variable"})
