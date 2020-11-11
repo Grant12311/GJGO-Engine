@@ -87,9 +87,9 @@ public:
 
             glClear(GL_COLOR_BUFFER_BIT);
 
-            GJGO::Renderer::begin2D(&this->m_shader, 1600, 900);
+            GJGO::Renderer::begin2D(&this->m_shader, 1280, 720);
 
-            GJGO::Renderer::drawQuad(this->m_playerPosition, {100, 100});
+            GJGO::Renderer::drawQuad(this->m_playerPosition, {100, 100}, {1.0f, 0.0f, 0.0f});
 
             this->fbo.unbind();
         }
@@ -105,14 +105,14 @@ public:
         {
             ImGui::Begin("Renderer", &this->m_showRendererWindow, ImGuiWindowFlags_AlwaysAutoResize);
 
-            ImGui::Image((void*)this->fbo.colorAttachment, {100, 100}, {0, 1}, {1, 0});
+            ImGui::Image((void*)this->fbo.colorAttachment, {128, 72}, {0, 1}, {1, 0});
 
             ImGui::End();
         }
     }
 
     GameLayer() :
-        fbo(1600, 900), m_shader("renderer.shader") {}
+        fbo(1280, 720), m_shader("renderer.shader") {}
 };
 
 int main()
