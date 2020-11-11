@@ -99,8 +99,6 @@ public:
     {
         GJGO_PROFILE_FUNCTION();
 
-        ImGui::ShowDemoWindow(nullptr);
-
         if (this->m_showRendererWindow)
         {
             ImGui::Begin("Renderer", &this->m_showRendererWindow, ImGuiWindowFlags_AlwaysAutoResize);
