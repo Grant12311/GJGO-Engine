@@ -1,5 +1,6 @@
 #include <GJGO/app.hpp>
 #include <GJGO/entity.hpp>
+#include <GJGO/profiler.hpp>
 
 namespace GJGO
 {
