@@ -38,12 +38,12 @@ namespace GJGO
             glViewport(0, 0, a_width, a_height);
         }
 
-        void drawQuad(Druid::Shader* const a_shader, const Position2D &a_position, const Size2D &a_size, const Color3 a_color = {1.0f, 1.0f, 1.0f})
+        void drawQuad(const Position2D &a_position, const Size2D &a_size, const Color3 a_color = {1.0f, 1.0f, 1.0f})
         {
             vaoPtr->bind();
 
-            a_shader->fillUniform("transformer", 1, false, genTransformer2D(a_position, a_size));
-            a_shader->fillUniform("quadColor", a_color.red, a_color.green, a_color.blue);
+            currentShader->fillUniform("transformer", 1, false, genTransformer2D(a_position, a_size));
+            currentShader->fillUniform("quadColor", a_color.red, a_color.green, a_color.blue);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         }
 

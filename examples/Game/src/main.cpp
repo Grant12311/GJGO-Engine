@@ -14,6 +14,7 @@
 #include <GJGO/event.hpp>
 #include <GJGO/layer.hpp>
 #include <GJGO/log.hpp>
+#include <GJGO/profiler.hpp>
 #include <GJGO/2D/renderer2D.hpp>
 #include <GJGO/2D/transform2D.hpp>
 #include <GJGO/window.hpp>
@@ -88,7 +89,7 @@ public:
 
             GJGO::Renderer::begin2D(&this->m_shader, 1600, 900);
 
-            GJGO::Renderer::drawQuad(&this->m_shader, this->m_playerPosition, {100, 100});
+            GJGO::Renderer::drawQuad(this->m_playerPosition, {100, 100});
 
             this->fbo.unbind();
         }
@@ -102,7 +103,7 @@ public:
 
         if (this->m_showRendererWindow)
         {
-            ImGui::Begin("Renderer", &this->m_showRendererWindow);
+            ImGui::Begin("Renderer", &this->m_showRendererWindow, ImGuiWindowFlags_AlwaysAutoResize);
 
             ImGui::Image((void*)this->fbo.colorAttachment, {100, 100}, {0, 1}, {1, 0});
 
