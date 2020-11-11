@@ -38,7 +38,7 @@ namespace GJGO
             glViewport(0, 0, a_width, a_height);
         }
 
-        void drawQuad(const Position2D &a_position, const Size2D &a_size, const Color3 a_color = {1.0f, 1.0f, 1.0f})
+        void drawQuad(const Position2D &a_position, const Size2D &a_size, const Color3 a_color)
         {
             vaoPtr->bind();
 
