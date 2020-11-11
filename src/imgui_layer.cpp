@@ -8,22 +8,29 @@
 #include <GJGO/clipboard.hpp>
 #include <GJGO/display.hpp>
 #include <GJGO/imgui_layer.hpp>
+#include <GJGO/profiler.hpp>
 #include <GJGO/window.hpp>
 
 namespace GJGO
 {
     static void ImGuiClipboardReadTextCallback(void* const /*a_userData*/, const char* const a_text)
     {
+        GJGO_PROFILE_FUNCTION();
+
         Clipboard::writeText(a_text);
     }
 
     static const char* ImGuiClipboardGetTextCallback(void* const /*a_userData*/)
     {
+        GJGO_PROFILE_FUNCTION();
+
         return Clipboard::readText();
     }
 
     void ImGuiLayer::onUpdate()
     {
+        GJGO_PROFILE_FUNCTION();
+
         this->m_ioPtr->KeyCtrl = glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_CONTROL);
         this->m_ioPtr->KeyShift = glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_SHIFT) || glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_SHIFT);
         this->m_ioPtr->KeyAlt = glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_ALT) || glfwGetKey(g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_ALT);
@@ -35,6 +42,8 @@ namespace GJGO
 
     void ImGuiLayer::onEvent(Event* const a_eventPtr)
     {
+        GJGO_PROFILE_FUNCTION();
+
         switch (a_eventPtr->type)
         {
             case EventType::keyDown:
@@ -76,6 +85,8 @@ namespace GJGO
 
     ImGuiLayer::ImGuiLayer()
     {
+        GJGO_PROFILE_FUNCTION();
+
         ImGui::CreateContext();
         ImGui::StyleColorsDark();
 
@@ -119,6 +130,8 @@ namespace GJGO
 
     ImGuiLayer::~ImGuiLayer()
     {
+        GJGO_PROFILE_FUNCTION();
+
         ImGui_ImplOpenGL3_Shutdown();
     }
 }

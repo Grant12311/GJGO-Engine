@@ -15,6 +15,8 @@ namespace GJGO
 {
     static void openglDebugLogger(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity, GLsizei /*length*/, const GLchar* message, const void* /*userParam*/)
     {
+        GJGO_PROFILE_FUNCTION();
+
         switch (severity)
         {
             case GL_DEBUG_SEVERITY_HIGH_KHR:
@@ -34,8 +36,6 @@ namespace GJGO
 
     void Application::run()
     {
-        Profiler::Get().BeginSession("main");
-
         GJGO_PROFILE_FUNCTION();
 
         double lastTime = glfwGetTime();
@@ -119,11 +119,15 @@ namespace GJGO
 
     static void error_callback(int /*error*/, const char* description)
     {
+        GJGO_PROFILE_FUNCTION();
+
         fprintf(stderr, "Error: %s\n", description);
     }
 
     static void keyCallback(GLFWwindow* const /*a_windowPtr*/, const int a_key, const int /*a_scancode*/, const int a_action, const int /*a_mods*/)
     {
+        GJGO_PROFILE_FUNCTION();
+
         if (a_action == GLFW_PRESS)
         {
             Event* const event = new Event(EventType::keyDown);
@@ -138,6 +142,8 @@ namespace GJGO
 
     static void keyTypedCallback(GLFWwindow* const /*a_windowPtr*/, const unsigned int a_char)
     {
+        GJGO_PROFILE_FUNCTION();
+
         Event* const event = new Event(EventType::keyTypedDown);
         event->keycode = a_char;
         g_appInstancePtr->pendingEvents.emplace_back(event);
@@ -145,6 +151,8 @@ namespace GJGO
 
     static void mousePositionCallback(GLFWwindow* const /*a_windowPtr*/, const double a_x, const double a_y)
     {
+        GJGO_PROFILE_FUNCTION();
+
         int windowPosX;
         int windowPosY;
         glfwGetWindowPos(g_appInstancePtr->windowPtr, &windowPosX, &windowPosY);
@@ -168,6 +176,8 @@ namespace GJGO
 
     static void mouseButtonCallback(GLFWwindow* const /*a_windowPtr*/, const int a_button, const int a_action, const int /*a_mods*/)
     {
+        GJGO_PROFILE_FUNCTION();
+
         Event* event;
 
         if (a_action == GLFW_PRESS)
@@ -183,6 +193,8 @@ namespace GJGO
 
     static void mouseWheelCallback(GLFWwindow* const /*a_window*/, const double /*a_xOffset*/, const double a_yOffset)
     {
+        GJGO_PROFILE_FUNCTION();
+
         Event* const event = new Event(EventType::mouseWheelScroll);
         event->mouseWheelDirection = static_cast<signed char>(a_yOffset);
         g_appInstancePtr->pendingEvents.emplace_back(event);
@@ -190,6 +202,8 @@ namespace GJGO
 
     static void windowSizeCallback(GLFWwindow* const /*a_windowPtr*/, const int a_width, const int a_height)
     {
+        GJGO_PROFILE_FUNCTION();
+
         Event* const event = new Event(EventType::windowResize);
         event->windowSize = {static_cast<unsigned int>(a_width), static_cast<unsigned int>(a_height)};
         g_appInstancePtr->pendingEvents.emplace_back(event);
@@ -197,6 +211,11 @@ namespace GJGO
 
     Application::Application()
     {
+        #ifndef GJGO_BUILD_TARGET_DIST
+            Profiler::Get().BeginSession("main");
+        #endif // GJGO_BUILD_TARGET_DIST
+        GJGO_PROFILE_FUNCTION();
+
         g_appInstancePtr = this;
 
         if (!glfwInit())
@@ -237,7 +256,7 @@ namespace GJGO
 
     Application::~Application()
     {
-        Profiler::Get().EndSession();
+        GJGO_PROFILE_FUNCTION();
 
         for (Layer* const l_layerPtr : this->layers)
         {
@@ -246,16 +265,24 @@ namespace GJGO
 
         glfwDestroyWindow(this->windowPtr);
         glfwTerminate();
+
+        #ifndef GJGO_BUILD_TARGET_DIST
+            Profiler::Get().EndSession();
+        #endif // GJGO_BUILD_TARGET_DIST
     }
 
     void setVsync(const bool a_vsync)
     {
+        GJGO_PROFILE_FUNCTION();
+
         g_appInstancePtr->vsyncEnabled = a_vsync;
         glfwSwapInterval(a_vsync);
     }
 
     void setFramerateCap(const double a_cap)
     {
+        GJGO_PROFILE_FUNCTION();
+
         g_appInstancePtr->framerateCap = 1000.0d / a_cap;
     }
 }

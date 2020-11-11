@@ -1,6 +1,7 @@
 #include <GLFW/glfw3.h>
 
 #include <GJGO/app.hpp>
+#include <GJGO/profiler.hpp>
 
 namespace GJGO
 {
@@ -8,6 +9,8 @@ namespace GJGO
     {
         unsigned int getWidth()
         {
+            GJGO_PROFILE_FUNCTION();
+
             int width;
             int height;
             glfwGetWindowSize(g_appInstancePtr->windowPtr, &width, &height);
@@ -17,6 +20,8 @@ namespace GJGO
 
         unsigned int getHeight()
         {
+            GJGO_PROFILE_FUNCTION();
+
             int width;
             int height;
             glfwGetWindowSize(g_appInstancePtr->windowPtr, &width, &height);

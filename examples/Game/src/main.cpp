@@ -31,6 +31,8 @@ public:
 
     void onUpdate() override
     {
+        GJGO_PROFILE_FUNCTION();
+
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_W))
             this->m_playerPosition.y += GJGO::Window::deltaTime;
         else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_S))
@@ -44,6 +46,8 @@ public:
 
     void onEvent(GJGO::Event* const a_event) override
     {
+        GJGO_PROFILE_FUNCTION();
+
         switch (a_event->type)
         {
             case GJGO::EventType::keyDown:
@@ -74,6 +78,8 @@ public:
 
     void draw() override
     {
+        GJGO_PROFILE_FUNCTION();
+
         if (this->m_showRendererWindow)
         {
             this->fbo.bind();
@@ -90,6 +96,8 @@ public:
 
     void drawGui() override
     {
+        GJGO_PROFILE_FUNCTION();
+
         ImGui::ShowDemoWindow(nullptr);
 
         if (this->m_showRendererWindow)

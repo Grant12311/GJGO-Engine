@@ -2,12 +2,15 @@
 
 #include <GJGO/app.hpp>
 #include <GJGO/editor_layer.hpp>
+#include <GJGO/profiler.hpp>
 #include <GJGO/window.hpp>
 
 namespace GJGO
 {
     void EditorLayer::drawGui()
     {
+        GJGO_PROFILE_FUNCTION();
+
         ImGuiIO& io = ImGui::GetIO();
 
         if (ImGui::BeginMainMenuBar())
