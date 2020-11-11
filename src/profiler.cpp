@@ -12,7 +12,7 @@ namespace GJGO
         long long end = std::chrono::time_point_cast<std::chrono::microseconds>(endPoint).time_since_epoch().count();
 
         this->m_stopped = true;
-        std::cout << "Duration: " << (end - start) * 0.001f << "ms" <<std::endl;
+        std::cout << "Duration: " << static_cast<double>(end - start) * 0.001d << "ms" <<std::endl;
     }
 
     ProfilerTimer::ProfilerTimer(const char* const a_name) :

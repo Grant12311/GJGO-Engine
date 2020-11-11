@@ -152,14 +152,14 @@ namespace GJGO
             event = new Event(EventType::mouseButtonUp);
         }
 
-        event->mouseButton = a_button;
+        event->mouseButton = static_cast<unsigned char>(a_button);
         g_appInstancePtr->pendingEvents.emplace_back(event);
     }
 
     static void mouseWheelCallback(GLFWwindow* const /*a_window*/, const double /*a_xOffset*/, const double a_yOffset)
     {
         Event* const event = new Event(EventType::mouseWheelScroll);
-        event->mouseWheelDirection = a_yOffset;
+        event->mouseWheelDirection = static_cast<signed char>(a_yOffset);
         g_appInstancePtr->pendingEvents.emplace_back(event);
     }
 
