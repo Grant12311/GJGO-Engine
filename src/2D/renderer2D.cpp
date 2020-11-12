@@ -38,9 +38,15 @@ namespace GJGO
             glViewport(0, 0, a_width, a_height);
         }
 
-        void drawQuad(const Position2D &a_position, const Size2D &a_size, const Color3 a_color)
+        void drawQuad(const Position2D &a_position, const Size2D &a_size, const Color3 a_color, const unsigned int a_texID)
         {
             vaoPtr->bind();
+
+            if (a_texID)
+            {
+                glBindTexture(GL_TEXTURE_2D, a_texID);
+                currentShader->fillUniform("useTexture", true);
+            }
 
             currentShader->fillUniform("transformer", 1, false, genTransformer2D(a_position, a_size));
             currentShader->fillUniform("quadColor", a_color.red, a_color.green, a_color.blue);

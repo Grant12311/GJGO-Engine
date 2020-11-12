@@ -7,6 +7,7 @@
 #include <Druid/vbo.h>
 #include <Druid/ibo.h>
 #include <Druid/shader.h>
+#include <Druid/texture.h>
 
 #include <GJGO/app.hpp>
 #include <GJGO/clipboard.hpp>
@@ -23,6 +24,7 @@ class GameLayer : public GJGO::Layer
 {
 private:
     Druid::Shader m_shader;
+    Druid::Texture2D m_texture;
 
     GJGO::Position2D m_playerPosition;
 
@@ -89,7 +91,7 @@ public:
 
             GJGO::Renderer::begin2D(&this->m_shader, 1280, 720);
 
-            GJGO::Renderer::drawQuad(this->m_playerPosition, {100, 100}, {1.0f, 0.0f, 0.0f});
+            GJGO::Renderer::drawQuad(this->m_playerPosition, {100, 100}, {1.0f, 1.0f, 1.0f}, this->m_texture);
 
             this->fbo.unbind();
         }
@@ -103,14 +105,14 @@ public:
         {
             ImGui::Begin("Renderer", &this->m_showRendererWindow, ImGuiWindowFlags_AlwaysAutoResize);
 
-            ImGui::Image((void*)this->fbo.colorAttachment, {128, 72}, {0, 1}, {1, 0});
+            ImGui::Image((void*)this->fbo.colorAttachment, {1280, 720}, {0, 1}, {1, 0});
 
             ImGui::End();
         }
     }
 
     GameLayer() :
-        fbo(1280, 720), m_shader("renderer.shader") {}
+        fbo(1280, 720), m_shader("renderer.shader"), m_texture("wall.jpg") {}
 };
 
 int main()
