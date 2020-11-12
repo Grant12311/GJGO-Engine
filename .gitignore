@@ -11,6 +11,7 @@ examples/Game/imgui.ini
 examples/Game/renderer.shader
 examples/Game/results.json
 examples/Game/sprite.shader
+examples/Game/wall.jpg
 
 GJGO.cbp
 GJGO.depend
