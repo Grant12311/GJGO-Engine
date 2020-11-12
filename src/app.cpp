@@ -249,10 +249,15 @@ namespace GJGO
 
         GJGO_LOG_INFO(glGetString(GL_VERSION));
 
-        glEnable(GL_DEBUG_OUTPUT_KHR);
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_KHR);
-        PFNGLDEBUGMESSAGECALLBACKKHRPROC glDebugMessageCallback = reinterpret_cast<PFNGLDEBUGMESSAGECALLBACKKHRPROC>(glfwGetProcAddress("glDebugMessageCallback"));
-        glDebugMessageCallback(openglDebugLogger, 0);
+        if (glfwExtensionSupported("GL_KHR_debug"))
+        {
+            glEnable(GL_DEBUG_OUTPUT_KHR);
+            glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_KHR);
+            PFNGLDEBUGMESSAGECALLBACKKHRPROC glDebugMessageCallback = reinterpret_cast<PFNGLDEBUGMESSAGECALLBACKKHRPROC>(glfwGetProcAddress("glDebugMessageCallback"));
+            glDebugMessageCallback(openglDebugLogger, 0);
+        }else{
+            GJGO_LOG_WARN("GL_KHR_debug extension NOT supported, OpenGL debugging DISABLED!");
+        }
 
         Renderer::init2D();
     }
