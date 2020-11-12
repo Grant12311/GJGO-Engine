@@ -26,7 +26,11 @@ namespace GJGO
         static glm::mat4 genTransformer2D(const Position2D &a_position, const Size2D &a_size, const float a_rotation)
         {
             glm::mat4 toReturn = glm::translate(glm::mat4(1.0f), glm::vec3(a_position.x, a_position.y, 0.0f));
+
+            toReturn = glm::translate(toReturn, glm::vec3(a_size.width / 2.0f, a_size.height / 2.0f, 0.0f));
             toReturn = glm::rotate(toReturn, glm::radians(a_rotation * -1.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+            toReturn = glm::translate(toReturn, glm::vec3((a_size.width / 2.0f) * -1.0f, (a_size.height / 2.0f) * -1.0f, 0.0f));
+
             return glm::scale(toReturn, glm::vec3(static_cast<float>((1 + a_size.width)) / 1.0f, static_cast<float>((1 + a_size.height)) / 1.0f, 1.0f));
         }
 
