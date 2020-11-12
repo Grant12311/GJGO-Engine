@@ -27,6 +27,7 @@ private:
     Druid::Texture2D m_texture;
 
     GJGO::Position2D m_playerPosition;
+    float m_rotation = 0.0f;
 
     bool m_showRendererWindow = true;
 public:
@@ -45,6 +46,11 @@ public:
             this->m_playerPosition.x -= GJGO::Window::deltaTime;
         else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_D))
             this->m_playerPosition.x += GJGO::Window::deltaTime;
+
+        if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT))
+            this->m_rotation += 1;
+        else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_LEFT))
+            this->m_rotation -= 1;
     }
 
     void onEvent(GJGO::Event* const a_event) override
@@ -83,32 +89,25 @@ public:
     {
         GJGO_PROFILE_FUNCTION();
 
-        if (this->m_showRendererWindow)
-        {
-            this->fbo.bind();
+        GJGO::Renderer::begin2D(&this->m_shader, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
-            glClear(GL_COLOR_BUFFER_BIT);
-
-            GJGO::Renderer::begin2D(&this->m_shader, 1280, 720);
-
-            GJGO::Renderer::drawQuad(this->m_playerPosition, {100, 100}, {1.0f, 1.0f, 1.0f}, this->m_texture);
-
-            this->fbo.unbind();
-        }
+        GJGO::Renderer::drawQuad(this->m_playerPosition, {200, 200}, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_texture);
     }
 
     void drawGui() override
     {
         GJGO_PROFILE_FUNCTION();
 
-        if (this->m_showRendererWindow)
+        ImGuiIO& io = ImGui::GetIO();
+
+        ImGuiWindowFlags overlayFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
+                                            ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoInputs;
+        ImGui::SetNextWindowPos({static_cast<float>(GJGO::Window::getWidth()) - ImGui::CalcTextSize("16.667 ms/frame (60.0 FPS)").x - 10.0f, 10.0f});
+        if (ImGui::Begin("Example: Simple overlay", NULL, overlayFlags))
         {
-            ImGui::Begin("Renderer", &this->m_showRendererWindow, ImGuiWindowFlags_AlwaysAutoResize);
-
-            ImGui::Image((void*)this->fbo.colorAttachment, {1280, 720}, {0, 1}, {1, 0});
-
-            ImGui::End();
+            ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
         }
+        ImGui::End();
     }
 
     GameLayer() :
