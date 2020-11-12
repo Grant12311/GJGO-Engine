@@ -23,9 +23,10 @@ namespace GJGO
         Druid::Shader* currentShader;
         glm::mat4 orthoMatrix;
 
-        static glm::mat4 genTransformer2D(const Position2D &a_position, const Size2D &a_size)
+        static glm::mat4 genTransformer2D(const Position2D &a_position, const Size2D &a_size, const float a_rotation)
         {
             glm::mat4 toReturn = glm::translate(glm::mat4(1.0f), glm::vec3(a_position.x, a_position.y, 0.0f));
+            toReturn = glm::rotate(toReturn, glm::radians(a_rotation * -1.0f), glm::vec3(0.0f, 0.0f, 1.0f));
             return glm::scale(toReturn, glm::vec3(static_cast<float>((1 + a_size.width)) / 1.0f, static_cast<float>((1 + a_size.height)) / 1.0f, 1.0f));
         }
 
@@ -38,7 +39,7 @@ namespace GJGO
             glViewport(0, 0, a_width, a_height);
         }
 
-        void drawQuad(const Position2D &a_position, const Size2D &a_size, const Color3 a_color, const unsigned int a_texID)
+        void drawQuad(const Position2D &a_position, const Size2D &a_size, const float a_rotation, const Color3 a_color, const unsigned int a_texID)
         {
             vaoPtr->bind();
 
@@ -48,7 +49,7 @@ namespace GJGO
                 currentShader->fillUniform("useTexture", true);
             }
 
-            currentShader->fillUniform("transformer", 1, false, genTransformer2D(a_position, a_size));
+            currentShader->fillUniform("transformer", 1, false, genTransformer2D(a_position, a_size, a_rotation));
             currentShader->fillUniform("quadColor", a_color.red, a_color.green, a_color.blue);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         }
