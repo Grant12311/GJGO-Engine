@@ -27,6 +27,7 @@ private:
     Druid::Texture2D m_texture;
 
     GJGO::Position2D m_playerPosition;
+    GJGO::Size2D m_size;
     float m_rotation = 0.0f;
 
     bool m_showRendererWindow = true;
@@ -47,10 +48,26 @@ public:
         else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_D))
             this->m_playerPosition.x += GJGO::Window::deltaTime;
 
+        if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_UP))
+        {
+            this->m_size.width += 1;
+            this->m_size.height += 1;
+        }else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_DOWN)){
+            this->m_size.width -= 1;
+            this->m_size.height -= 1;
+        }
+
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT))
             this->m_rotation += 1;
         else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_LEFT))
             this->m_rotation -= 1;
+
+        if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_BRACKET))
+        {
+            this->m_texture.setFilters(GL_NEAREST, GL_NEAREST);
+        }else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_BRACKET)){
+            this->m_texture.setFilters(GL_LINEAR, GL_LINEAR);
+        }
     }
 
     void onEvent(GJGO::Event* const a_event) override
@@ -91,7 +108,7 @@ public:
 
         GJGO::Renderer::begin2D(&this->m_shader, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
-        GJGO::Renderer::drawQuad(this->m_playerPosition, {200, 200}, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_texture);
+        GJGO::Renderer::drawQuad(this->m_playerPosition, this->m_size, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_texture);
     }
 
     void drawGui() override
@@ -111,7 +128,7 @@ public:
     }
 
     GameLayer() :
-        fbo(1280, 720), m_shader("renderer.shader"), m_texture("wall.jpg") {}
+        fbo(1280, 720), m_shader("renderer.shader"), m_texture("wall.jpg"), m_size{100, 100} {}
 };
 
 int main()
