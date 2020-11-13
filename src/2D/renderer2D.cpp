@@ -9,8 +9,9 @@
 #include <Druid/vbo.h>
 #include <Druid/ibo.h>
 
-#include <GJGO/2D/transform2D.hpp>
 #include <GJGO/color.hpp>
+#include <GJGO/2D/camera2D.hpp>
+#include <GJGO/2D/transform2D.hpp>
 
 namespace GJGO
 {
@@ -34,11 +35,14 @@ namespace GJGO
             return glm::scale(toReturn, glm::vec3(static_cast<float>((1 + a_size.width)) / 1.0f, static_cast<float>((1 + a_size.height)) / 1.0f, 1.0f));
         }
 
-        void begin2D(Druid::Shader* const a_shader, const unsigned int a_width, const unsigned int a_height)
+        void begin2D(Druid::Shader* const a_shader, const Camera2D &a_camera, const unsigned int a_width, const unsigned int a_height)
         {
             currentShader = a_shader;
             currentShader->bind();
+
             orthoMatrix = glm::ortho(0.0f, static_cast<float>(a_width), 0.0f, static_cast<float>(a_height));
+            orthoMatrix = glm::translate(orthoMatrix, glm::vec3(a_camera.position.x * -1.0f, a_camera.position.y * -1.0f, 0.0f));
+
             currentShader->fillUniform("orthoMatrix", 1, false, orthoMatrix);
             glViewport(0, 0, a_width, a_height);
         }
