@@ -53,6 +53,7 @@ namespace GJGO
 
             if (a_texID)
             {
+                glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, a_texID);
                 currentShader->fillUniform("useTexture", true);
             }
