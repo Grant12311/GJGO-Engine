@@ -16,9 +16,10 @@
 #include <GJGO/layer.hpp>
 #include <GJGO/log.hpp>
 #include <GJGO/profiler.hpp>
+#include <GJGO/window.hpp>
+#include <GJGO/2D/camera2D.hpp>
 #include <GJGO/2D/renderer2D.hpp>
 #include <GJGO/2D/transform2D.hpp>
-#include <GJGO/window.hpp>
 
 class GameLayer : public GJGO::Layer
 {
@@ -30,6 +31,8 @@ private:
     GJGO::Size2D m_size;
     float m_rotation = 0.0f;
 
+    GJGO::Camera2D m_camera;
+
     bool m_showRendererWindow = true;
 public:
     Druid::FBO fbo;
@@ -39,14 +42,14 @@ public:
         GJGO_PROFILE_FUNCTION();
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_W))
-            this->m_playerPosition.y += GJGO::Window::deltaTime;
+            this->m_camera.position.y += GJGO::Window::deltaTime;
         else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_S))
-            this->m_playerPosition.y -= GJGO::Window::deltaTime;
+            this->m_camera.position.y -= GJGO::Window::deltaTime;
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_A))
-            this->m_playerPosition.x -= GJGO::Window::deltaTime;
+            this->m_camera.position.x -= GJGO::Window::deltaTime;
         else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_D))
-            this->m_playerPosition.x += GJGO::Window::deltaTime;
+            this->m_camera.position.x += GJGO::Window::deltaTime;
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_UP))
         {
@@ -106,7 +109,7 @@ public:
     {
         GJGO_PROFILE_FUNCTION();
 
-        GJGO::Renderer::begin2D(&this->m_shader, GJGO::Window::getWidth(), GJGO::Window::getHeight());
+        GJGO::Renderer::begin2D(&this->m_shader, this->m_camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
         GJGO::Renderer::drawQuad(this->m_playerPosition, this->m_size, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_texture);
     }
