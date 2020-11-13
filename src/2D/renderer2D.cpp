@@ -10,6 +10,7 @@
 #include <Druid/ibo.h>
 
 #include <GJGO/color.hpp>
+#include <GJGO/profiler.hpp>
 #include <GJGO/2D/camera2D.hpp>
 #include <GJGO/2D/transform2D.hpp>
 
@@ -26,6 +27,8 @@ namespace GJGO
 
         static glm::mat4 genTransformer2D(const Position2D &a_position, const Size2D &a_size, const float a_rotation)
         {
+            GJGO_PROFILE_FUNCTION();
+
             glm::mat4 toReturn = glm::translate(glm::mat4(1.0f), glm::vec3(a_position.x, a_position.y, 0.0f));
 
             toReturn = glm::translate(toReturn, glm::vec3(a_size.width / 2.0f, a_size.height / 2.0f, 0.0f));
@@ -37,6 +40,8 @@ namespace GJGO
 
         void begin2D(Druid::Shader* const a_shader, const Camera2D &a_camera, const unsigned int a_width, const unsigned int a_height)
         {
+            GJGO_PROFILE_FUNCTION();
+
             currentShader = a_shader;
             currentShader->bind();
 
@@ -49,6 +54,8 @@ namespace GJGO
 
         void drawQuad(const Position2D &a_position, const Size2D &a_size, const float a_rotation, const Color3 a_color, const unsigned int a_texID)
         {
+            GJGO_PROFILE_FUNCTION();
+
             vaoPtr->bind();
 
             if (a_texID)
@@ -65,6 +72,8 @@ namespace GJGO
 
         void init2D()
         {
+            GJGO_PROFILE_FUNCTION();
+
             std::array<float, 16> quadVertices = {
                 0, 0, 0.0f, 1.0f, // lower left
                 0, 1, 0.0f, 0.0f, // upper left
