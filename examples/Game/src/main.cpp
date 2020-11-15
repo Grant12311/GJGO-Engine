@@ -42,14 +42,14 @@ public:
         GJGO_PROFILE_FUNCTION();
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_W))
-            this->m_camera.position.y += GJGO::Window::deltaTime;
+            this->m_playerPosition.y += GJGO::Window::deltaTime;
         else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_S))
-            this->m_camera.position.y -= GJGO::Window::deltaTime;
+            this->m_playerPosition.y -= GJGO::Window::deltaTime;
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_A))
-            this->m_camera.position.x -= GJGO::Window::deltaTime;
+            this->m_playerPosition.x -= GJGO::Window::deltaTime;
         else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_D))
-            this->m_camera.position.x += GJGO::Window::deltaTime;
+            this->m_playerPosition.x += GJGO::Window::deltaTime;
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_UP))
         {
@@ -119,8 +119,6 @@ public:
         GJGO::Renderer::begin2D(&this->m_shader, this->m_camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
         GJGO::Renderer::drawQuad(this->m_playerPosition, this->m_size, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_texture);
-        GJGO::Renderer::drawQuad({this->m_playerPosition.x + this->m_size.width, this->m_playerPosition.y}, this->m_size, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_texture);
-        GJGO::Renderer::drawQuad({this->m_playerPosition.x + (this->m_size.width * 2.0f), this->m_playerPosition.y}, this->m_size, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_texture);
     }
 
     void drawGui() override
