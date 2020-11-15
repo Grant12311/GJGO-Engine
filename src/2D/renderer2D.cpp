@@ -22,8 +22,8 @@ namespace GJGO
         static std::unique_ptr<Druid::VBO> vboPtr;
         static std::unique_ptr<Druid::IBO> iboPtr;
 
-        Druid::Shader* currentShader;
-        glm::mat4 orthoMatrix;
+        static Druid::Shader* currentShader;
+        static glm::mat4 orthoMatrix;
 
         static glm::mat4 genTransformer2D(const Position2D &a_position, const Size2D &a_size, const float a_rotation)
         {
