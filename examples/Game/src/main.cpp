@@ -71,6 +71,13 @@ public:
         }else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_BRACKET)){
             this->m_texture.setFilters(GL_LINEAR, GL_LINEAR);
         }
+
+        if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_MINUS))
+        {
+            this->m_camera.position.z -= 1;
+        }else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_EQUAL)){
+            this->m_camera.position.z += 1;
+        }
     }
 
     void onEvent(GJGO::Event* const a_event) override
@@ -100,7 +107,7 @@ public:
                 GJGO_LOG_INFO("Key Up: ", a_event->keycode);
                 break;
             case GJGO::EventType::mouseWheelScroll:
-                GJGO_LOG_INFO("Mouse Wheel Scroll: ", static_cast<short>(a_event->mouseWheelDirection));
+                this->m_camera.position.z += 1 * a_event->mouseWheelDirection;
                 break;
         }
     }
@@ -112,6 +119,8 @@ public:
         GJGO::Renderer::begin2D(&this->m_shader, this->m_camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
         GJGO::Renderer::drawQuad(this->m_playerPosition, this->m_size, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_texture);
+        GJGO::Renderer::drawQuad({this->m_playerPosition.x + this->m_size.width, this->m_playerPosition.y}, this->m_size, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_texture);
+        GJGO::Renderer::drawQuad({this->m_playerPosition.x + (this->m_size.width * 2.0f), this->m_playerPosition.y}, this->m_size, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_texture);
     }
 
     void drawGui() override
