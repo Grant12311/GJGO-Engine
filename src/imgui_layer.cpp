@@ -48,16 +48,16 @@ namespace GJGO
         {
             case EventType::keyDown:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = true;
-                //a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
+                a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
             case EventType::keyUp:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = false;
-                //a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
+                a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
             case EventType::keyTypedDown:
                 this->m_ioPtr->AddInputCharacter(static_cast<unsigned short>(a_eventPtr->keycode));
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = true;
-                //a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
+                a_eventPtr->handled = this->m_ioPtr->WantCaptureKeyboard;
                 break;
             /*case EventType::keyTypedUp:
                 this->m_ioPtr->KeysDown[a_eventPtr->keycode] = false;
