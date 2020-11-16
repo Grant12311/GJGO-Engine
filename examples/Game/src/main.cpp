@@ -161,6 +161,9 @@ public:
 
         ImGui::Begin("Anim");
         ImGui::SliderInt("Frame", &this->m_textureToDraw, 0, 23);
+        ImGui::InputInt2("Pos", reinterpret_cast<int*>(&this->m_playerPosition));
+        ImGui::InputInt2("Size", reinterpret_cast<int*>(&this->m_size));
+        ImGui::SliderFloat("Rotation", &this->m_rotation, 0.0f, 360.0f);
         ImGui::End();
 
         ImGuiWindowFlags overlayFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
