@@ -25,7 +25,33 @@ class GameLayer : public GJGO::Layer
 {
 private:
     Druid::Shader m_shader;
-    Druid::Texture2D m_texture;
+    int m_textureToDraw = 0;
+    std::array<Druid::Texture2D, 24> m_textures = {
+        Druid::Texture2D("res/sprites/dinos/blue/1.png",  false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/2.png",  false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/3.png",  false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/4.png",  false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/5.png",  false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/6.png",  false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/7.png",  false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/8.png",  false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/9.png",  false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/10.png", false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/11.png", false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/12.png", false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/13.png", false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/14.png", false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/15.png", false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/16.png", false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/17.png", false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/18.png", false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/19.png", false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/20.png", false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/21.png", false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/22.png", false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/23.png", false, GL_NEAREST, GL_NEAREST),
+        Druid::Texture2D("res/sprites/dinos/blue/24.png", false, GL_NEAREST, GL_NEAREST)
+    };
 
     GJGO::Position2D m_playerPosition;
     GJGO::Size2D m_size;
@@ -53,11 +79,11 @@ public:
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_UP))
         {
-            this->m_size.width += 1;
-            this->m_size.height += 1;
+            this->m_size.width += 10;
+            this->m_size.height += 10;
         }else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_DOWN)){
-            this->m_size.width -= 1;
-            this->m_size.height -= 1;
+            this->m_size.width -= 10;
+            this->m_size.height -= 10;
         }
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT))
@@ -67,9 +93,15 @@ public:
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_BRACKET))
         {
-            this->m_texture.setFilters(GL_NEAREST, GL_NEAREST);
+            for (unsigned char i = 0; i < this->m_textures.size(); i++)
+            {
+                this->m_textures[i].setFilters(GL_NEAREST, GL_NEAREST);
+            }
         }else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT_BRACKET)){
-            this->m_texture.setFilters(GL_LINEAR, GL_LINEAR);
+            for (unsigned char i = 0; i < this->m_textures.size(); i++)
+            {
+                this->m_textures[i].setFilters(GL_LINEAR, GL_LINEAR);
+            }
         }
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_MINUS))
@@ -118,7 +150,7 @@ public:
 
         GJGO::Renderer::begin2D(&this->m_shader, this->m_camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
-        GJGO::Renderer::drawQuad(this->m_playerPosition, this->m_size, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_texture);
+        GJGO::Renderer::drawQuad(this->m_playerPosition, this->m_size, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_textures[this->m_textureToDraw]);
     }
 
     void drawGui() override
@@ -126,6 +158,10 @@ public:
         GJGO_PROFILE_FUNCTION();
 
         ImGuiIO& io = ImGui::GetIO();
+
+        ImGui::Begin("Anim");
+        ImGui::SliderInt("Frame", &this->m_textureToDraw, 0, 23);
+        ImGui::End();
 
         ImGuiWindowFlags overlayFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
                                             ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoInputs;
@@ -138,7 +174,7 @@ public:
     }
 
     GameLayer() :
-        fbo(1280, 720), m_shader("renderer.shader"), m_texture("wall.jpg"), m_size{100, 100} {}
+        fbo(1280, 720), m_shader("renderer.shader"), m_size{18, 18} {}
 };
 
 int main()
@@ -148,6 +184,8 @@ int main()
     GJGO::Application app;
 
     app.layers.emplace_back(new GameLayer);
+
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 
     GJGO::Entity e;
     e.addComponent<GJGO::Transform2D>();
