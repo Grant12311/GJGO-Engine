@@ -24,7 +24,7 @@
 class GameLayer : public GJGO::Layer
 {
 private:
-    Druid::Shader m_shader;
+    Druid::Shader m_shader = Druid::Shader("renderer.shader");
     int m_textureToDraw = 0;
     std::array<Druid::Texture2D, 24> m_textures = {
         Druid::Texture2D("res/sprites/dinos/blue/1.png",  false, GL_NEAREST, GL_NEAREST),
@@ -53,15 +53,19 @@ private:
         Druid::Texture2D("res/sprites/dinos/blue/24.png", false, GL_NEAREST, GL_NEAREST)
     };
 
-    GJGO::Position2D m_playerPosition;
-    GJGO::Size2D m_size;
+    GJGO::Position2D m_playerPosition = {300, 10};
+    GJGO::Size2D m_size = {1000, 1000};
     float m_rotation = 0.0f;
 
     GJGO::Camera2D m_camera;
 
+    std::array<float, 3> m_clearColor = {
+        0.0f, 0.0f, 0.0f
+    };
+
     bool m_showRendererWindow = true;
 public:
-    Druid::FBO fbo;
+    Druid::FBO fbo = Druid::FBO(1280, 720);
 
     void onUpdate() override
     {
@@ -148,6 +152,8 @@ public:
     {
         GJGO_PROFILE_FUNCTION();
 
+        glClearColor(this->m_clearColor[0], this->m_clearColor[1], this->m_clearColor[2], 1.0f);
+
         GJGO::Renderer::begin2D(&this->m_shader, this->m_camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
         GJGO::Renderer::drawQuad(this->m_playerPosition, this->m_size, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_textures[this->m_textureToDraw]);
@@ -164,6 +170,8 @@ public:
         ImGui::InputInt2("Pos", reinterpret_cast<int*>(&this->m_playerPosition));
         ImGui::InputInt2("Size", reinterpret_cast<int*>(&this->m_size));
         ImGui::SliderFloat("Rotation", &this->m_rotation, 0.0f, 360.0f);
+        ImGui::Separator();
+        ImGui::SliderFloat3("Clear Color", this->m_clearColor.data(), 0, 1.0f);
         ImGui::End();
 
         ImGuiWindowFlags overlayFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings |
@@ -175,9 +183,6 @@ public:
         }
         ImGui::End();
     }
-
-    GameLayer() :
-        fbo(1280, 720), m_shader("renderer.shader"), m_size{18, 18} {}
 };
 
 int main()
@@ -187,8 +192,6 @@ int main()
     GJGO::Application app;
 
     app.layers.emplace_back(new GameLayer);
-
-    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 
     GJGO::Entity e;
     e.addComponent<GJGO::Transform2D>();
