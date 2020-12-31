@@ -108,14 +108,22 @@ namespace GJGO
             {
                 GJGO_PROFILE_SCOPE("VSYNC");
 
-                glfwSwapBuffers(this->windowPtr);
+                {
+                    GJGO_PROFILE_SCOPE("glfwSwapBuffers");
 
-                if (this->vsyncEnabled)
-                    while ((glfwGetTime() - lastTime) * 1000.0d < this->framerateCap) {}
+                    glfwSwapBuffers(this->windowPtr);
+                }
 
-                Window::deltaTime = (glfwGetTime() - lastTime) * 1000.0d;
+                {
+                    GJGO_PROFILE_SCOPE("Timer");
 
-                lastTime = glfwGetTime();
+                    if (this->vsyncEnabled)
+                        while ((glfwGetTime() - lastTime) * 1000.0d < this->framerateCap) {}
+
+                    Window::deltaTime = (glfwGetTime() - lastTime) * 1000.0d;
+
+                    lastTime = glfwGetTime();
+                }
             }
         }
     }
@@ -229,7 +237,7 @@ namespace GJGO
         glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
         glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
 
-        this->windowPtr = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+        this->windowPtr = glfwCreateWindow(640, 480, "Hello World", nullptr, nullptr);
         if (!this->windowPtr)
         {
             glfwTerminate();
