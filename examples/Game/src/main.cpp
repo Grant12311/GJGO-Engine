@@ -21,8 +21,6 @@
 #include <GJGO/2D/renderer2D.hpp>
 #include <GJGO/2D/transform2D.hpp>
 
-// test
-
 class GameLayer : public GJGO::Layer
 {
 private:
