@@ -1,24 +1,19 @@
-/bin
-/obj
-examples/Sprite Test/bin
-examples/Sprite Test/obj
 examples/Sprite Test/res
 
-examples/Sprite Test/Sprite Test.cbp
-examples/Sprite Test/Sprite Test.depend
-examples/Sprite Test/Sprite Test.layout
-examples/Sprite Test/gmon.out
-examples/Sprite Test/imgui.ini
 examples/Sprite Test/renderer.shader
 examples/Sprite Test/results.json
 examples/Sprite Test/sprite.shader
-examples/Sprite Test/wall.jpg
 
-/GJGO.cbp
-/GJGO.depend
-/GJGO.layout
 /GJGO.make
-/GJGO.workspace
-/GJGO.workspace.layout
 
+*.cbp
+*.depend
+*.layout
+*.workspace
+
+bin/
+obj/
+
+gmon.out
+imgui.ini
 Makefile
