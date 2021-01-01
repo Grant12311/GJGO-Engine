@@ -4,7 +4,7 @@ workspace("GJGO")
     toolset("gcc")
     configurations({"Debug", "Release", "Dist"})
     platforms({"LinuxARM"})
-    startproject("Sprite Test")
+    startproject("Club Penguin Revived")
 
     includedirs({"include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip", "vendor/glm"})
     links({"X11", "xcb", "xcb-randr", "EGL", "GL", "pthread", "glfw", "dl"})
@@ -44,6 +44,22 @@ workspace("GJGO")
         files({"premake5.lua", ".gitignore", "src/**", "include/**"})
 
     project("Sprite Test")
+        location("examples/%{prj.name}")
+        targetdir("%{prj.location}/bin/%{cfg.platform}/%{cfg.buildcfg}")
+
+        links({"GJGO", "Druid", "imgui", "clip"})
+        files({"%{prj.location}/src/*"})
+
+        filter("configurations:Debug")
+            kind("ConsoleApp")
+
+        filter("configurations:Release")
+            kind("ConsoleApp")
+
+        filter("configurations:Dist")
+            kind("WindowedApp")
+
+    project("Club Penguin Revived")
         location("examples/%{prj.name}")
         targetdir("%{prj.location}/bin/%{cfg.platform}/%{cfg.buildcfg}")
 
