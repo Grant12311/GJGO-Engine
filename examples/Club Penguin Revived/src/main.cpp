@@ -1,6 +1,11 @@
 #include <imgui.h>
 
+#include <Druid/shader.h>
+#include <Druid/texture.h>
+
+#include <GJGO/2D/renderer2D.hpp>
 #include <GJGO/app.hpp>
+#include <GJGO/2D/camera2D.hpp>
 #include <GJGO/layer.hpp>
 #include <GJGO/log.hpp>
 #include <GJGO/profiler.hpp>
@@ -9,6 +14,12 @@
 class GameLayer : public GJGO::Layer
 {
 public:
+    GJGO::Camera2D camera;
+    GJGO::Position2D playerPosition = {100, 100};
+
+    Druid::Shader shader;
+    Druid::Texture2D playerTexture;
+
     void onEvent(GJGO::Event* const a_event) override
     {
         GJGO_PROFILE_FUNCTION();
@@ -38,6 +49,15 @@ public:
         }
     }
 
+    void draw() override
+    {
+        GJGO_PROFILE_FUNCTION();
+
+        GJGO::Renderer::begin2D(&this->shader, this->camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
+
+        GJGO::Renderer::drawQuad(this->playerPosition, {61, 69}, 0.0f, {1.0f, 1.0f, 1.0f}, this->playerTexture);
+    }
+
     void drawGui() override
     {
         GJGO_PROFILE_FUNCTION();
@@ -54,7 +74,8 @@ public:
         ImGui::End();
     }
 
-    GameLayer()
+    GameLayer() :
+        shader("sprite.shader"), playerTexture("res/penguin/purple/down.png", false)
     {
         GJGO_PROFILE_FUNCTION();
 
