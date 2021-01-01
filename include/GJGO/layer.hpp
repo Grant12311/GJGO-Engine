@@ -10,6 +10,8 @@ namespace GJGO
     class Layer
     {
     public:
+        const char* name;
+
         virtual void onUpdate() {}
         virtual void onEvent(Event* const /*a_event*/)  {}
         virtual void draw() {}

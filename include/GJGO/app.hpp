@@ -24,6 +24,8 @@ namespace GJGO
         bool vsyncEnabled = true;
         double framerateCap = 1000.0d / 60.0d;
 
+        Layer& getLayerByName(const char* const a_name);
+
         void run();
 
         Application();

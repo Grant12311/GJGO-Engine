@@ -37,6 +37,17 @@ namespace GJGO
         }
     }
 
+    Layer& Application::getLayerByName(const char* const a_name)
+    {
+        for (unsigned short i = 0; i < this->layers.size(); i++)
+        {
+            if (std::strcmp(a_name, this->layers[i]->name) == 0)
+            {
+                return *this->layers[i];
+            }
+        }
+    }
+
     void Application::run()
     {
         GJGO_PROFILE_FUNCTION();
