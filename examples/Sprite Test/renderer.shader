@@ -21,17 +21,17 @@ void main()
 #version 300 es
 
 precision highp float;
-layout (location = 0) out vec3 color;
+layout (location = 0) out vec4 color;
 in vec2 ourTexCoord;
 
-uniform vec3 quadColor;
+uniform vec4 quadColor;
 uniform sampler2D texture1;
 uniform bool useTexture;
 
 void main()
 {
     if (useTexture)
-        color = vec3(texture(texture1, ourTexCoord) * vec4(quadColor, 1.0));
+        color = texture(texture1, ourTexCoord) * quadColor;
     else
         color = quadColor;
 }

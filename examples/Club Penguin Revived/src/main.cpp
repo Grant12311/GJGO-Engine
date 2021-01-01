@@ -55,7 +55,7 @@ public:
 
         GJGO::Renderer::begin2D(&this->shader, this->camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
-        GJGO::Renderer::drawQuad(this->playerPosition, {61, 69}, 0.0f, {1.0f, 1.0f, 1.0f}, this->playerTexture);
+        GJGO::Renderer::drawQuad(this->playerPosition, {61, 69}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->playerTexture);
     }
 
     void drawGui() override

@@ -52,7 +52,7 @@ namespace GJGO
             glViewport(0, 0, a_width, a_height);
         }
 
-        void drawQuad(const Position2D &a_position, const Size2D &a_size, const float a_rotation, const Color3 a_color, const unsigned int a_texID)
+        void drawQuad(const Position2D &a_position, const Size2D &a_size, const float a_rotation, const Color4 a_color, const unsigned int a_texID)
         {
             GJGO_PROFILE_FUNCTION();
 
@@ -66,7 +66,7 @@ namespace GJGO
             }
 
             currentShader->fillUniform("transformer", 1, false, genTransformer2D(a_position, a_size, a_rotation));
-            currentShader->fillUniform("quadColor", a_color.red, a_color.green, a_color.blue);
+            currentShader->fillUniform("quadColor", a_color.red, a_color.green, a_color.blue, a_color.alpha);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         }
 
