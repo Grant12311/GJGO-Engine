@@ -14,10 +14,11 @@ examples/Sprite Test/results.json
 examples/Sprite Test/sprite.shader
 examples/Sprite Test/wall.jpg
 
-GJGO.cbp
-GJGO.depend
-GJGO.layout
-GJGO.make
-GJGO.workspace
-GJGO.workspace.layout
+/GJGO.cbp
+/GJGO.depend
+/GJGO.layout
+/GJGO.make
+/GJGO.workspace
+/GJGO.workspace.layout
+
 Makefile
