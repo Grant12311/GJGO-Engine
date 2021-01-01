@@ -7,6 +7,8 @@ namespace GJGO
     {
         inline double deltaTime = 0;
 
+        void setTitle(const char* const a_title);
+
         unsigned int getWidth();
         unsigned int getHeight();
     }

@@ -7,6 +7,13 @@ namespace GJGO
 {
     namespace Window
     {
+        void setTitle(const char* const a_title)
+        {
+            GJGO_PROFILE_FUNCTION();
+
+            glfwSetWindowTitle(g_appInstancePtr->windowPtr, a_title);
+        }
+
         unsigned int getWidth()
         {
             GJGO_PROFILE_FUNCTION();
