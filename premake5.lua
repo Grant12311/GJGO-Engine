@@ -4,7 +4,7 @@ workspace("GJGO")
     toolset("gcc")
     configurations({"Debug", "Release", "Dist"})
     platforms({"LinuxARM"})
-    startproject("Game")
+    startproject("Sprite Test")
 
     includedirs({"include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip", "vendor/glm"})
     links({"X11", "xcb", "xcb-randr", "EGL", "GL", "pthread", "glfw", "dl"})
@@ -44,13 +44,12 @@ workspace("GJGO")
 
         files({"premake5.lua", ".gitignore", "src/**", "include/**"})
 
-    project("Game")
-        filename("Game")
-        location("examples/Game")
-        targetdir("examples/Game/bin/%{cfg.platform}/%{cfg.buildcfg}")
+    project("Sprite Test")
+        location("examples/Sprite Test")
+        targetdir("examples/Sprite Test/bin/%{cfg.platform}/%{cfg.buildcfg}")
 
         links({"GJGO", "Druid", "imgui", "clip"})
-        files({"examples/Game/src/*"})
+        files({"examples/Sprite Test/src/*"})
 
         filter("configurations:Debug")
             kind("ConsoleApp")

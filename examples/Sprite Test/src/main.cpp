@@ -183,6 +183,11 @@ public:
         }
         ImGui::End();
     }
+
+    GameLayer()
+    {
+        this->name = "Game";
+    }
 };
 
 int main()

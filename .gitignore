@@ -1,18 +1,18 @@
 /bin
 /obj
-examples/Game/bin
-examples/Game/obj
-examples/Game/res
+examples/Sprite Test/bin
+examples/Sprite Test/obj
+examples/Sprite Test/res
 
-examples/Game/Game.cbp
-examples/Game/Game.depend
-examples/Game/Game.layout
-examples/Game/gmon.out
-examples/Game/imgui.ini
-examples/Game/renderer.shader
-examples/Game/results.json
-examples/Game/sprite.shader
-examples/Game/wall.jpg
+examples/Sprite Test/Sprite Test.cbp
+examples/Sprite Test/Sprite Test.depend
+examples/Sprite Test/Sprite Test.layout
+examples/Sprite Test/gmon.out
+examples/Sprite Test/imgui.ini
+examples/Sprite Test/renderer.shader
+examples/Sprite Test/results.json
+examples/Sprite Test/sprite.shader
+examples/Sprite Test/wall.jpg
 
 GJGO.cbp
 GJGO.depend
