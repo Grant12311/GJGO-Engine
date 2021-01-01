@@ -38,7 +38,6 @@ workspace("GJGO")
     include("vendor/Druid/project.lua")
 
     project("GJGO")
-        filename("GJGO")
         kind("StaticLib")
         links({"Druid", "imgui", "clip"})
 
