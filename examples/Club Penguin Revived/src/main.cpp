@@ -80,6 +80,8 @@ public:
         GJGO_PROFILE_FUNCTION();
 
         this->name = "Game";
+
+        GJGO::Window::setTitle("Club Penguin Revived");
     }
 };
 
