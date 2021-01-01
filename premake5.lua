@@ -44,11 +44,11 @@ workspace("GJGO")
         files({"premake5.lua", ".gitignore", "src/**", "include/**"})
 
     project("Sprite Test")
-        location("examples/Sprite Test")
-        targetdir("examples/Sprite Test/bin/%{cfg.platform}/%{cfg.buildcfg}")
+        location("examples/%{prj.name}")
+        targetdir("%{prj.location}/bin/%{cfg.platform}/%{cfg.buildcfg}")
 
         links({"GJGO", "Druid", "imgui", "clip"})
-        files({"examples/Sprite Test/src/*"})
+        files({"%{prj.location}/src/*"})
 
         filter("configurations:Debug")
             kind("ConsoleApp")
