@@ -15,10 +15,24 @@ class GameLayer : public GJGO::Layer
 {
 public:
     GJGO::Camera2D camera;
-    GJGO::Position2D playerPosition = {100, 100};
+    glm::vec2 playerPosition = glm::vec2(100.0f, 100.0f);
+    glm::vec2 direction;
+    short step = -1;
 
     Druid::Shader shader;
     Druid::Texture2D playerTexture;
+
+    void onUpdate() override
+    {
+        if (this->step != -1)
+        {
+            this->playerPosition += this->direction;
+            if (++this->step == 100)
+            {
+                this->step = -1;
+            }
+        }
+    }
 
     void onEvent(GJGO::Event* const a_event) override
     {
@@ -46,6 +60,17 @@ public:
             case GJGO::EventType::keyUp:
                 GJGO_LOG_INFO("Key Up: ", a_event->keycode);
                 break;
+            case GJGO::EventType::mouseButtonDown:
+            {
+                std::array<double, 2> mousePosition;
+                glfwGetCursorPos(GJGO::g_appInstancePtr->windowPtr, &mousePosition[0], &mousePosition[1]);
+                mousePosition[1] = GJGO::Window::getHeight() - mousePosition[1];
+
+                this->direction = (glm::vec2(mousePosition[0], mousePosition[1]) - this->playerPosition) * glm::vec2(0.01f, 0.01f);
+                this->step = 0;
+
+                break;
+            }
         }
     }
 
@@ -55,7 +80,7 @@ public:
 
         GJGO::Renderer::begin2D(&this->shader, this->camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
-        GJGO::Renderer::drawQuad(this->playerPosition, {61, 69}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->playerTexture);
+        GJGO::Renderer::drawQuad({this->playerPosition.x, this->playerPosition.y}, {61, 69}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->playerTexture);
     }
 
     void drawGui() override
