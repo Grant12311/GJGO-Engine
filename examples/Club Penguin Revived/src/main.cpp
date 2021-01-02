@@ -1,5 +1,7 @@
 #include <imgui.h>
 
+#include <tweeny.h>
+
 #include <Druid/shader.h>
 #include <Druid/texture.h>
 
@@ -15,23 +17,19 @@ class GameLayer : public GJGO::Layer
 {
 public:
     GJGO::Camera2D camera;
-    glm::vec2 playerPosition = glm::vec2(100.0f, 100.0f);
-    glm::vec2 direction;
-    short step = -1;
+    GJGO::Position2D playerPosition;
+    tweeny::tween<int> tweenX = tweeny::from(0).to(0).during(1.0f);
+    tweeny::tween<int> tweenY = tweeny::from(0).to(0).during(1.0f);
 
     Druid::Shader shader;
     Druid::Texture2D playerTexture;
 
     void onUpdate() override
     {
-        if (this->step != -1)
-        {
-            this->playerPosition += this->direction;
-            if (++this->step == 100)
-            {
-                this->step = -1;
-            }
-        }
+        GJGO_PROFILE_FUNCTION();
+
+        this->playerPosition.x = this->tweenX.step(static_cast<int>(GJGO::Window::deltaTime));
+        this->playerPosition.y = this->tweenY.step(static_cast<int>(GJGO::Window::deltaTime));
     }
 
     void onEvent(GJGO::Event* const a_event) override
@@ -66,8 +64,10 @@ public:
                 glfwGetCursorPos(GJGO::g_appInstancePtr->windowPtr, &mousePosition[0], &mousePosition[1]);
                 mousePosition[1] = GJGO::Window::getHeight() - mousePosition[1];
 
-                this->direction = (glm::vec2(mousePosition[0], mousePosition[1]) - this->playerPosition) * glm::vec2(0.01f, 0.01f);
-                this->step = 0;
+                int duration = std::abs(this->playerPosition.x - mousePosition[0]) + std::abs(this->playerPosition.y - mousePosition[1]);
+
+                this->tweenX = tweeny::from(this->playerPosition.x).to(static_cast<int>(mousePosition[0])).during(duration);
+                this->tweenY = tweeny::from(this->playerPosition.y).to(static_cast<int>(mousePosition[1])).during(duration);
 
                 break;
             }
