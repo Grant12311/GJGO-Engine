@@ -2,6 +2,8 @@
 
 #include <imgui.h>
 
+#include <tweeny.h>
+
 #include <Druid/fbo.h>
 #include <Druid/vao.h>
 #include <Druid/vbo.h>
@@ -53,6 +55,17 @@ private:
         Druid::Texture2D("res/sprites/dinos/blue/24.png", false, GL_NEAREST, GL_NEAREST)
     };
 
+    int m_animChoice = 0;
+    tweeny::tween<int> m_animTween = tweeny::from(2).to(8).during(700).onStep([](tweeny::tween<int> &a_tween)
+    {
+        if (a_tween.progress() >= 1.0f)
+        {
+            a_tween.seek(0);
+        }
+
+        return false;
+    });
+
     GJGO::Position2D m_playerPosition = {300, 10};
     GJGO::Size2D m_size = {1000, 1000};
     float m_rotation = 0.0f;
@@ -70,6 +83,8 @@ public:
     void onUpdate() override
     {
         GJGO_PROFILE_FUNCTION();
+
+        this->m_textureToDraw = this->m_animTween.step(static_cast<int>(GJGO::Window::deltaTime));
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_W))
             this->m_playerPosition.y += GJGO::Window::deltaTime;
@@ -166,7 +181,10 @@ public:
         ImGuiIO& io = ImGui::GetIO();
 
         ImGui::Begin("Anim");
+        constexpr std::array<const char*, 4> choices = {"Walk", "Jump", "Hurt", "Run"};
+        ImGui::ListBox("Anims", &this->m_animChoice, choices.data(), choices.size());
         ImGui::SliderInt("Frame", &this->m_textureToDraw, 0, 23);
+        ImGui::Separator();
         ImGui::InputInt2("Pos", reinterpret_cast<int*>(&this->m_playerPosition));
         ImGui::InputInt2("Size", reinterpret_cast<int*>(&this->m_size));
         ImGui::SliderFloat("Rotation", &this->m_rotation, 0.0f, 360.0f);
@@ -187,6 +205,8 @@ public:
     GameLayer()
     {
         this->name = "Game";
+
+        glfwMaximizeWindow(GJGO::g_appInstancePtr->windowPtr);
     }
 };
 
