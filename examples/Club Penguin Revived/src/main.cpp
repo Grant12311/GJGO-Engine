@@ -6,6 +6,7 @@
 #include <Druid/texture.h>
 
 #include <GJGO/2D/renderer2D.hpp>
+#include <GJGO/animation.hpp>
 #include <GJGO/app.hpp>
 #include <GJGO/2D/camera2D.hpp>
 #include <GJGO/layer.hpp>
@@ -18,8 +19,7 @@ class GameLayer : public GJGO::Layer
 public:
     GJGO::Camera2D camera;
     GJGO::Position2D playerPosition;
-    tweeny::tween<int> tweenX = tweeny::from(0).to(0).during(1.0f);
-    tweeny::tween<int> tweenY = tweeny::from(0).to(0).during(1.0f);
+    GJGO::AnimationPosition2D animation;
 
     Druid::Shader shader;
     Druid::Texture2D playerTexture;
@@ -28,8 +28,7 @@ public:
     {
         GJGO_PROFILE_FUNCTION();
 
-        this->playerPosition.x = this->tweenX.step(static_cast<int>(GJGO::Window::deltaTime));
-        this->playerPosition.y = this->tweenY.step(static_cast<int>(GJGO::Window::deltaTime));
+        this->animation.step();
     }
 
     void onEvent(GJGO::Event* const a_event) override
@@ -66,8 +65,7 @@ public:
 
                 int duration = std::abs(this->playerPosition.x - mousePosition[0]) + std::abs(this->playerPosition.y - mousePosition[1]);
 
-                this->tweenX = tweeny::from(this->playerPosition.x).to(static_cast<int>(mousePosition[0])).during(duration);
-                this->tweenY = tweeny::from(this->playerPosition.y).to(static_cast<int>(mousePosition[1])).during(duration);
+                this->animation = GJGO::AnimationPosition2D(duration, this->playerPosition, GJGO::Position2D{mousePosition[0], mousePosition[1]});
 
                 break;
             }
