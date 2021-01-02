@@ -13,6 +13,7 @@ namespace GJGO
         bool paused = false;
 
         virtual void step() = 0;
+        virtual ~Animation() = default;
     };
 
     class AnimationPosition2D : public Animation
