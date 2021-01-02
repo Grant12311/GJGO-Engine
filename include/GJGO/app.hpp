@@ -7,6 +7,7 @@
 
 #include <GLFW/glfw3.h>
 
+#include <GJGO/animation.hpp>
 #include <GJGO/event.hpp>
 #include <GJGO/layer.hpp>
 
