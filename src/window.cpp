@@ -1,4 +1,4 @@
-#include <GLFW/glfw3.h>
+#include <pch.hpp>
 
 #include <GJGO/app.hpp>
 #include <GJGO/profiler.hpp>

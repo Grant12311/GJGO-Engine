@@ -1,13 +1,4 @@
-#include <memory>
-
-#include <GLES3/gl31.h>
-
-#include <glm/mat4x4.hpp>
-
-#include <Druid/shader.h>
-#include <Druid/vao.h>
-#include <Druid/vbo.h>
-#include <Druid/ibo.h>
+#include <pch.hpp>
 
 #include <GJGO/color.hpp>
 #include <GJGO/profiler.hpp>

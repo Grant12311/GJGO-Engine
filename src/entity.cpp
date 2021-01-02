@@ -1,3 +1,5 @@
+#include <pch.hpp>
+
 #include <GJGO/app.hpp>
 #include <GJGO/entity.hpp>
 #include <GJGO/profiler.hpp>

@@ -1,5 +1,4 @@
-#include <iostream>
-#include <thread>
+#include <pch.hpp>
 
 #include <GJGO/profiler.hpp>
 

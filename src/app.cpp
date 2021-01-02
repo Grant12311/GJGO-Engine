@@ -1,9 +1,7 @@
-#include <GLFW/glfw3.h>
+#include <pch.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
-
-#include <backends/imgui_impl_opengl3.h>
 
 #include <GJGO/app.hpp>
 #include <GJGO/editor_layer.hpp>
