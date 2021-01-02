@@ -6,7 +6,7 @@ workspace("GJGO")
     platforms({"LinuxARM"})
     startproject("Club Penguin Revived")
 
-    includedirs({"include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip", "vendor/glm"})
+    includedirs({"include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip", "vendor/glm", "vendor/tweeny/include/"})
     links({"X11", "xcb", "xcb-randr", "EGL", "GL", "pthread", "glfw", "dl"})
 
     flags({"MultiProcessorCompile"})
