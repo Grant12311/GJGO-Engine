@@ -39,7 +39,6 @@ public:
         switch (a_event->type)
         {
             case GJGO::EventType::keyDown:
-                GJGO_LOG_INFO("Key Down: ", a_event->keycode);
                 switch (a_event->keycode)
                 {
                     case GLFW_KEY_0:
@@ -62,9 +61,6 @@ public:
                         this->roomTexture.setFilters(GL_LINEAR, GL_LINEAR);
                         break;
                 }
-                break;
-            case GJGO::EventType::keyUp:
-                GJGO_LOG_INFO("Key Up: ", a_event->keycode);
                 break;
             case GJGO::EventType::mouseButtonDown:
             {
