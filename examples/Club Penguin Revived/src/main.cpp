@@ -23,6 +23,7 @@ public:
 
     Druid::Shader shader;
     Druid::Texture2D playerTexture;
+    Druid::Texture2D roomTexture;
 
     void onUpdate() override
     {
@@ -52,6 +53,14 @@ public:
                         GJGO::setVsync(true);
                         GJGO::setFramerateCap(30);
                         break;
+                    case GLFW_KEY_LEFT_BRACKET:
+                        this->playerTexture.setFilters(GL_NEAREST, GL_NEAREST);
+                        this->roomTexture.setFilters(GL_NEAREST, GL_NEAREST);
+                        break;
+                    case GLFW_KEY_RIGHT_BRACKET:
+                        this->playerTexture.setFilters(GL_LINEAR, GL_LINEAR);
+                        this->roomTexture.setFilters(GL_LINEAR, GL_LINEAR);
+                        break;
                 }
                 break;
             case GJGO::EventType::keyUp:
@@ -61,7 +70,8 @@ public:
             {
                 std::array<double, 2> mousePosition;
                 glfwGetCursorPos(GJGO::g_appInstancePtr->windowPtr, &mousePosition[0], &mousePosition[1]);
-                mousePosition[1] = GJGO::Window::getHeight() - mousePosition[1];
+                mousePosition[0] -= 30;
+                mousePosition[1] = GJGO::Window::getHeight() - mousePosition[1] - 10;
 
                 this->animation = GJGO::AnimationPosition2D(getDistance(this->playerPosition, GJGO::Position2D{static_cast<int>(mousePosition[0]), static_cast<int>(mousePosition[1])}),
                                                             this->playerPosition, GJGO::Position2D{static_cast<int>(mousePosition[0]), static_cast<int>(mousePosition[1])});
@@ -77,6 +87,7 @@ public:
 
         GJGO::Renderer::begin2D(&this->shader, this->camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
+        GJGO::Renderer::drawQuad({0, 0}, {1235, 780}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->roomTexture);
         GJGO::Renderer::drawQuad({this->playerPosition.x, this->playerPosition.y}, {61, 69}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->playerTexture);
     }
 
@@ -97,13 +108,11 @@ public:
     }
 
     GameLayer() :
-        shader("sprite.shader"), playerTexture("res/penguin/purple/down.png", false)
+        shader("sprite.shader"), playerTexture("res/penguin/purple/down.png", false, GL_NEAREST, GL_NEAREST), roomTexture("res/rooms_main/town_main.png", false, GL_NEAREST, GL_NEAREST)
     {
         GJGO_PROFILE_FUNCTION();
 
         this->name = "Game";
-
-        GJGO::Window::setTitle("Club Penguin Revived");
     }
 };
 
@@ -112,6 +121,9 @@ int main()
     GJGO_LOG_SET_PRINT_FILE(false);
     GJGO_LOG_SET_PRINT_FUNCTION(false);
     GJGO::Application app;
+
+    GJGO::Window::setTitle("Club Penguin Revived");
+    GJGO::Window::setSize(1235, 780);
 
     app.layers.emplace_back(new GameLayer);
 
