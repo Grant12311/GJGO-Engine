@@ -1,9 +1,4 @@
-#include <imgui.h>
-
-#include <tweeny.h>
-
-#include <Druid/shader.h>
-#include <Druid/texture.h>
+#include <pch.hpp>
 
 #include <GJGO/2D/renderer2D.hpp>
 #include <GJGO/animation.hpp>
