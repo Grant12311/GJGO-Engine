@@ -14,6 +14,11 @@
 #include <GJGO/profiler.hpp>
 #include <GJGO/window.hpp>
 
+static unsigned int getDistance(const GJGO::Position2D &a_point1, const GJGO::Position2D &a_point2)
+{
+    return std::sqrt(std::pow(a_point2.x - a_point1.x, 2) + std::pow(a_point2.y - a_point1.y, 2));
+}
+
 class GameLayer : public GJGO::Layer
 {
 public:
@@ -63,9 +68,8 @@ public:
                 glfwGetCursorPos(GJGO::g_appInstancePtr->windowPtr, &mousePosition[0], &mousePosition[1]);
                 mousePosition[1] = GJGO::Window::getHeight() - mousePosition[1];
 
-                int duration = std::abs(this->playerPosition.x - static_cast<int>(mousePosition[0])) + std::abs(this->playerPosition.y - static_cast<int>(mousePosition[1]));
-
-                this->animation = GJGO::AnimationPosition2D(duration, this->playerPosition, GJGO::Position2D{static_cast<int>(mousePosition[0]), static_cast<int>(mousePosition[1])});
+                this->animation = GJGO::AnimationPosition2D(getDistance(this->playerPosition, GJGO::Position2D{static_cast<int>(mousePosition[0]), static_cast<int>(mousePosition[1])}),
+                                                            this->playerPosition, GJGO::Position2D{static_cast<int>(mousePosition[0]), static_cast<int>(mousePosition[1])});
 
                 break;
             }
