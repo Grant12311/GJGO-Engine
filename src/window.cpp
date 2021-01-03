@@ -35,5 +35,12 @@ namespace GJGO
 
             return height;
         }
+
+        void setSize(const int a_width, const int a_height)
+        {
+            GJGO_PROFILE_FUNCTION();
+
+            glfwSetWindowSize(g_appInstancePtr->windowPtr, a_width, a_height);
+        }
     }
 }
