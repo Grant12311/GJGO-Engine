@@ -1,5 +1,7 @@
 #include <pch.hpp>
 
+#include <Druid/coordinates.h>
+
 #include <GJGO/2D/renderer2D.hpp>
 #include <GJGO/animation.hpp>
 #include <GJGO/app.hpp>
@@ -14,12 +16,25 @@ static unsigned int getDistance(const GJGO::Position2D &a_point1, const GJGO::Po
     return std::sqrt(std::pow(a_point2.x - a_point1.x, 2) + std::pow(a_point2.y - a_point1.y, 2));
 }
 
+struct Door
+{
+    GJGO::Position2D position;
+    GJGO::Size2D size;
+
+    Door(const GJGO::Position2D &a_position, const GJGO::Size2D &a_size) :
+        position(a_position), size(a_size) {}
+};
+
+constexpr int playerPosModX = -30;
+constexpr int playerPosModY = -10;
+
 class GameLayer : public GJGO::Layer
 {
 public:
     GJGO::Camera2D camera;
     GJGO::Position2D playerPosition;
     GJGO::AnimationPosition2D animation;
+    std::vector<Door> doors;
 
     Druid::Shader shader;
     Druid::Texture2D playerTexture;
@@ -30,6 +45,14 @@ public:
         GJGO_PROFILE_FUNCTION();
 
         this->animation.step();
+
+        for (const Door &l_door : this->doors)
+        {
+            if (Druid::coordsInRect(l_door.position.x, l_door.position.y, l_door.size.height, l_door.size.width, this->playerPosition.x, this->playerPosition.y))
+            {
+                std::cout << "in!" << std::endl;
+            }
+        }
     }
 
     void onEvent(GJGO::Event* const a_event) override
@@ -66,8 +89,7 @@ public:
             {
                 std::array<double, 2> mousePosition;
                 glfwGetCursorPos(GJGO::g_appInstancePtr->windowPtr, &mousePosition[0], &mousePosition[1]);
-                mousePosition[0] -= 30;
-                mousePosition[1] = GJGO::Window::getHeight() - mousePosition[1] - 10;
+                mousePosition[1] = GJGO::Window::getHeight() - mousePosition[1];
 
                 this->animation = GJGO::AnimationPosition2D(getDistance(this->playerPosition, GJGO::Position2D{static_cast<int>(mousePosition[0]), static_cast<int>(mousePosition[1])}),
                                                             this->playerPosition, GJGO::Position2D{static_cast<int>(mousePosition[0]), static_cast<int>(mousePosition[1])});
@@ -84,7 +106,13 @@ public:
         GJGO::Renderer::begin2D(&this->shader, this->camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
         GJGO::Renderer::drawQuad({0, 0}, {1235, 780}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->roomTexture);
-        GJGO::Renderer::drawQuad({this->playerPosition.x, this->playerPosition.y}, {61, 69}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->playerTexture);
+
+        for (const Door &l_door : this->doors)
+        {
+            GJGO::Renderer::drawQuad(l_door.position, l_door.size, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f});
+        }
+
+        GJGO::Renderer::drawQuad({this->playerPosition.x + playerPosModX, this->playerPosition.y + playerPosModY}, {61, 69}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->playerTexture);
     }
 
     void drawGui() override
@@ -109,6 +137,8 @@ public:
         GJGO_PROFILE_FUNCTION();
 
         this->name = "Game";
+
+        this->doors.emplace_back(GJGO::Position2D{655, 445}, GJGO::Size2D{55, 55});
     }
 };
 
