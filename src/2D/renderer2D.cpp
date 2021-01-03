@@ -54,6 +54,8 @@ namespace GJGO
                 glActiveTexture(GL_TEXTURE0);
                 glBindTexture(GL_TEXTURE_2D, a_texID);
                 currentShader->fillUniform("useTexture", true);
+            }else{
+                currentShader->fillUniform("useTexture", false);
             }
 
             currentShader->fillUniform("transformer", 1, false, genTransformer2D(a_position, a_size, a_rotation));
