@@ -3,6 +3,16 @@
         "file": "res/rooms_main/town_main.png",
         "doors": [
             {
+                "position": [0, 340],
+                "size": [90, 100],
+                "target": "Dock"
+            },
+            {
+                "position": [320, 415],
+                "size": [40, 60],
+                "target": "Coffee Shop"
+            },
+            {
                 "position": [655, 445],
                 "size": [55, 55],
                 "target": "Dance Club"
@@ -11,6 +21,41 @@
                 "position": [875, 455],
                 "size": [55, 60],
                 "target": "Gift Shop"
+            }
+        ]
+    },
+    "Dock": {
+        "file": "res/rooms_main/dock_main.png",
+        "doors": [
+            {
+                "position": [1155, 570],
+                "size": [75, 50],
+                "target": "Town"
+            }
+        ]
+    },
+    "Coffee Shop": {
+        "file": "res/rooms_main/coffee_shop_main.png",
+        "doors": [
+            {
+                "position": [525, 535],
+                "size": [105, 165],
+                "target": "Town"
+            },
+            {
+                "position": [990, 345],
+                "size": [125, 217],
+                "target": "Book Room"
+            }
+        ]
+    },
+    "Book Room": {
+        "file": "res/rooms_main/book_room_main.png",
+        "doors": [
+            {
+                "position": [985, 435],
+                "size": [95, 135],
+                "target": "Coffee Shop"
             }
         ]
     },
