@@ -69,6 +69,16 @@
             }
         ]
     },
+    "Snow Forts": {
+        "file": "res/rooms_main/snow_forts_main.png",
+        "doors": [
+            {
+                "position": [20, 520],
+                "size": [64, 75],
+                "target": "Town"
+            }
+        ]
+    },
     "Town": {
         "file": "res/rooms_main/town_main.png",
         "doors": [
@@ -91,6 +101,11 @@
                 "position": [875, 455],
                 "size": [55, 60],
                 "target": "Gift Shop"
+            },
+            {
+                "position": [1145, 430],
+                "size": [80, 60],
+                "target": "Snow Forts"
             }
         ]
     }
