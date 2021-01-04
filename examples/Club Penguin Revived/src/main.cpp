@@ -14,6 +14,8 @@
 #include <GJGO/window.hpp>
 
 #include <CPRV/door.hpp>
+#include <CPRV/loaded_texture_details.hpp>
+#include <CPRV/load_texture_thread_fn.hpp>
 
 static unsigned int getDistance(const GJGO::Position2D &a_point1, const GJGO::Position2D &a_point2)
 {
@@ -22,20 +24,6 @@ static unsigned int getDistance(const GJGO::Position2D &a_point1, const GJGO::Po
 
 constexpr int playerPosModX = -30;
 constexpr int playerPosModY = -10;
-
-struct LoadedTextureDetails
-{
-    unsigned char* data;
-    int width, height, bpp;
-};
-
-static LoadedTextureDetails loadTextureThreadFn(const std::string &a_path)
-{
-    LoadedTextureDetails toReturn;
-    stbi_set_flip_vertically_on_load(false);
-    toReturn.data = stbi_load(a_path.c_str(), &toReturn.width, &toReturn.height, &toReturn.bpp, 4);
-    return toReturn;
-}
 
 class GameLayer : public GJGO::Layer
 {
