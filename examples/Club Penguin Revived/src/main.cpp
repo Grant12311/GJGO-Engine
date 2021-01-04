@@ -1,5 +1,7 @@
 #include <pch.hpp>
 
+#include <yaml-cpp/yaml.h>
+
 #include <Druid/coordinates.h>
 
 #include <GJGO/2D/renderer2D.hpp>
@@ -20,9 +22,10 @@ struct Door
 {
     GJGO::Position2D position;
     GJGO::Size2D size;
+    std::string target;
 
-    Door(const GJGO::Position2D &a_position, const GJGO::Size2D &a_size) :
-        position(a_position), size(a_size) {}
+    Door(const GJGO::Position2D &a_position, const GJGO::Size2D &a_size, const std::string &a_target) :
+        position(a_position), size(a_size), target(a_target) {}
 };
 
 constexpr int playerPosModX = -30;
@@ -31,26 +34,64 @@ constexpr int playerPosModY = -10;
 class GameLayer : public GJGO::Layer
 {
 public:
+    YAML::Node roomData;
+
     GJGO::Camera2D camera;
     GJGO::Position2D playerPosition;
-    GJGO::AnimationPosition2D animation;
+    GJGO::AnimationPosition2D* animationPtr = nullptr;
     std::vector<Door> doors;
 
     Druid::Shader shader;
     Druid::Texture2D playerTexture;
-    Druid::Texture2D roomTexture;
+    std::unordered_map<std::string, Druid::Texture2D*> roomTextures;
+
+    std::string currentRoomName = "Town";
+    Druid::Texture2D* currentRoomTexturePtr;
+
+    void loadRoom(const std::string &a_name)
+    {
+        if (this->roomTextures.find(a_name) == this->roomTextures.end())
+        {
+            this->roomTextures[a_name] = new Druid::Texture2D(roomData[a_name]["file"].as<std::string>().c_str(), false, GL_NEAREST, GL_NEAREST);
+        }
+        this->currentRoomTexturePtr = this->roomTextures[a_name];
+
+        this->doors.clear();
+        if (this->roomData[a_name]["doors"])
+        {
+            for (unsigned short i = 0; i < this->roomData[a_name]["doors"].size(); i++)
+            {
+                YAML::Node currentDoorNode = this->roomData[a_name]["doors"][i];
+                GJGO::Position2D pos = {currentDoorNode["position"]["x"].as<int>(), currentDoorNode["position"]["y"].as<int>()};
+                GJGO::Size2D size = {currentDoorNode["size"]["width"].as<unsigned int>(), currentDoorNode["size"]["height"].as<unsigned int>()};
+                this->doors.emplace_back(pos, size, currentDoorNode["target"].as<std::string>());
+            }
+        }
+
+        this->currentRoomName = a_name;
+    }
 
     void onUpdate() override
     {
         GJGO_PROFILE_FUNCTION();
 
-        this->animation.step();
-
-        for (const Door &l_door : this->doors)
+        if (this->animationPtr != nullptr)
         {
-            if (Druid::coordsInRect(l_door.position.x, l_door.position.y, l_door.size.height, l_door.size.width, this->playerPosition.x, this->playerPosition.y))
+            this->animationPtr->step();
+            if (this->animationPtr->isDone())
             {
-                std::cout << "in!" << std::endl;
+                delete this->animationPtr;
+                this->animationPtr = nullptr;
+            }
+        }else{
+            unsigned short i = 0;
+            for (const Door &l_door : this->doors)
+            {
+                if (Druid::coordsInRect(l_door.position.x, l_door.position.y, l_door.size.height, l_door.size.width, this->playerPosition.x, this->playerPosition.y))
+                {
+                    this->loadRoom(l_door.target);
+                }
+                i++;
             }
         }
     }
@@ -77,11 +118,11 @@ public:
                         break;
                     case GLFW_KEY_LEFT_BRACKET:
                         this->playerTexture.setFilters(GL_NEAREST, GL_NEAREST);
-                        this->roomTexture.setFilters(GL_NEAREST, GL_NEAREST);
+                        this->currentRoomTexturePtr->setFilters(GL_NEAREST, GL_NEAREST);
                         break;
                     case GLFW_KEY_RIGHT_BRACKET:
                         this->playerTexture.setFilters(GL_LINEAR, GL_LINEAR);
-                        this->roomTexture.setFilters(GL_LINEAR, GL_LINEAR);
+                        this->currentRoomTexturePtr->setFilters(GL_LINEAR, GL_LINEAR);
                         break;
                 }
                 break;
@@ -91,11 +132,19 @@ public:
                 glfwGetCursorPos(GJGO::g_appInstancePtr->windowPtr, &mousePosition[0], &mousePosition[1]);
                 mousePosition[1] = GJGO::Window::getHeight() - mousePosition[1];
 
-                this->animation = GJGO::AnimationPosition2D(getDistance(this->playerPosition, GJGO::Position2D{static_cast<int>(mousePosition[0]), static_cast<int>(mousePosition[1])}),
+                if (this->animationPtr != nullptr)
+                {
+                    delete this->animationPtr;
+                }
+
+                this->animationPtr = new GJGO::AnimationPosition2D(getDistance(this->playerPosition, GJGO::Position2D{static_cast<int>(mousePosition[0]), static_cast<int>(mousePosition[1])}),
                                                             this->playerPosition, GJGO::Position2D{static_cast<int>(mousePosition[0]), static_cast<int>(mousePosition[1])});
 
                 break;
             }
+            case GJGO::EventType::mouseMove:
+                std::cout << "(" << a_event->mousePosition.relative.x << ", " << a_event->mousePosition.relative.y << ")" << std::endl;
+                break;
         }
     }
 
@@ -105,7 +154,7 @@ public:
 
         GJGO::Renderer::begin2D(&this->shader, this->camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
-        GJGO::Renderer::drawQuad({0, 0}, {1235, 780}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->roomTexture);
+        GJGO::Renderer::drawQuad({0, 0}, {1235, 780}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, *this->currentRoomTexturePtr);
 
         for (const Door &l_door : this->doors)
         {
@@ -132,13 +181,21 @@ public:
     }
 
     GameLayer() :
-        shader("sprite.shader"), playerTexture("res/penguin/purple/down.png", false, GL_NEAREST, GL_NEAREST), roomTexture("res/rooms_main/town_main.png", false, GL_NEAREST, GL_NEAREST)
+        roomData(YAML::LoadFile("room data.yaml")), shader("sprite.shader"), playerTexture("res/penguin/purple/down.png", false, GL_NEAREST, GL_NEAREST)
     {
         GJGO_PROFILE_FUNCTION();
 
         this->name = "Game";
 
-        this->doors.emplace_back(GJGO::Position2D{655, 445}, GJGO::Size2D{55, 55});
+        this->loadRoom("Town");
+    }
+
+    ~GameLayer()
+    {
+        for (const std::pair<std::string, Druid::Texture2D*> &l_combo: this->roomTextures)
+        {
+            delete l_combo.second;
+        }
     }
 };
 
