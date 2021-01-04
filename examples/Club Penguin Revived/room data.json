@@ -1,0 +1,27 @@
+{
+    "Town": {
+        "file": "res/rooms_main/town_main.png",
+        "doors": [
+            {
+                "position": [655, 445],
+                "size": [55, 55],
+                "target": "Dance Club"
+            }
+        ]
+    },
+    "Dance Club": {
+        "file": "res/rooms_main/dance_club_main.png",
+        "doors": [
+            {
+                "position": [110, 345],
+                "size": [70, 245],
+                "target": "Town"
+            },
+            {
+                "position": [1035, 430],
+                "size": [140, 170],
+                "target": "Arcade"
+            }
+        ]
+    }
+}
