@@ -1,4 +1,74 @@
 {
+    "Arcade": {
+        "file": "res/rooms_main/arcade_main.png",
+        "doors": [
+            {
+                "position": [1095, 240],
+                "size": [90, 35],
+                "target": "Dance Club"
+            }
+        ]
+    },
+    "Book Room": {
+        "file": "res/rooms_main/book_room_main.png",
+        "doors": [
+            {
+                "position": [985, 435],
+                "size": [95, 135],
+                "target": "Coffee Shop"
+            }
+        ]
+    },
+    "Coffee Shop": {
+        "file": "res/rooms_main/coffee_shop_main.png",
+        "doors": [
+            {
+                "position": [525, 535],
+                "size": [105, 165],
+                "target": "Town"
+            },
+            {
+                "position": [990, 345],
+                "size": [125, 217],
+                "target": "Book Room"
+            }
+        ]
+    },
+    "Dance Club": {
+        "file": "res/rooms_main/dance_club_main.png",
+        "doors": [
+            {
+                "position": [110, 345],
+                "size": [70, 245],
+                "target": "Town"
+            },
+            {
+                "position": [1035, 430],
+                "size": [140, 170],
+                "target": "Arcade"
+            }
+        ]
+    },
+    "Dock": {
+        "file": "res/rooms_main/dock_main.png",
+        "doors": [
+            {
+                "position": [1155, 570],
+                "size": [75, 50],
+                "target": "Town"
+            }
+        ]
+    },
+    "Gift Shop": {
+        "file": "res/rooms_main/gift_shop_main.png",
+        "doors": [
+            {
+                "position": [845, 505],
+                "size": [90, 160],
+                "target": "Town"
+            }
+        ]
+    },
     "Town": {
         "file": "res/rooms_main/town_main.png",
         "doors": [
@@ -21,76 +91,6 @@
                 "position": [875, 455],
                 "size": [55, 60],
                 "target": "Gift Shop"
-            }
-        ]
-    },
-    "Dock": {
-        "file": "res/rooms_main/dock_main.png",
-        "doors": [
-            {
-                "position": [1155, 570],
-                "size": [75, 50],
-                "target": "Town"
-            }
-        ]
-    },
-    "Coffee Shop": {
-        "file": "res/rooms_main/coffee_shop_main.png",
-        "doors": [
-            {
-                "position": [525, 535],
-                "size": [105, 165],
-                "target": "Town"
-            },
-            {
-                "position": [990, 345],
-                "size": [125, 217],
-                "target": "Book Room"
-            }
-        ]
-    },
-    "Book Room": {
-        "file": "res/rooms_main/book_room_main.png",
-        "doors": [
-            {
-                "position": [985, 435],
-                "size": [95, 135],
-                "target": "Coffee Shop"
-            }
-        ]
-    },
-    "Dance Club": {
-        "file": "res/rooms_main/dance_club_main.png",
-        "doors": [
-            {
-                "position": [110, 345],
-                "size": [70, 245],
-                "target": "Town"
-            },
-            {
-                "position": [1035, 430],
-                "size": [140, 170],
-                "target": "Arcade"
-            }
-        ]
-    },
-    "Arcade": {
-        "file": "res/rooms_main/arcade_main.png",
-        "doors": [
-            {
-                "position": [1095, 240],
-                "size": [90, 35],
-                "target": "Dance Club"
-            }
-        ]
-    },
-    "Gift Shop": {
-        "file": "res/rooms_main/gift_shop_main.png",
-        "doors": [
-            {
-                "position": [845, 505],
-                "size": [90, 160],
-                "target": "Town"
             }
         ]
     }
