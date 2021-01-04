@@ -38,6 +38,8 @@ public:
     bool loadingNextRoom;
 
     Druid::Texture2D loadScreenBackgroundTexture;
+    Druid::Texture2D loadingScreenBarTexture;
+    Druid::Texture2D loadingScreenWheelTexture;
 
     std::string currentRoomName = "Town";
     Druid::Texture2D* currentRoomTexturePtr;
@@ -163,7 +165,15 @@ public:
 
         if (this->loadingNextRoom)
         {
+            static float wheelRotation = 0.0f;
             GJGO::Renderer::drawQuad({0, 0}, {1235, 780}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->loadScreenBackgroundTexture);
+            GJGO::Renderer::drawQuad({545, 375}, {145, 31}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->loadingScreenBarTexture);
+            GJGO::Renderer::drawQuad({551, 383}, {21, 17}, wheelRotation, {1.0f, 1.0f, 1.0f, 1.0f}, this->loadingScreenWheelTexture);
+
+            wheelRotation += GJGO::Window::deltaTime / 2.0f;
+
+            if (wheelRotation >= 360.0f)
+                wheelRotation -= 360.0f;
         }else{
             GJGO::Renderer::drawQuad({0, 0}, {1235, 780}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, *this->currentRoomTexturePtr);
 
@@ -196,7 +206,9 @@ public:
 
     GameLayer() :
         roomData(YAML::LoadFile("room data.yaml")), shader("sprite.shader"), playerTexture("res/penguin/purple/down.png", false, GL_NEAREST, GL_NEAREST),
-        loadScreenBackgroundTexture("res/loading_screen/background.png", false, GL_NEAREST, GL_NEAREST)
+        loadScreenBackgroundTexture("res/loading_screen/background.png", false, GL_NEAREST, GL_NEAREST),
+        loadingScreenBarTexture("res/loading_screen/loading_bar_no_wheel.png", false, GL_NEAREST, GL_NEAREST),
+        loadingScreenWheelTexture("res/loading_screen/loading_wheel.png", false, GL_NEAREST, GL_NEAREST)
     {
         GJGO_PROFILE_FUNCTION();
 
