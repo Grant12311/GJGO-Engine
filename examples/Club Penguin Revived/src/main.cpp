@@ -31,6 +31,20 @@ struct Door
 constexpr int playerPosModX = -30;
 constexpr int playerPosModY = -10;
 
+struct LoadedTextureDetails
+{
+    unsigned char* data;
+    int width, height, bpp;
+};
+
+static LoadedTextureDetails loadTextureThreadFn(const std::string &a_path)
+{
+    LoadedTextureDetails toReturn;
+    stbi_set_flip_vertically_on_load(false);
+    toReturn.data = stbi_load(a_path.c_str(), &toReturn.width, &toReturn.height, &toReturn.bpp, 4);
+    return toReturn;
+}
+
 class GameLayer : public GJGO::Layer
 {
 public:
@@ -43,18 +57,17 @@ public:
 
     Druid::Shader shader;
     Druid::Texture2D playerTexture;
-    std::unordered_map<std::string, Druid::Texture2D*> roomTextures;
+    std::future<LoadedTextureDetails> loadingTexture;
+    bool loadingNextRoom;
 
     std::string currentRoomName = "Town";
     Druid::Texture2D* currentRoomTexturePtr;
 
     void loadRoom(const std::string &a_name)
     {
-        if (this->roomTextures.find(a_name) == this->roomTextures.end())
-        {
-            this->roomTextures[a_name] = new Druid::Texture2D(roomData[a_name]["file"].as<std::string>().c_str(), false, GL_NEAREST, GL_NEAREST);
-        }
-        this->currentRoomTexturePtr = this->roomTextures[a_name];
+        this->loadingNextRoom = true;
+
+        this->loadingTexture = std::async(std::launch::async, loadTextureThreadFn, roomData[a_name]["file"].as<std::string>());
 
         this->doors.clear();
         if (this->roomData[a_name]["doors"])
@@ -75,23 +88,38 @@ public:
     {
         GJGO_PROFILE_FUNCTION();
 
-        if (this->animationPtr != nullptr)
+        if (this->loadingNextRoom)
         {
-            this->animationPtr->step();
-            if (this->animationPtr->isDone())
+            std::future_status status = loadingTexture.wait_for(std::chrono::nanoseconds(1));
+            if (status == std::future_status::ready)
             {
-                delete this->animationPtr;
-                this->animationPtr = nullptr;
+                LoadedTextureDetails details = this->loadingTexture.get();
+                this->currentRoomTexturePtr = new Druid::Texture2D(details.data, details.width, details.height, details.bpp, GL_NEAREST, GL_NEAREST);
+                stbi_image_free(details.data);
+                this->loadingNextRoom = false;
             }
-        }else{
-            unsigned short i = 0;
-            for (const Door &l_door : this->doors)
+        }
+
+        if (!this->loadingNextRoom)
+        {
+            if (this->animationPtr != nullptr)
             {
-                if (Druid::coordsInRect(l_door.position.x, l_door.position.y, l_door.size.height, l_door.size.width, this->playerPosition.x, this->playerPosition.y))
+                this->animationPtr->step();
+                if (this->animationPtr->isDone())
                 {
-                    this->loadRoom(l_door.target);
+                    delete this->animationPtr;
+                    this->animationPtr = nullptr;
                 }
-                i++;
+            }else{
+                unsigned short i = 0;
+                for (const Door &l_door : this->doors)
+                {
+                    if (Druid::coordsInRect(l_door.position.x, l_door.position.y, l_door.size.height, l_door.size.width, this->playerPosition.x, this->playerPosition.y))
+                    {
+                        this->loadRoom(l_door.target);
+                    }
+                    i++;
+                }
             }
         }
     }
@@ -100,47 +128,50 @@ public:
     {
         GJGO_PROFILE_FUNCTION();
 
-        switch (a_event->type)
+        if (!this->loadingNextRoom)
         {
-            case GJGO::EventType::keyDown:
-                switch (a_event->keycode)
-                {
-                    case GLFW_KEY_0:
-                        GJGO::setVsync(false);
-                        break;
-                    case GLFW_KEY_1:
-                        GJGO::setVsync(true);
-                        GJGO::setFramerateCap(60);
-                        break;
-                    case GLFW_KEY_2:
-                        GJGO::setVsync(true);
-                        GJGO::setFramerateCap(30);
-                        break;
-                    case GLFW_KEY_LEFT_BRACKET:
-                        this->playerTexture.setFilters(GL_NEAREST, GL_NEAREST);
-                        this->currentRoomTexturePtr->setFilters(GL_NEAREST, GL_NEAREST);
-                        break;
-                    case GLFW_KEY_RIGHT_BRACKET:
-                        this->playerTexture.setFilters(GL_LINEAR, GL_LINEAR);
-                        this->currentRoomTexturePtr->setFilters(GL_LINEAR, GL_LINEAR);
-                        break;
-                }
-                break;
-            case GJGO::EventType::mouseButtonDown:
+            switch (a_event->type)
             {
-                std::array<double, 2> mousePosition;
-                glfwGetCursorPos(GJGO::g_appInstancePtr->windowPtr, &mousePosition[0], &mousePosition[1]);
-                mousePosition[1] = GJGO::Window::getHeight() - mousePosition[1];
-
-                if (this->animationPtr != nullptr)
+                case GJGO::EventType::keyDown:
+                    switch (a_event->keycode)
+                    {
+                        case GLFW_KEY_0:
+                            GJGO::setVsync(false);
+                            break;
+                        case GLFW_KEY_1:
+                            GJGO::setVsync(true);
+                            GJGO::setFramerateCap(60);
+                            break;
+                        case GLFW_KEY_2:
+                            GJGO::setVsync(true);
+                            GJGO::setFramerateCap(30);
+                            break;
+                        case GLFW_KEY_LEFT_BRACKET:
+                            this->playerTexture.setFilters(GL_NEAREST, GL_NEAREST);
+                            this->currentRoomTexturePtr->setFilters(GL_NEAREST, GL_NEAREST);
+                            break;
+                        case GLFW_KEY_RIGHT_BRACKET:
+                            this->playerTexture.setFilters(GL_LINEAR, GL_LINEAR);
+                            this->currentRoomTexturePtr->setFilters(GL_LINEAR, GL_LINEAR);
+                            break;
+                    }
+                    break;
+                case GJGO::EventType::mouseButtonDown:
                 {
-                    delete this->animationPtr;
+                    std::array<double, 2> mousePosition;
+                    glfwGetCursorPos(GJGO::g_appInstancePtr->windowPtr, &mousePosition[0], &mousePosition[1]);
+                    mousePosition[1] = GJGO::Window::getHeight() - mousePosition[1];
+
+                    if (this->animationPtr != nullptr)
+                    {
+                        delete this->animationPtr;
+                    }
+
+                    this->animationPtr = new GJGO::AnimationPosition2D(getDistance(this->playerPosition, GJGO::Position2D{static_cast<int>(mousePosition[0]), static_cast<int>(mousePosition[1])}),
+                                                                this->playerPosition, GJGO::Position2D{static_cast<int>(mousePosition[0]), static_cast<int>(mousePosition[1])});
+
+                    break;
                 }
-
-                this->animationPtr = new GJGO::AnimationPosition2D(getDistance(this->playerPosition, GJGO::Position2D{static_cast<int>(mousePosition[0]), static_cast<int>(mousePosition[1])}),
-                                                            this->playerPosition, GJGO::Position2D{static_cast<int>(mousePosition[0]), static_cast<int>(mousePosition[1])});
-
-                break;
             }
         }
     }
@@ -151,14 +182,19 @@ public:
 
         GJGO::Renderer::begin2D(&this->shader, this->camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
-        GJGO::Renderer::drawQuad({0, 0}, {1235, 780}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, *this->currentRoomTexturePtr);
-
-        for (const Door &l_door : this->doors)
+        if (this->loadingNextRoom)
         {
-            GJGO::Renderer::drawQuad(l_door.position, l_door.size, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f});
-        }
 
-        GJGO::Renderer::drawQuad({this->playerPosition.x + playerPosModX, this->playerPosition.y + playerPosModY}, {61, 69}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->playerTexture);
+        }else{
+            GJGO::Renderer::drawQuad({0, 0}, {1235, 780}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, *this->currentRoomTexturePtr);
+
+            for (const Door &l_door : this->doors)
+            {
+                GJGO::Renderer::drawQuad(l_door.position, l_door.size, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f});
+            }
+
+            GJGO::Renderer::drawQuad({this->playerPosition.x + playerPosModX, this->playerPosition.y + playerPosModY}, {61, 69}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->playerTexture);
+        }
     }
 
     void drawGui() override
@@ -189,10 +225,7 @@ public:
 
     ~GameLayer()
     {
-        for (const std::pair<std::string, Druid::Texture2D*> &l_combo: this->roomTextures)
-        {
-            delete l_combo.second;
-        }
+        delete this->currentRoomTexturePtr;
     }
 };
 
