@@ -65,7 +65,7 @@ workspace("GJGO")
         location("examples/%{prj.name}")
         targetdir("%{prj.location}/bin/%{cfg.platform}/%{cfg.buildcfg}")
 
-        includedirs({"%{prj.location}/include/"})
+        includedirs({"%{prj.location}/include/", "vendor/json/single_include/"})
         links({"GJGO", "Druid", "imgui", "clip"})
         files({"%{prj.location}/src/**", "%{prj.location}/include/**"})
 
