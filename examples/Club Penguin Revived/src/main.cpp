@@ -1,6 +1,6 @@
 #include <pch.hpp>
 
-#include <yaml-cpp/yaml.h>
+#include <nlohmann/json.hpp>
 
 #include <Druid/coordinates.h>
 
@@ -17,6 +17,8 @@
 #include <CPRV/loaded_texture_details.hpp>
 #include <CPRV/load_texture_thread_fn.hpp>
 
+using json = nlohmann::json;
+
 constexpr static unsigned int getDistance(const GJGO::Position2D &a_point1, const GJGO::Position2D &a_point2)
 {
     return std::sqrt(std::pow(a_point2.x - a_point1.x, 2) + std::pow(a_point2.y - a_point1.y, 2));
@@ -25,7 +27,7 @@ constexpr static unsigned int getDistance(const GJGO::Position2D &a_point1, cons
 class GameLayer : public GJGO::Layer
 {
 public:
-    YAML::Node roomData;
+    json roomData;
 
     GJGO::Camera2D camera;
     GJGO::Position2D playerPosition;
@@ -48,17 +50,17 @@ public:
     {
         this->loadingNextRoom = true;
 
-        this->loadingTexture = std::async(std::launch::async, loadTextureThreadFn, roomData[a_name]["file"].as<std::string>());
+        this->loadingTexture = std::async(std::launch::async, loadTextureThreadFn, roomData[a_name]["file"]);
 
         this->doors.clear();
-        if (this->roomData[a_name]["doors"])
+        std::cout << a_name << std::endl;
+        if (this->roomData[a_name].contains("doors"))
         {
-            for (unsigned int i = this->roomData[a_name]["doors"].size() - 1; i == 0; i--)
+            for (auto& l_element : this->roomData[a_name]["doors"])
             {
-                YAML::Node currentDoorNode = this->roomData[a_name]["doors"][i];
-                GJGO::Position2D pos = {currentDoorNode["position"]["x"].as<int>(), currentDoorNode["position"]["y"].as<int>()};
-                GJGO::Size2D size = {currentDoorNode["size"]["width"].as<unsigned int>(), currentDoorNode["size"]["height"].as<unsigned int>()};
-                this->doors.emplace_back(pos, size, currentDoorNode["target"].as<std::string>());
+                GJGO::Position2D pos = {l_element["position"][0], l_element["position"][1]};
+                GJGO::Size2D size = {l_element["size"][0], l_element["size"][1]};
+                this->doors.emplace_back(pos, size, l_element["target"]);
             }
         }
 
@@ -206,7 +208,7 @@ public:
     }
 
     GameLayer() :
-        roomData(YAML::LoadFile("room data.yaml")), shader("sprite.shader"), playerTexture("res/penguin/purple/down.png", false, GL_NEAREST, GL_NEAREST),
+        shader("sprite.shader"), playerTexture("res/penguin/purple/down.png", false, GL_NEAREST, GL_NEAREST),
         loadScreenBackgroundTexture("res/loading_screen/background.png", false, GL_NEAREST, GL_NEAREST),
         loadingScreenBarTexture("res/loading_screen/loading_bar_no_wheel.png", false, GL_NEAREST, GL_NEAREST),
         loadingScreenWheelTexture("res/loading_screen/loading_wheel.png", false, GL_NEAREST, GL_NEAREST)
@@ -214,6 +216,12 @@ public:
         GJGO_PROFILE_FUNCTION();
 
         this->name = "Game";
+
+        this->doors.reserve(10);
+
+        std::ifstream jsonFile("room data.json");
+        jsonFile >> this->roomData;
+        jsonFile.close();
 
         this->loadRoom("Town");
     }
