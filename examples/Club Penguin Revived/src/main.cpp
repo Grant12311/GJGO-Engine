@@ -78,7 +78,7 @@ public:
             if (status == std::future_status::ready)
             {
                 LoadedTextureDetails details = this->loadingTexture.get();
-                this->currentRoomTexturePtr = new Druid::Texture2D(details.data, details.width, details.height, details.bpp, GL_NEAREST, GL_NEAREST);
+                this->currentRoomTexturePtr = new Druid::Texture2D(details.data, details.width, details.height, details.bpp, GL_LINEAR, GL_LINEAR);
                 stbi_image_free(details.data);
                 this->loadingNextRoom = false;
             }
