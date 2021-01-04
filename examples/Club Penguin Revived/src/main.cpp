@@ -142,9 +142,6 @@ public:
 
                 break;
             }
-            case GJGO::EventType::mouseMove:
-                std::cout << "(" << a_event->mousePosition.relative.x << ", " << a_event->mousePosition.relative.y << ")" << std::endl;
-                break;
         }
     }
 
