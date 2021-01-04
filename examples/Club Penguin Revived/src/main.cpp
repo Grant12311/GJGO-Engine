@@ -13,20 +13,12 @@
 #include <GJGO/profiler.hpp>
 #include <GJGO/window.hpp>
 
+#include <CPRV/door.hpp>
+
 static unsigned int getDistance(const GJGO::Position2D &a_point1, const GJGO::Position2D &a_point2)
 {
     return std::sqrt(std::pow(a_point2.x - a_point1.x, 2) + std::pow(a_point2.y - a_point1.y, 2));
 }
-
-struct Door
-{
-    GJGO::Position2D position;
-    GJGO::Size2D size;
-    std::string target;
-
-    Door(const GJGO::Position2D &a_position, const GJGO::Size2D &a_size, const std::string &a_target) :
-        position(a_position), size(a_size), target(a_target) {}
-};
 
 constexpr int playerPosModX = -30;
 constexpr int playerPosModY = -10;
