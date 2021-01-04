@@ -17,7 +17,7 @@
 #include <CPRV/loaded_texture_details.hpp>
 #include <CPRV/load_texture_thread_fn.hpp>
 
-static unsigned int getDistance(const GJGO::Position2D &a_point1, const GJGO::Position2D &a_point2)
+constexpr static unsigned int getDistance(const GJGO::Position2D &a_point1, const GJGO::Position2D &a_point2)
 {
     return std::sqrt(std::pow(a_point2.x - a_point1.x, 2) + std::pow(a_point2.y - a_point1.y, 2));
 }
