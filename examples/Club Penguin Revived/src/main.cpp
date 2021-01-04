@@ -22,9 +22,6 @@ static unsigned int getDistance(const GJGO::Position2D &a_point1, const GJGO::Po
     return std::sqrt(std::pow(a_point2.x - a_point1.x, 2) + std::pow(a_point2.y - a_point1.y, 2));
 }
 
-constexpr int playerPosModX = -30;
-constexpr int playerPosModY = -10;
-
 class GameLayer : public GJGO::Layer
 {
 public:
@@ -173,6 +170,8 @@ public:
                 GJGO::Renderer::drawQuad(l_door.position, l_door.size, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f});
             }
 
+            constexpr int playerPosModX = -30;
+            constexpr int playerPosModY = -10;
             GJGO::Renderer::drawQuad({this->playerPosition.x + playerPosModX, this->playerPosition.y + playerPosModY}, {61, 69}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->playerTexture);
         }
     }
