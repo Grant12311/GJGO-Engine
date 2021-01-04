@@ -19,3 +19,6 @@
 [submodule "vendor/tweeny"]
 	path = vendor/tweeny
 	url = https://github.com/mobius3/tweeny.git
+[submodule "vendor/json"]
+	path = vendor/json
+	url = https://github.com/nlohmann/json.git
