@@ -202,9 +202,9 @@ public:
 
     GameLayer() :
         shader("sprite.shader"), playerTexture("res/penguin/purple/down.png", false, GL_NEAREST, GL_NEAREST),
-        loadScreenBackgroundTexture("res/loading_screen/background.png", false, GL_NEAREST, GL_NEAREST),
-        loadingScreenBarTexture("res/loading_screen/loading_bar_no_wheel.png", false, GL_NEAREST, GL_NEAREST),
-        loadingScreenWheelTexture("res/loading_screen/loading_wheel.png", false, GL_NEAREST, GL_NEAREST)
+        loadScreenBackgroundTexture("res/loading_screen/background.png", false, GL_LINEAR, GL_LINEAR),
+        loadingScreenBarTexture("res/loading_screen/loading_bar_no_wheel.png", false, GL_LINEAR, GL_LINEAR),
+        loadingScreenWheelTexture("res/loading_screen/loading_wheel.png", false, GL_LINEAR, GL_LINEAR)
     {
         GJGO_PROFILE_FUNCTION();
 
