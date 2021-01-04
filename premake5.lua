@@ -66,7 +66,7 @@ workspace("GJGO")
         targetdir("%{prj.location}/bin/%{cfg.platform}/%{cfg.buildcfg}")
 
         includedirs({"%{prj.location}/include/"})
-        links({"GJGO", "Druid", "imgui", "clip", "yaml-cpp"})
+        links({"GJGO", "Druid", "imgui", "clip"})
         files({"%{prj.location}/src/**", "%{prj.location}/include/**"})
 
         filter("configurations:Debug")
