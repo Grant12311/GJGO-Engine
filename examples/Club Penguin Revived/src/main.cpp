@@ -37,6 +37,8 @@ public:
     std::future<LoadedTextureDetails> loadingTexture;
     bool loadingNextRoom;
 
+    Druid::Texture2D loadScreenBackgroundTexture;
+
     std::string currentRoomName = "Town";
     Druid::Texture2D* currentRoomTexturePtr;
 
@@ -161,7 +163,7 @@ public:
 
         if (this->loadingNextRoom)
         {
-
+            GJGO::Renderer::drawQuad({0, 0}, {1235, 780}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->loadScreenBackgroundTexture);
         }else{
             GJGO::Renderer::drawQuad({0, 0}, {1235, 780}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, *this->currentRoomTexturePtr);
 
@@ -193,7 +195,8 @@ public:
     }
 
     GameLayer() :
-        roomData(YAML::LoadFile("room data.yaml")), shader("sprite.shader"), playerTexture("res/penguin/purple/down.png", false, GL_NEAREST, GL_NEAREST)
+        roomData(YAML::LoadFile("room data.yaml")), shader("sprite.shader"), playerTexture("res/penguin/purple/down.png", false, GL_NEAREST, GL_NEAREST),
+        loadScreenBackgroundTexture("res/loading_screen/background.png", false, GL_NEAREST, GL_NEAREST)
     {
         GJGO_PROFILE_FUNCTION();
 
