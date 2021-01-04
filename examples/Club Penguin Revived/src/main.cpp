@@ -53,7 +53,7 @@ public:
         this->doors.clear();
         if (this->roomData[a_name]["doors"])
         {
-            for (unsigned short i = 0; i < this->roomData[a_name]["doors"].size(); i++)
+            for (unsigned int i = this->roomData[a_name]["doors"].size() - 1; i == 0; i--)
             {
                 YAML::Node currentDoorNode = this->roomData[a_name]["doors"][i];
                 GJGO::Position2D pos = {currentDoorNode["position"]["x"].as<int>(), currentDoorNode["position"]["y"].as<int>()};
@@ -142,6 +142,7 @@ public:
                     std::array<double, 2> mousePosition;
                     glfwGetCursorPos(GJGO::g_appInstancePtr->windowPtr, &mousePosition[0], &mousePosition[1]);
                     mousePosition[1] = GJGO::Window::getHeight() - mousePosition[1];
+                    std::cout << "(" << mousePosition[0] << ", " << mousePosition[1] << ")" << std::endl;
 
                     if (this->animationPtr != nullptr)
                     {
