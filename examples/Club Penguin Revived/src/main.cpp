@@ -130,14 +130,6 @@ public:
                             GJGO::setVsync(true);
                             GJGO::setFramerateCap(30);
                             break;
-                        case GLFW_KEY_LEFT_BRACKET:
-                            this->playerTexture.setFilters(GL_NEAREST, GL_NEAREST);
-                            this->currentRoomTexturePtr->setFilters(GL_NEAREST, GL_NEAREST);
-                            break;
-                        case GLFW_KEY_RIGHT_BRACKET:
-                            this->playerTexture.setFilters(GL_LINEAR, GL_LINEAR);
-                            this->currentRoomTexturePtr->setFilters(GL_LINEAR, GL_LINEAR);
-                            break;
                     }
                     break;
                 case GJGO::EventType::mouseButtonDown:
