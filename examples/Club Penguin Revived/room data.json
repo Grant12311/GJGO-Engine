@@ -6,6 +6,11 @@
                 "position": [655, 445],
                 "size": [55, 55],
                 "target": "Dance Club"
+            },
+            {
+                "position": [875, 455],
+                "size": [55, 60],
+                "target": "Gift Shop"
             }
         ]
     },
@@ -21,6 +26,26 @@
                 "position": [1035, 430],
                 "size": [140, 170],
                 "target": "Arcade"
+            }
+        ]
+    },
+    "Arcade": {
+        "file": "res/rooms_main/arcade_main.png",
+        "doors": [
+            {
+                "position": [1095, 240],
+                "size": [90, 35],
+                "target": "Dance Club"
+            }
+        ]
+    },
+    "Gift Shop": {
+        "file": "res/rooms_main/gift_shop_main.png",
+        "doors": [
+            {
+                "position": [845, 505],
+                "size": [90, 160],
+                "target": "Town"
             }
         ]
     }
