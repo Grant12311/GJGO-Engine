@@ -53,7 +53,6 @@ public:
         this->loadingTexture = std::async(std::launch::async, loadTextureThreadFn, roomData[a_name]["file"]);
 
         this->doors.clear();
-        std::cout << a_name << std::endl;
         if (this->roomData[a_name].contains("doors"))
         {
             for (auto& l_element : this->roomData[a_name]["doors"])
@@ -63,6 +62,8 @@ public:
                 this->doors.emplace_back(pos, size, l_element["target"]);
             }
         }
+
+        this->playerPosition = {0, 0};
 
         this->currentRoomName = a_name;
     }
