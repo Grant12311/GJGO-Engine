@@ -4,10 +4,10 @@
 
 #include <Druid/coordinates.h>
 
+#include <GJGO/2D/camera2D.hpp>
 #include <GJGO/2D/renderer2D.hpp>
 #include <GJGO/animation.hpp>
 #include <GJGO/app.hpp>
-#include <GJGO/2D/camera2D.hpp>
 #include <GJGO/layer.hpp>
 #include <GJGO/log.hpp>
 #include <GJGO/profiler.hpp>
@@ -180,6 +180,7 @@ public:
 
             constexpr int playerPosModX = -30;
             constexpr int playerPosModY = -10;
+
             GJGO::Renderer::drawQuad({this->playerPosition.x + playerPosModX, this->playerPosition.y + playerPosModY}, {61, 69}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->playerTexture);
         }
     }
