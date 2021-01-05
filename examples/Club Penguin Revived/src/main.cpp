@@ -24,6 +24,21 @@ constexpr static unsigned int getDistance(const GJGO::Position2D &a_point1, cons
     return std::sqrt(std::pow(a_point2.x - a_point1.x, 2) + std::pow(a_point2.y - a_point1.y, 2));
 }
 
+constexpr static float directionToAngle(const float a_x, const float a_y)
+{
+    constexpr float PI = 3.14159265f;
+
+    float angle = std::atan2(a_y, a_x) * 180.0f / PI;
+
+    if (angle < 0)
+        angle += 360;
+
+    return angle;
+}
+
+constexpr int playerPosModX = -30;
+constexpr int playerPosModY = -10;
+
 class GameLayer : public GJGO::Layer
 {
 public:
@@ -35,7 +50,8 @@ public:
     std::vector<Door> doors;
 
     Druid::Shader shader;
-    Druid::Texture2D playerTexture;
+    unsigned char playerTextureIndex = 0;
+    std::array<Druid::Texture2D*, 8> playerTextures;
     std::future<LoadedTextureDetails> loadingTexture;
     bool loadingNextRoom;
 
@@ -149,6 +165,11 @@ public:
 
                     break;
                 }
+                case GJGO::EventType::mouseMove:
+                {
+                    GJGO::Position2D dir = a_event->mousePosition.relative - (this->playerPosition + GJGO::Position2D{playerPosModX, playerPosModY} + GJGO::Position2D{30, 45});
+                    this->playerTextureIndex = std::ceil((directionToAngle(dir.x, dir.y) / 45.0f) - 1.0f);
+                }
             }
         }
     }
@@ -178,10 +199,8 @@ public:
                 GJGO::Renderer::drawQuad(l_door.position, l_door.size, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f});
             }
 
-            constexpr int playerPosModX = -30;
-            constexpr int playerPosModY = -10;
-
-            GJGO::Renderer::drawQuad({this->playerPosition.x + playerPosModX, this->playerPosition.y + playerPosModY}, {61, 69}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f}, this->playerTexture);
+            GJGO::Renderer::drawQuad({this->playerPosition.x + playerPosModX, this->playerPosition.y + playerPosModY}, {61, 69}, 0.0f, {1.0f, 1.0f, 1.0f, 1.0f},
+                                     *this->playerTextures[this->playerTextureIndex]);
         }
     }
 
@@ -202,8 +221,7 @@ public:
     }
 
     GameLayer() :
-        shader("sprite.shader"), playerTexture("res/penguin/purple/down.png", false, GL_NEAREST, GL_NEAREST),
-        loadScreenBackgroundTexture("res/loading_screen/background.png", false, GL_LINEAR, GL_LINEAR),
+        shader("sprite.shader"), loadScreenBackgroundTexture("res/loading_screen/background.png", false, GL_LINEAR, GL_LINEAR),
         loadingScreenBarTexture("res/loading_screen/loading_bar_no_wheel.png", false, GL_LINEAR, GL_LINEAR),
         loadingScreenWheelTexture("res/loading_screen/loading_wheel.png", false, GL_LINEAR, GL_LINEAR)
     {
@@ -212,6 +230,17 @@ public:
         this->name = "Game";
 
         this->doors.reserve(10);
+
+        this->playerTextures = {
+            new Druid::Texture2D("res/penguin/purple/side_right.png", false, GL_NEAREST, GL_NEAREST),
+            new Druid::Texture2D("res/penguin/purple/angle_up_right.png", false, GL_NEAREST, GL_NEAREST),
+            new Druid::Texture2D("res/penguin/purple/up.png", false, GL_NEAREST, GL_NEAREST),
+            new Druid::Texture2D("res/penguin/purple/angle_up_left.png", false, GL_NEAREST, GL_NEAREST),
+            new Druid::Texture2D("res/penguin/purple/side_left.png", false, GL_NEAREST, GL_NEAREST),
+            new Druid::Texture2D("res/penguin/purple/angle_down_left.png", false, GL_NEAREST, GL_NEAREST),
+            new Druid::Texture2D("res/penguin/purple/down.png", false, GL_NEAREST, GL_NEAREST),
+            new Druid::Texture2D("res/penguin/purple/angle_down_right.png", false, GL_NEAREST, GL_NEAREST),
+        };
 
         std::ifstream jsonFile("room data.json");
         jsonFile >> this->roomData;
@@ -223,6 +252,11 @@ public:
     ~GameLayer()
     {
         delete this->currentRoomTexturePtr;
+
+        for (Druid::Texture2D* const l_texturePtr : this->playerTextures)
+        {
+            delete l_texturePtr;
+        }
     }
 };
 
