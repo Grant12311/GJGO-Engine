@@ -1,4 +1,4 @@
-#include <pch.hpp>
+#include <GJGOpch.hpp>
 
 #include <GJGO/app.hpp>
 #include <GJGO/entity.hpp>

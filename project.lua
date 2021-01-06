@@ -14,7 +14,7 @@ project("GJGO")
 
     files({"premake5.lua", "project.lua", ".gitignore", "src/**", "include/**"})
 
-    pchheader("pch.hpp")
+    pchheader("GJGOpch.hpp")
 
     filter("platforms:Linux*")
         system("linux")

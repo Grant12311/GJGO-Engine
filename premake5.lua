@@ -13,7 +13,7 @@ workspace("GJGO")
     buildoptions({"-pipe", "-Wall", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion", "-Wno-switch", "-Wno-unused-variable"})
     defines({"IMGUI_IMPL_OPENGL_ES3", "GLFW_INCLUDE_ES31", "GLFW_INCLUDE_GLEXT"})
 
-    pchheader("pch.hpp")
+    pchheader("GJGOpch.hpp")
 
     filter("platforms:LinuxARM")
         architecture("ARM")
