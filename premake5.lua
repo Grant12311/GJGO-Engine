@@ -4,7 +4,7 @@ workspace("GJGO")
     toolset("gcc")
     configurations({"Debug", "Release", "Dist"})
     platforms({"LinuxARM"})
-    startproject("Club Penguin Revived")
+    startproject("Sprite Test")
 
     includedirs({"include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip", "vendor/glm", "vendor/tweeny/include/"})
     links({"X11", "xcb", "xcb-randr", "EGL", "GL", "pthread", "glfw", "dl"})
@@ -38,12 +38,7 @@ workspace("GJGO")
     include("vendor/imgui/project.lua")
     include("vendor/clip/project.lua")
     include("vendor/Druid/project.lua")
-
-    project("GJGO")
-        kind("StaticLib")
-        links({"Druid", "imgui", "clip"})
-
-        files({"premake5.lua", ".gitignore", "src/**", "include/**"})
+    include("project.lua")
 
     project("Sprite Test")
         location("examples/%{prj.name}")
