@@ -9,9 +9,9 @@ namespace GJGO
 {
     namespace Renderer
     {
-        static std::unique_ptr<Druid::VAO> vaoPtr;
-        static std::unique_ptr<Druid::VBO> vboPtr;
-        static std::unique_ptr<Druid::IBO> iboPtr;
+        static std::unique_ptr<Druid::VAO> quadVaoPtr;
+        static std::unique_ptr<Druid::VBO> quadVboPtr;
+        static std::unique_ptr<Druid::IBO> quadIboPtr;
 
         static Druid::Shader* currentShader;
         static glm::mat4 orthoMatrix;
@@ -47,7 +47,7 @@ namespace GJGO
         {
             GJGO_PROFILE_FUNCTION();
 
-            vaoPtr->bind();
+            quadVaoPtr->bind();
 
             if (a_texID)
             {
@@ -78,19 +78,19 @@ namespace GJGO
                 0, 3, 2
             };
 
-            vaoPtr = std::make_unique<Druid::VAO>();
-            vboPtr = std::make_unique<Druid::VBO>();
-            iboPtr = std::make_unique<Druid::IBO>();
+            quadVaoPtr = std::make_unique<Druid::VAO>();
+            quadVboPtr = std::make_unique<Druid::VBO>();
+            quadIboPtr = std::make_unique<Druid::IBO>();
 
-            vaoPtr->bind();
-            vboPtr->bind();
-            iboPtr->bind();
+            quadVaoPtr->bind();
+            quadVboPtr->bind();
+            quadIboPtr->bind();
 
-            vboPtr->fill(quadVertices.size() * sizeof(float), quadVertices.data(), GL_STATIC_DRAW);
-            iboPtr->fill(quadIndices.size() * sizeof(unsigned int), quadIndices.data(), GL_STATIC_DRAW);
+            quadVboPtr->fill(quadVertices.size() * sizeof(float), quadVertices.data(), GL_STATIC_DRAW);
+            quadIboPtr->fill(quadIndices.size() * sizeof(unsigned int), quadIndices.data(), GL_STATIC_DRAW);
 
-            vaoPtr->setAttrib(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
-            vaoPtr->setAttrib(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 2 * sizeof(float));
+            quadVaoPtr->setAttrib(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+            quadVaoPtr->setAttrib(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 2 * sizeof(float));
         }
     }
 }
