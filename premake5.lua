@@ -56,21 +56,4 @@ workspace("GJGO")
         filter("configurations:Dist")
             kind("WindowedApp")
 
-    project("Club Penguin Revived")
-        location("examples/%{prj.name}")
-        targetdir("%{prj.location}/bin/%{cfg.platform}/%{cfg.buildcfg}")
-
-        includedirs({"%{prj.location}/include/", "vendor/json/single_include/"})
-        links({"GJGO", "Druid", "imgui", "clip"})
-        files({"%{prj.location}/src/**", "%{prj.location}/include/**"})
-
-        filter("configurations:Debug")
-            kind("ConsoleApp")
-
-        filter("configurations:Release")
-            kind("ConsoleApp")
-
-        filter("configurations:Dist")
-            kind("WindowedApp")
-
 
