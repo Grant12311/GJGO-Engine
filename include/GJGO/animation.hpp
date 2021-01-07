@@ -1,7 +1,7 @@
 #ifndef GJGO_ANIMATION_H
 #define GJGO_ANIMATION_H
 
-#include <tweeny.h>
+#include <tweeny/tweeny.h>
 
 #include <GJGO/2D/transform2D.hpp>
 
