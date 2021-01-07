@@ -12,6 +12,9 @@ namespace GJGO
         unsigned int getWidth();
         unsigned int getHeight();
         void setSize(const int a_width, const int a_height);
+
+        void maximize();
+        void restore();
     }
 }
 

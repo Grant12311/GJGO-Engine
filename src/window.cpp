@@ -42,5 +42,19 @@ namespace GJGO
 
             glfwSetWindowSize(g_appInstancePtr->windowPtr, a_width, a_height);
         }
+
+        void maximize()
+        {
+            GJGO_PROFILE_FUNCTION();
+
+            glfwMaximizeWindow(g_appInstancePtr->windowPtr);
+        }
+
+        void restore()
+        {
+            GJGO_PROFILE_FUNCTION();
+
+            glfwRestoreWindow(g_appInstancePtr->windowPtr);
+        }
     }
 }
