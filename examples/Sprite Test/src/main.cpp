@@ -204,6 +204,8 @@ public:
 
     GameLayer()
     {
+        GJGO_PROFILE_FUNCTION();
+
         this->name = "Game";
 
         glfwMaximizeWindow(GJGO::g_appInstancePtr->windowPtr);
@@ -217,9 +219,6 @@ int main()
     GJGO::Application app;
 
     app.layers.emplace_back(new GameLayer);
-
-    GJGO::Entity e;
-    e.addComponent<GJGO::Transform2D>();
 
     app.run();
 
