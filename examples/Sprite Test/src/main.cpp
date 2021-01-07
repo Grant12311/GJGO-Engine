@@ -208,7 +208,7 @@ public:
 
         this->name = "Game";
 
-        glfwMaximizeWindow(GJGO::g_appInstancePtr->windowPtr);
+        GJGO::Window::maximize();
     }
 };
 
