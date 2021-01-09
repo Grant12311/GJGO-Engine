@@ -3,13 +3,15 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
+#include <GJGO/2D/renderer2D.hpp>
 #include <GJGO/app.hpp>
 #include <GJGO/editor_layer.hpp>
 #include <GJGO/event.hpp>
 #include <GJGO/imgui_layer.hpp>
 #include <GJGO/log.hpp>
 #include <GJGO/profiler.hpp>
-#include <GJGO/2D/renderer2D.hpp>
+#include <GJGO/scene.hpp>
+#include <GJGO/scene_management_layer.hpp>
 #include <GJGO/window.hpp>
 
 namespace GJGO
@@ -53,6 +55,7 @@ namespace GJGO
         double lastTime = glfwGetTime();
 
         this->layers.emplace_back(new ImGuiLayer);
+        this->layers.emplace_back(new SceneManagementLayer);
         #ifndef GJGO_BUILD_TARGET_DIST
             //this->layers.emplace_back(new EditorLayer);
         #endif // GJGO_BUILD_TARGET_DIST
@@ -280,11 +283,15 @@ namespace GJGO
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         Renderer::init2D();
+
+        this->currentScene = new Scene;
     }
 
     Application::~Application()
     {
         GJGO_PROFILE_FUNCTION();
+
+        delete this->currentScene;
 
         for (Layer* const l_layerPtr : this->layers)
         {

@@ -1,9 +1,10 @@
 #include <GJGOpch.hpp>
 
+#include <GJGO/2D/camera2D.hpp>
+#include <GJGO/2D/renderer2D.hpp>
+#include <GJGO/2D/transform2D.hpp>
 #include <GJGO/color.hpp>
 #include <GJGO/profiler.hpp>
-#include <GJGO/2D/camera2D.hpp>
-#include <GJGO/2D/transform2D.hpp>
 
 namespace GJGO
 {
@@ -91,6 +92,42 @@ namespace GJGO
 
             quadVaoPtr->setAttrib(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
             quadVaoPtr->setAttrib(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 2 * sizeof(float));
+
+            const char* const defaultSpriteShaderVertexSource = "#version 300 es\n"
+                "precision highp float;"
+                "layout (location = 0) in vec2 aPos;"
+                "layout (location = 1) in vec2 aTexCoord;"
+
+                "out vec2 ourTexCoord;"
+
+                "uniform mat4 transformer;"
+                "uniform mat4 orthoMatrix;"
+
+                "void main()"
+                "{"
+                "    ourTexCoord = aTexCoord;"
+
+                "    gl_Position = orthoMatrix * transformer * vec4(aPos, 1.0, 1.0);"
+                "}";
+
+            const char* const defaultSpriteShaderFragmentSource = "#version 300 es\n"
+                "precision highp float;"
+                "layout (location = 0) out vec4 color;"
+                "in vec2 ourTexCoord;"
+
+                "uniform vec4 quadColor;"
+                "uniform sampler2D texture1;"
+                "uniform bool useTexture;"
+
+                "void main()"
+                "{"
+                "    if (useTexture)"
+                "        color = texture(texture1, ourTexCoord) * quadColor;"
+                "    else"
+                "        color = quadColor;"
+                "}";
+
+            defaultSpriteShader = new Druid::Shader(defaultSpriteShaderVertexSource, defaultSpriteShaderFragmentSource);
         }
     }
 }

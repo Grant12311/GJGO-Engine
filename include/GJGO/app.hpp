@@ -10,6 +10,7 @@
 #include <GJGO/animation.hpp>
 #include <GJGO/event.hpp>
 #include <GJGO/layer.hpp>
+#include <GJGO/scene.hpp>
 
 namespace GJGO
 {
@@ -19,6 +20,7 @@ namespace GJGO
         GLFWwindow* windowPtr;
         entt::registry registry;
 
+        Scene* currentScene;
         std::vector<Layer*> layers;
         std::vector<Event*> pendingEvents;
 

@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <glm/vec2.hpp>
+
 #include <imgui.h>
 
 #include <tweeny.h>
@@ -11,22 +13,23 @@
 #include <Druid/shader.h>
 #include <Druid/texture.h>
 
+#include <GJGO/2D/camera2D.hpp>
+#include <GJGO/2D/renderer2D.hpp>
+#include <GJGO/2D/transform2D.hpp>
 #include <GJGO/app.hpp>
 #include <GJGO/clipboard.hpp>
+#include <GJGO/components.hpp>
 #include <GJGO/entity.hpp>
 #include <GJGO/event.hpp>
 #include <GJGO/layer.hpp>
 #include <GJGO/log.hpp>
 #include <GJGO/profiler.hpp>
 #include <GJGO/window.hpp>
-#include <GJGO/2D/camera2D.hpp>
-#include <GJGO/2D/renderer2D.hpp>
-#include <GJGO/2D/transform2D.hpp>
 
 class GameLayer : public GJGO::Layer
 {
 private:
-    Druid::Shader m_shader = Druid::Shader("renderer.shader");
+    GJGO::Entity dinoEntity;
     int m_textureToDraw = 0;
     std::array<Druid::Texture2D, 24> m_textures = {
         Druid::Texture2D("res/sprites/dinos/blue/1.png",  false, GL_NEAREST, GL_NEAREST),
@@ -169,7 +172,7 @@ public:
 
         glClearColor(this->m_clearColor[0], this->m_clearColor[1], this->m_clearColor[2], 1.0f);
 
-        GJGO::Renderer::begin2D(&this->m_shader, this->m_camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
+        GJGO::Renderer::begin2D(GJGO::Renderer::defaultSpriteShader, this->m_camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
         GJGO::Renderer::drawQuad(this->m_playerPosition, this->m_size, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_textures[this->m_textureToDraw]);
     }
@@ -209,6 +212,11 @@ public:
         this->name = "Game";
 
         GJGO::Window::maximize();
+
+        GJGO::g_appInstancePtr->currentScene->primaryCamera = &this->m_camera;
+        this->dinoEntity = GJGO::g_appInstancePtr->currentScene->createEntity("Dino");
+        this->dinoEntity.addComponent<GJGO::Transform2DComponent>(glm::vec2(100.0f, 100.0f), glm::vec2(100.0f, 100.0f));
+        //this->dinoEntity.addComponent<GJGO::SpriteComponent>();
     }
 };
 

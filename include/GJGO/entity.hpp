@@ -4,58 +4,61 @@
 #include <entt/entity/registry.hpp>
 
 #include <GJGO/app.hpp>
+#include <GJGO/scene.hpp>
 
 namespace GJGO
 {
     class Entity
     {
     public:
-        Entity();
-        ~Entity();
+        Entity(const entt::entity a_entity = entt::null, Scene* const a_scenePtr = nullptr);
 
         template<typename T, typename... ARGS>
         void addComponent(ARGS... a_args)
         {
-            g_appInstancePtr->registry.emplace<T>(this->m_entity, a_args...);
+           this->m_scenePtr->m_registry.emplace<T>(this->m_entity, a_args...);
         }
 
         template<typename T>
         void removeComponent()
         {
-            g_appInstancePtr->registry.remove<T>(this->m_entity);
+            this->m_scenePtr->m_registry.remove<T>(this->m_entity);
         }
 
         template<typename T>
         const T& getComponent()
         {
-            return g_appInstancePtr->registry.get<T>(this->m_entity);
+            return this->m_scenePtr->m_registry.get<T>(this->m_entity);
         }
 
         template<typename T>
         bool hasComponent()
         {
-            return g_appInstancePtr->registry.has<T>(this->m_entity);
+            return this->m_scenePtr->m_registry.has<T>(this->m_entity);
         }
 
         template<typename T>
         T& getComponentAccess()
         {
-            return g_appInstancePtr->registry.get<T>(this->m_entity);
+            return this->m_scenePtr->m_registry.get<T>(this->m_entity);
         }
 
         template<typename T, typename... ARGS>
         void editComponent(ARGS... a_args)
         {
-            g_appInstancePtr->registry.replace<T>(this->m_entity, a_args...);
+            this->m_scenePtr->m_registry.replace<T>(this->m_entity, a_args...);
         }
 
         template<typename T, typename... ARGS>
         void addOrEditComponent(ARGS... a_args)
         {
-            g_appInstancePtr->registry.emplace_or_replace<T>(this->m_entity, a_args...);
+            this->m_scenePtr->m_registry.emplace_or_replace<T>(this->m_entity, a_args...);
         }
+
+        friend class Scene;
     private:
         entt::entity m_entity;
+        Scene* m_scenePtr;
     };
 }
 
