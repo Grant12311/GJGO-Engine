@@ -10,7 +10,7 @@ workspace("GJGO")
     links({"X11", "xcb", "xcb-randr", "EGL", "GL", "pthread", "glfw", "dl"})
 
     flags({"MultiProcessorCompile"})
-    buildoptions({"-pipe", "-Wall", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion", "-Wno-switch", "-Wno-unused-variable"})
+    buildoptions({"-pipe", "-Wall", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion", "-Wno-switch", "-Wno-unused-variable", "-fuse-ld=gold"})
     defines({"IMGUI_IMPL_OPENGL_ES3", "GLFW_INCLUDE_ES31", "GLFW_INCLUDE_GLEXT"})
 
     pchheader("GJGOpch.hpp")
@@ -44,7 +44,7 @@ workspace("GJGO")
         location("examples/%{prj.name}")
         targetdir("%{prj.location}/bin/%{cfg.platform}/%{cfg.buildcfg}")
 
-        links({"GJGO", "Druid", "imgui", "clip"})
+        links({"bin/%{cfg.platform}/%{cfg.buildcfg}/libGJGO.a", "Druid", "imgui", "clip"})
         files({"%{prj.location}/src/*"})
 
         filter("configurations:Debug")
