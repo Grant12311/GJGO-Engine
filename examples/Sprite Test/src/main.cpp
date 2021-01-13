@@ -171,10 +171,6 @@ public:
         GJGO_PROFILE_FUNCTION();
 
         glClearColor(this->m_clearColor[0], this->m_clearColor[1], this->m_clearColor[2], 1.0f);
-
-        GJGO::Renderer::begin2D(GJGO::Renderer::defaultSpriteShader, this->m_camera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
-
-        GJGO::Renderer::drawQuad(this->m_playerPosition, this->m_size, this->m_rotation, {1.0f, 1.0f, 1.0f}, this->m_textures[this->m_textureToDraw]);
     }
 
     void drawGui() override
@@ -216,7 +212,7 @@ public:
         GJGO::g_appInstancePtr->currentScene->primaryCamera = &this->m_camera;
         this->dinoEntity = GJGO::g_appInstancePtr->currentScene->createEntity("Dino");
         this->dinoEntity.addComponent<GJGO::Transform2DComponent>(glm::vec2(100.0f, 100.0f), glm::vec2(100.0f, 100.0f));
-        //this->dinoEntity.addComponent<GJGO::SpriteComponent>();
+        this->dinoEntity.addComponent<GJGO::SpriteComponent>(static_cast<unsigned int>(this->m_textures[0]), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     }
 };
 
