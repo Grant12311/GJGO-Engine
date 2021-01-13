@@ -78,8 +78,6 @@ private:
     std::array<float, 3> m_clearColor = {
         0.0f, 0.0f, 0.0f
     };
-
-    bool m_showRendererWindow = true;
 public:
     void onUpdate() override
     {
