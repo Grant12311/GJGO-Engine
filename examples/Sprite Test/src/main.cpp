@@ -162,13 +162,6 @@ public:
         }
     }
 
-    void draw() override
-    {
-        GJGO_PROFILE_FUNCTION();
-
-        glClearColor(this->m_clearColor[0], this->m_clearColor[1], this->m_clearColor[2], 1.0f);
-    }
-
     void drawGui() override
     {
         GJGO_PROFILE_FUNCTION();
@@ -195,6 +188,8 @@ public:
             ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
         }
         ImGui::End();
+
+        glClearColor(this->m_clearColor[0], this->m_clearColor[1], this->m_clearColor[2], 1.0f);
     }
 
     GameLayer()
