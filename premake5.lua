@@ -13,8 +13,6 @@ workspace("GJGO")
     buildoptions({"-pipe", "-Wall", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion", "-Wno-switch", "-Wno-unused-variable", "-fuse-ld=gold"})
     defines({"IMGUI_IMPL_OPENGL_ES3", "GLFW_INCLUDE_ES31", "GLFW_INCLUDE_GLEXT"})
 
-    pchheader("GJGOpch.hpp")
-
     filter("platforms:LinuxARM")
         architecture("ARM")
         system("linux")
@@ -46,6 +44,8 @@ workspace("GJGO")
 
         links({"GJGO", "Druid", "imgui", "clip"})
         files({"%{prj.location}/src/*"})
+
+        pchheader("GJGOpch.hpp")
 
         filter("configurations:Debug")
             kind("ConsoleApp")
