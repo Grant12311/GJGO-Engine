@@ -18,7 +18,6 @@ namespace GJGO
     {
     public:
         GLFWwindow* windowPtr;
-        entt::registry registry;
 
         Scene* currentScene;
         std::vector<Layer*> layers;
