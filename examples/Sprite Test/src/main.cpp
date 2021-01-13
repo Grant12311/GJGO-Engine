@@ -216,7 +216,7 @@ public:
         GJGO::g_appInstancePtr->currentScene->primaryCamera = &this->m_camera;
         this->dinoEntity = GJGO::g_appInstancePtr->currentScene->createEntity("Dino");
         this->dinoEntity.addComponent<GJGO::Transform2DComponent>(glm::vec2(100.0f, 100.0f), glm::vec2(100.0f, 100.0f));
-        //this->dinoEntity.addComponent<GJGO::SpriteComponent>();
+        this->dinoEntity.addComponent<GJGO::SpriteComponent>();
     }
 };
 
