@@ -30,7 +30,7 @@ namespace GJGO
                 auto[transform, sprite] = view.get<Transform2DComponent, SpriteComponent>(l_entity);
 
                 Renderer::begin2D(Renderer::defaultSpriteShader, *g_appInstancePtr->currentScene->primaryCamera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
-                Renderer::drawQuad(transform.position, transform.size, 0.0f, sprite.color, sprite.texture);
+                Renderer::drawQuad(transform.position, transform.size, transform.rotation, sprite.color, sprite.texture);
             }
         }
     }

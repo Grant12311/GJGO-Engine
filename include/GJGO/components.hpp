@@ -19,9 +19,10 @@ namespace GJGO
     {
         glm::vec2 position;
         glm::vec2 size;
+        float rotation;
 
-        Transform2DComponent(const glm::vec2 a_position = {0.0f, 0.0f}, const glm::vec2 a_size = {0.0f, 0.0f}):
-            position(a_position), size(a_size) {}
+        Transform2DComponent(const glm::vec2 a_position = {0.0f, 0.0f}, const glm::vec2 a_size = {0.0f, 0.0f}, const float a_rotation = 0.0f):
+            position(a_position), size(a_size), rotation(a_rotation) {}
     };
 
     struct SpriteComponent
