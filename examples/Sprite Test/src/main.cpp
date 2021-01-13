@@ -69,10 +69,6 @@ private:
         return false;
     });
 
-    GJGO::Position2D m_playerPosition = {300, 10};
-    GJGO::Size2D m_size = {1000, 1000};
-    float m_rotation = 0.0f;
-
     GJGO::Camera2D m_camera;
 
     std::array<float, 3> m_clearColor = {
@@ -85,29 +81,31 @@ public:
 
         this->m_textureToDraw = this->m_animTween.step(static_cast<int>(GJGO::Window::deltaTime));
 
+        GJGO::Transform2DComponent& plrTransform = this->dinoEntity.getComponentAccess<GJGO::Transform2DComponent>();
+
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_W))
-            this->m_playerPosition.y += GJGO::Window::deltaTime;
+            plrTransform.position.y += GJGO::Window::deltaTime;
         else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_S))
-            this->m_playerPosition.y -= GJGO::Window::deltaTime;
+            plrTransform.position.y -= GJGO::Window::deltaTime;
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_A))
-            this->m_playerPosition.x -= GJGO::Window::deltaTime;
+            plrTransform.position.x -= GJGO::Window::deltaTime;
         else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_D))
-            this->m_playerPosition.x += GJGO::Window::deltaTime;
+            plrTransform.position.x += GJGO::Window::deltaTime;
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_UP))
         {
-            this->m_size.width += 10;
-            this->m_size.height += 10;
+            plrTransform.size.x += 10;
+            plrTransform.size.y += 10;
         }else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_DOWN)){
-            this->m_size.width -= 10;
-            this->m_size.height -= 10;
+            plrTransform.size.x -= 10;
+            plrTransform.size.y -= 10;
         }
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_RIGHT))
-            this->m_rotation += 1;
+            plrTransform.rotation += 1;
         else if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_LEFT))
-            this->m_rotation -= 1;
+            plrTransform.rotation -= 1;
 
         if (glfwGetKey(GJGO::g_appInstancePtr->windowPtr, GLFW_KEY_LEFT_BRACKET))
         {
@@ -166,6 +164,8 @@ public:
     {
         GJGO_PROFILE_FUNCTION();
 
+        GJGO::Transform2DComponent& plrTransform = this->dinoEntity.getComponentAccess<GJGO::Transform2DComponent>();
+
         ImGuiIO& io = ImGui::GetIO();
 
         ImGui::Begin("Anim");
@@ -173,9 +173,9 @@ public:
         ImGui::ListBox("Anims", &this->m_animChoice, choices.data(), choices.size());
         ImGui::SliderInt("Frame", &this->m_textureToDraw, 0, 23);
         ImGui::Separator();
-        ImGui::InputInt2("Pos", reinterpret_cast<int*>(&this->m_playerPosition));
-        ImGui::InputInt2("Size", reinterpret_cast<int*>(&this->m_size));
-        ImGui::SliderFloat("Rotation", &this->m_rotation, 0.0f, 360.0f);
+        ImGui::InputFloat2("Pos", &plrTransform.position.x);
+        ImGui::InputFloat2("Size", &plrTransform.size.x);
+        ImGui::SliderFloat("Rotation", &plrTransform.rotation, 0.0f, 360.0f);
         ImGui::Separator();
         ImGui::SliderFloat3("Clear Color", this->m_clearColor.data(), 0, 1.0f);
         ImGui::End();
