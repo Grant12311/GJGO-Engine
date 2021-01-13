@@ -81,8 +81,6 @@ private:
 
     bool m_showRendererWindow = true;
 public:
-    Druid::FBO fbo = Druid::FBO(1280, 720);
-
     void onUpdate() override
     {
         GJGO_PROFILE_FUNCTION();
