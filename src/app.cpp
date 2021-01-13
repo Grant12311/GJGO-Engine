@@ -7,6 +7,7 @@
 #include <GJGO/app.hpp>
 #include <GJGO/editor_layer.hpp>
 #include <GJGO/event.hpp>
+#include <GJGO/imgui_layer.hpp>
 #include <GJGO/log.hpp>
 #include <GJGO/profiler.hpp>
 #include <GJGO/scene.hpp>
@@ -53,7 +54,11 @@ namespace GJGO
 
         double lastTime = glfwGetTime();
 
+        this->layers.emplace_back(new ImGuiLayer);
         this->layers.emplace_back(new SceneManagementLayer);
+        #ifndef GJGO_BUILD_TARGET_DIST
+            //this->layers.emplace_back(new EditorLayer);
+        #endif // GJGO_BUILD_TARGET_DIST
 
         while (!glfwWindowShouldClose(this->windowPtr))
         {
@@ -102,14 +107,14 @@ namespace GJGO
             {
                 GJGO_PROFILE_SCOPE("ImGui");
 
-                /*ImGui_ImplOpenGL3_NewFrame();
+                ImGui_ImplOpenGL3_NewFrame();
                 ImGui::NewFrame();
                 for (Layer* const l_layerPtr : this->layers)
                 {
                     l_layerPtr->drawGui();
                 }
                 ImGui::Render();
-                ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());*/
+                ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
             }
 
             {
