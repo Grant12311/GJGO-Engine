@@ -44,7 +44,7 @@ workspace("GJGO")
         location("examples/%{prj.name}")
         targetdir("%{prj.location}/bin/%{cfg.platform}/%{cfg.buildcfg}")
 
-        links({"bin/%{cfg.platform}/%{cfg.buildcfg}/libGJGO.a", "Druid", "imgui", "clip"})
+        links({"GJGO", "Druid", "imgui", "clip"})
         files({"%{prj.location}/src/*"})
 
         filter("configurations:Debug")
