@@ -180,9 +180,7 @@ namespace GJGO
     {
         GJGO_PROFILE_FUNCTION();
 
-        int windowPosX;
-        int windowPosY;
-        glfwGetWindowPos(App::instance->windowPtr, &windowPosX, &windowPosY);
+        std::array<int, 2> windowPosition = Window::getPosition();
 
         int windowWidth;
         int windowHeight;
@@ -190,13 +188,13 @@ namespace GJGO
 
         int screenHeight = glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
 
-        windowPosY += windowHeight;
-        windowPosY = screenHeight - windowPosY;
+        windowPosition[1] += windowHeight;
+        windowPosition[1] = screenHeight - windowPosition[1];
 
         Event* const event = new Event(EventType::mouseMove);
         event->mousePosition.relative = {static_cast<int>(a_x), windowHeight - static_cast<int>(a_y) - 1};
 
-        event->mousePosition.absolute = {windowPosX + static_cast<int>(a_x), windowPosY + event->mousePosition.relative.y};
+        event->mousePosition.absolute = {windowPosition[0] + static_cast<int>(a_x), windowPosition[1] + event->mousePosition.relative.y};
 
         App::instance->pendingEvents.emplace_back(event);
     }
