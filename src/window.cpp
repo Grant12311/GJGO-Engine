@@ -14,6 +14,12 @@ namespace GJGO
             glfwSetWindowTitle(App::instance->windowPtr, a_title);
         }
 
+        std::array<int, 2> getPosition()
+        {
+            std::array<int, 2> toReturn;
+            glfwGetWindowPos(App::instance->windowPtr, &toReturn[0], &toReturn[1]);
+        }
+
         unsigned int getWidth()
         {
             GJGO_PROFILE_FUNCTION();
