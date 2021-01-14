@@ -16,6 +16,8 @@ namespace GJGO
 
         std::array<int, 2> getPosition()
         {
+            GJGO_PROFILE_FUNCTION();
+
             std::array<int, 2> toReturn;
             glfwGetWindowPos(App::instance->windowPtr, &toReturn[0], &toReturn[1]);
             return toReturn;
