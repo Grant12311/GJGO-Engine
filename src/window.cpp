@@ -1,7 +1,10 @@
 #include <GJGOpch.hpp>
 
+#include <GJGO/2D/transform2D.hpp>
 #include <GJGO/app.hpp>
+#include <GJGO/display.hpp>
 #include <GJGO/profiler.hpp>
+#include <GJGO/window.hpp>
 
 namespace GJGO
 {
@@ -14,12 +17,14 @@ namespace GJGO
             glfwSetWindowTitle(App::instance->windowPtr, a_title);
         }
 
-        std::array<int, 2> getPosition()
+        Position2D getPosition()
         {
             GJGO_PROFILE_FUNCTION();
 
-            std::array<int, 2> toReturn;
-            glfwGetWindowPos(App::instance->windowPtr, &toReturn[0], &toReturn[1]);
+            Position2D toReturn;
+            glfwGetWindowPos(App::instance->windowPtr, &toReturn.x, &toReturn.y);
+            toReturn.y = Display::getHeight() - Window::getHeight() - toReturn.y;
+
             return toReturn;
         }
 
@@ -45,7 +50,7 @@ namespace GJGO
             return height;
         }
 
-        std::array<unsigned int, 2> getSize()
+        Size2D getSize()
         {
            GJGO_PROFILE_FUNCTION();
 

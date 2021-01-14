@@ -3,6 +3,8 @@
 
 #include <array>
 
+#include <GJGO/2D/transform2D.hpp>
+
 namespace GJGO
 {
     namespace Window
@@ -11,11 +13,11 @@ namespace GJGO
 
         void setTitle(const char* const a_title);
 
-        std::array<int, 2> getPosition();
+        Position2D getPosition();
 
         unsigned int getWidth();
         unsigned int getHeight();
-        std::array<unsigned int, 2> getSize();
+        Size2D getSize();
         void setSize(const int a_width, const int a_height);
 
         void maximize();
