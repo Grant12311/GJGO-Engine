@@ -46,6 +46,10 @@ namespace GJGO
                 return *this->layers[i];
             }
         }
+
+        GJGO_LOG_ERROR("No layer with name ", a_name, "!");
+        //This should NEVER run!!!
+        return *this->layers[0];
     }
 
     void App::run()
