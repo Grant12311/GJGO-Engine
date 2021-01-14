@@ -155,11 +155,11 @@ namespace GJGO
         {
             Event* const event = new Event(EventType::keyDown);
             event->keycode = a_key;
-            g_appInstancePtr->pendingEvents.emplace_back(event);
+            Application::instance->pendingEvents.emplace_back(event);
         }else if (a_action == GLFW_RELEASE){
             Event* const event = new Event(EventType::keyUp);
             event->keycode = a_key;
-            g_appInstancePtr->pendingEvents.emplace_back(event);
+            Application::instance->pendingEvents.emplace_back(event);
         }
     }
 
@@ -169,7 +169,7 @@ namespace GJGO
 
         Event* const event = new Event(EventType::keyTypedDown);
         event->keycode = a_char;
-        g_appInstancePtr->pendingEvents.emplace_back(event);
+        Application::instance->pendingEvents.emplace_back(event);
     }
 
     static void mousePositionCallback(GLFWwindow* const /*a_windowPtr*/, const double a_x, const double a_y)
@@ -178,11 +178,11 @@ namespace GJGO
 
         int windowPosX;
         int windowPosY;
-        glfwGetWindowPos(g_appInstancePtr->windowPtr, &windowPosX, &windowPosY);
+        glfwGetWindowPos(Application::instance->windowPtr, &windowPosX, &windowPosY);
 
         int windowWidth;
         int windowHeight;
-        glfwGetWindowSize(GJGO::g_appInstancePtr->windowPtr, &windowWidth, &windowHeight);
+        glfwGetWindowSize(GJGO::Application::instance->windowPtr, &windowWidth, &windowHeight);
 
         int screenHeight = glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
 
@@ -194,7 +194,7 @@ namespace GJGO
 
         event->mousePosition.absolute = {windowPosX + static_cast<int>(a_x), windowPosY + event->mousePosition.relative.y};
 
-        g_appInstancePtr->pendingEvents.emplace_back(event);
+        Application::instance->pendingEvents.emplace_back(event);
     }
 
     static void mouseButtonCallback(GLFWwindow* const /*a_windowPtr*/, const int a_button, const int a_action, const int /*a_mods*/)
@@ -211,7 +211,7 @@ namespace GJGO
         }
 
         event->mouseButton = static_cast<unsigned char>(a_button);
-        g_appInstancePtr->pendingEvents.emplace_back(event);
+        Application::instance->pendingEvents.emplace_back(event);
     }
 
     static void mouseWheelCallback(GLFWwindow* const /*a_window*/, const double /*a_xOffset*/, const double a_yOffset)
@@ -220,7 +220,7 @@ namespace GJGO
 
         Event* const event = new Event(EventType::mouseWheelScroll);
         event->mouseWheelDirection = static_cast<signed char>(a_yOffset);
-        g_appInstancePtr->pendingEvents.emplace_back(event);
+        Application::instance->pendingEvents.emplace_back(event);
     }
 
     static void windowSizeCallback(GLFWwindow* const /*a_windowPtr*/, const int a_width, const int a_height)
@@ -229,7 +229,7 @@ namespace GJGO
 
         Event* const event = new Event(EventType::windowResize);
         event->windowSize = {static_cast<unsigned int>(a_width), static_cast<unsigned int>(a_height)};
-        g_appInstancePtr->pendingEvents.emplace_back(event);
+        Application::instance->pendingEvents.emplace_back(event);
     }
 
     Application::Application()
@@ -239,7 +239,8 @@ namespace GJGO
         #endif // GJGO_BUILD_TARGET_DIST
         GJGO_PROFILE_FUNCTION();
 
-        g_appInstancePtr = this;
+        Application::instance = this;
+        Application::instance = this;
 
         if (!glfwInit())
             exit(1);
@@ -310,7 +311,7 @@ namespace GJGO
     {
         GJGO_PROFILE_FUNCTION();
 
-        g_appInstancePtr->vsyncEnabled = a_vsync;
+        Application::instance->vsyncEnabled = a_vsync;
         glfwSwapInterval(a_vsync);
     }
 
@@ -318,6 +319,6 @@ namespace GJGO
     {
         GJGO_PROFILE_FUNCTION();
 
-        g_appInstancePtr->framerateCap = 1000.0d / a_cap;
+        Application::instance->framerateCap = 1000.0d / a_cap;
     }
 }

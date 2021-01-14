@@ -11,7 +11,7 @@ namespace GJGO
         {
             GJGO_PROFILE_FUNCTION();
 
-            glfwSetWindowTitle(g_appInstancePtr->windowPtr, a_title);
+            glfwSetWindowTitle(Application::instance->windowPtr, a_title);
         }
 
         unsigned int getWidth()
@@ -20,7 +20,7 @@ namespace GJGO
 
             int width;
             int height;
-            glfwGetWindowSize(g_appInstancePtr->windowPtr, &width, &height);
+            glfwGetWindowSize(Application::instance->windowPtr, &width, &height);
 
             return static_cast<unsigned int>(width);
         }
@@ -31,7 +31,7 @@ namespace GJGO
 
             int width;
             int height;
-            glfwGetWindowSize(g_appInstancePtr->windowPtr, &width, &height);
+            glfwGetWindowSize(Application::instance->windowPtr, &width, &height);
 
             return height;
         }
@@ -40,21 +40,21 @@ namespace GJGO
         {
             GJGO_PROFILE_FUNCTION();
 
-            glfwSetWindowSize(g_appInstancePtr->windowPtr, a_width, a_height);
+            glfwSetWindowSize(Application::instance->windowPtr, a_width, a_height);
         }
 
         void maximize()
         {
             GJGO_PROFILE_FUNCTION();
 
-            glfwMaximizeWindow(g_appInstancePtr->windowPtr);
+            glfwMaximizeWindow(Application::instance->windowPtr);
         }
 
         void restore()
         {
             GJGO_PROFILE_FUNCTION();
 
-            glfwRestoreWindow(g_appInstancePtr->windowPtr);
+            glfwRestoreWindow(Application::instance->windowPtr);
         }
     }
 }

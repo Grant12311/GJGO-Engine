@@ -17,6 +17,8 @@ namespace GJGO
     class Application
     {
     public:
+        static inline Application* instance;
+
         GLFWwindow* windowPtr;
 
         Scene* currentScene;
@@ -33,8 +35,6 @@ namespace GJGO
         Application();
         ~Application();
     };
-
-    inline Application* g_appInstancePtr = nullptr;
 
     void setVsync(const bool a_vsync);
     void setFramerateCap(const double a_cap);
