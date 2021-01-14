@@ -5,6 +5,7 @@
 
 #include <GJGO/2D/renderer2D.hpp>
 #include <GJGO/app.hpp>
+#include <GJGO/display.hpp>
 #include <GJGO/editor_layer.hpp>
 #include <GJGO/event.hpp>
 #include <GJGO/imgui_layer.hpp>
@@ -181,15 +182,10 @@ namespace GJGO
         GJGO_PROFILE_FUNCTION();
 
         std::array<int, 2> windowPosition = Window::getPosition();
-
-        int windowWidth;
-        int windowHeight;
-        glfwGetWindowSize(GJGO::App::instance->windowPtr, &windowWidth, &windowHeight);
-
-        int screenHeight = glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
+        unsigned int windowHeight = Window::getHeight();
 
         windowPosition[1] += windowHeight;
-        windowPosition[1] = screenHeight - windowPosition[1];
+        windowPosition[1] = Display::getHeight() - windowPosition[1];
 
         Event* const event = new Event(EventType::mouseMove);
         event->mousePosition.relative = {static_cast<int>(a_x), windowHeight - static_cast<int>(a_y) - 1};
