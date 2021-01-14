@@ -25,7 +25,7 @@ namespace GJGO
             x(a_x), y(a_y) {}
 
         Position2D(const glm::vec2 &a_vec = {0, 0}) :
-            x(a_vec.x), y(a_vec.y) {}
+            x(static_cast<int>(a_vec.x)), y(static_cast<int>(a_vec.y)) {}
     };
 
     inline std::ostream& operator<<(std::ostream &a_os, const Position2D &a_pos)
@@ -42,7 +42,7 @@ namespace GJGO
             width(a_width), height(a_height) {}
 
         Size2D(const glm::vec2 &a_vec = {0, 0}) :
-            width(a_vec.x), height(a_vec.y) {}
+            width(static_cast<unsigned int>(a_vec.x)), height(static_cast<unsigned int>(a_vec.y)) {}
     };
 
     struct Transform2D
