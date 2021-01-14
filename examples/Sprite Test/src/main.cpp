@@ -83,47 +83,47 @@ public:
 
         GJGO::Transform2DComponent& plrTransform = this->dinoEntity.getComponentAccess<GJGO::Transform2DComponent>();
 
-        if (glfwGetKey(GJGO::Application::instance->windowPtr, GLFW_KEY_W))
+        if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_W))
             plrTransform.position.y += GJGO::Window::deltaTime;
-        else if (glfwGetKey(GJGO::Application::instance->windowPtr, GLFW_KEY_S))
+        else if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_S))
             plrTransform.position.y -= GJGO::Window::deltaTime;
 
-        if (glfwGetKey(GJGO::Application::instance->windowPtr, GLFW_KEY_A))
+        if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_A))
             plrTransform.position.x -= GJGO::Window::deltaTime;
-        else if (glfwGetKey(GJGO::Application::instance->windowPtr, GLFW_KEY_D))
+        else if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_D))
             plrTransform.position.x += GJGO::Window::deltaTime;
 
-        if (glfwGetKey(GJGO::Application::instance->windowPtr, GLFW_KEY_UP))
+        if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_UP))
         {
             plrTransform.size.x += 10;
             plrTransform.size.y += 10;
-        }else if (glfwGetKey(GJGO::Application::instance->windowPtr, GLFW_KEY_DOWN)){
+        }else if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_DOWN)){
             plrTransform.size.x -= 10;
             plrTransform.size.y -= 10;
         }
 
-        if (glfwGetKey(GJGO::Application::instance->windowPtr, GLFW_KEY_RIGHT))
+        if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_RIGHT))
             plrTransform.rotation += 1;
-        else if (glfwGetKey(GJGO::Application::instance->windowPtr, GLFW_KEY_LEFT))
+        else if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_LEFT))
             plrTransform.rotation -= 1;
 
-        if (glfwGetKey(GJGO::Application::instance->windowPtr, GLFW_KEY_LEFT_BRACKET))
+        if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_LEFT_BRACKET))
         {
             for (unsigned char i = 0; i < this->m_textures.size(); i++)
             {
                 this->m_textures[i].setFilters(GL_NEAREST, GL_NEAREST);
             }
-        }else if (glfwGetKey(GJGO::Application::instance->windowPtr, GLFW_KEY_RIGHT_BRACKET)){
+        }else if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_RIGHT_BRACKET)){
             for (unsigned char i = 0; i < this->m_textures.size(); i++)
             {
                 this->m_textures[i].setFilters(GL_LINEAR, GL_LINEAR);
             }
         }
 
-        if (glfwGetKey(GJGO::Application::instance->windowPtr, GLFW_KEY_MINUS))
+        if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_MINUS))
         {
             this->m_camera.position.z -= 1;
-        }else if (glfwGetKey(GJGO::Application::instance->windowPtr, GLFW_KEY_EQUAL)){
+        }else if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_EQUAL)){
             this->m_camera.position.z += 1;
         }
     }
@@ -200,8 +200,8 @@ public:
 
         GJGO::Window::maximize();
 
-        GJGO::Application::instance->currentScene->primaryCamera = &this->m_camera;
-        this->dinoEntity = GJGO::Application::instance->currentScene->createEntity("Dino");
+        GJGO::App::instance->currentScene->primaryCamera = &this->m_camera;
+        this->dinoEntity = GJGO::App::instance->currentScene->createEntity("Dino");
         this->dinoEntity.addComponent<GJGO::Transform2DComponent>(glm::vec2(100.0f, 100.0f), glm::vec2(100.0f, 100.0f));
         this->dinoEntity.addComponent<GJGO::SpriteComponent>(static_cast<unsigned int>(this->m_textures[0]), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     }
@@ -211,7 +211,7 @@ int main()
 {
     GJGO_LOG_SET_PRINT_FILE(false);
     GJGO_LOG_SET_PRINT_FUNCTION(false);
-    GJGO::Application app;
+    GJGO::App app;
 
     app.layers.emplace_back(new GameLayer);
 

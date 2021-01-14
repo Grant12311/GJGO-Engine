@@ -27,10 +27,10 @@ namespace GJGO
     {
         GJGO_PROFILE_FUNCTION();
 
-        this->m_ioPtr->KeyCtrl = glfwGetKey(Application::instance->windowPtr, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(Application::instance->windowPtr, GLFW_KEY_RIGHT_CONTROL);
-        this->m_ioPtr->KeyShift = glfwGetKey(Application::instance->windowPtr, GLFW_KEY_LEFT_SHIFT) || glfwGetKey(Application::instance->windowPtr, GLFW_KEY_RIGHT_SHIFT);
-        this->m_ioPtr->KeyAlt = glfwGetKey(Application::instance->windowPtr, GLFW_KEY_LEFT_ALT) || glfwGetKey(Application::instance->windowPtr, GLFW_KEY_RIGHT_ALT);
-        this->m_ioPtr->KeySuper = glfwGetKey(Application::instance->windowPtr, GLFW_KEY_LEFT_SUPER) || glfwGetKey(Application::instance->windowPtr, GLFW_KEY_RIGHT_SUPER);
+        this->m_ioPtr->KeyCtrl = glfwGetKey(App::instance->windowPtr, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(App::instance->windowPtr, GLFW_KEY_RIGHT_CONTROL);
+        this->m_ioPtr->KeyShift = glfwGetKey(App::instance->windowPtr, GLFW_KEY_LEFT_SHIFT) || glfwGetKey(App::instance->windowPtr, GLFW_KEY_RIGHT_SHIFT);
+        this->m_ioPtr->KeyAlt = glfwGetKey(App::instance->windowPtr, GLFW_KEY_LEFT_ALT) || glfwGetKey(App::instance->windowPtr, GLFW_KEY_RIGHT_ALT);
+        this->m_ioPtr->KeySuper = glfwGetKey(App::instance->windowPtr, GLFW_KEY_LEFT_SUPER) || glfwGetKey(App::instance->windowPtr, GLFW_KEY_RIGHT_SUPER);
 
         this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(Window::getWidth()), static_cast<float>(Window::getHeight()));
         this->m_ioPtr->DeltaTime = static_cast<float>(Window::deltaTime) / 1000.0f;

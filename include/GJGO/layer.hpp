@@ -5,7 +5,7 @@
 
 namespace GJGO
 {
-    class Application;
+    class App;
 
     class Layer
     {

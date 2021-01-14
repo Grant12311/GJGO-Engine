@@ -22,14 +22,14 @@ namespace GJGO
     {
         GJGO_PROFILE_FUNCTION();
 
-        if (Application::instance->currentScene->primaryCamera)
+        if (App::instance->currentScene->primaryCamera)
         {
-            auto view = Application::instance->currentScene->m_registry.view<Transform2DComponent, SpriteComponent>();
+            auto view = App::instance->currentScene->m_registry.view<Transform2DComponent, SpriteComponent>();
             for (const entt::entity l_entity : view)
             {
                 auto[transform, sprite] = view.get<Transform2DComponent, SpriteComponent>(l_entity);
 
-                Renderer::begin2D(Renderer::defaultSpriteShader, *Application::instance->currentScene->primaryCamera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
+                Renderer::begin2D(Renderer::defaultSpriteShader, *App::instance->currentScene->primaryCamera, GJGO::Window::getWidth(), GJGO::Window::getHeight());
                 Renderer::drawQuad(transform.position, transform.size, transform.rotation, sprite.color, sprite.texture);
             }
         }

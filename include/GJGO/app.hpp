@@ -14,10 +14,10 @@
 
 namespace GJGO
 {
-    class Application
+    class App
     {
     public:
-        static inline Application* instance;
+        static inline App* instance;
 
         GLFWwindow* windowPtr;
 
@@ -32,8 +32,8 @@ namespace GJGO
 
         void run();
 
-        Application();
-        ~Application();
+        App();
+        ~App();
     };
 
     void setVsync(const bool a_vsync);
