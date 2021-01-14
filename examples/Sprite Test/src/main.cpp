@@ -1,17 +1,4 @@
-#include <iostream>
-
-#include <glm/vec2.hpp>
-
-#include <imgui.h>
-
-#include <tweeny.h>
-
-#include <Druid/fbo.h>
-#include <Druid/vao.h>
-#include <Druid/vbo.h>
-#include <Druid/ibo.h>
-#include <Druid/shader.h>
-#include <Druid/texture.h>
+#include <GJGOpch.hpp>
 
 #include <GJGO/2D/camera2D.hpp>
 #include <GJGO/2D/renderer2D.hpp>
