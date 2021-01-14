@@ -53,7 +53,7 @@ namespace GJGO
             int height;
             glfwGetWindowSize(App::instance->windowPtr, &width, &height);
 
-            return {width, height};
+            return {static_cast<unsigned int>(width), static_cast<unsigned int>(height)};
         }
 
         void setSize(const int a_width, const int a_height)
