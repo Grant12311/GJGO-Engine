@@ -24,7 +24,7 @@ namespace GJGO
         Position2D(const int a_x = 0, const int a_y = 0) :
             x(a_x), y(a_y) {}
 
-        Position2D(const glm::vec2 &a_vec = {0, 0}) :
+        Position2D(const glm::vec2 &a_vec) :
             x(static_cast<int>(a_vec.x)), y(static_cast<int>(a_vec.y)) {}
     };
 
@@ -41,7 +41,7 @@ namespace GJGO
         Size2D(const unsigned int a_width = 0, const unsigned int a_height = 0) :
             width(a_width), height(a_height) {}
 
-        Size2D(const glm::vec2 &a_vec = {0, 0}) :
+        Size2D(const glm::vec2 &a_vec) :
             width(static_cast<unsigned int>(a_vec.x)), height(static_cast<unsigned int>(a_vec.y)) {}
     };
 
