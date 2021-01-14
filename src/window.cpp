@@ -45,6 +45,17 @@ namespace GJGO
             return height;
         }
 
+        std::array<unsigned int, 2> getSize()
+        {
+           GJGO_PROFILE_FUNCTION();
+
+            int width;
+            int height;
+            glfwGetWindowSize(App::instance->windowPtr, &width, &height);
+
+            return {width, height};
+        }
+
         void setSize(const int a_width, const int a_height)
         {
             GJGO_PROFILE_FUNCTION();

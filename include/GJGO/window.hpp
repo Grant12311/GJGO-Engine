@@ -15,6 +15,7 @@ namespace GJGO
 
         unsigned int getWidth();
         unsigned int getHeight();
+        std::array<unsigned int, 2> getSize();
         void setSize(const int a_width, const int a_height);
 
         void maximize();
