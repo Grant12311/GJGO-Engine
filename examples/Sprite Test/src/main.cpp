@@ -84,14 +84,14 @@ public:
         GJGO::Transform2DComponent& plrTransform = this->dinoEntity.getComponentAccess<GJGO::Transform2DComponent>();
 
         if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_W))
-            plrTransform.position.y += GJGO::Window::deltaTime;
+            plrTransform.position.y += static_cast<float>(GJGO::Window::deltaTime);
         else if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_S))
-            plrTransform.position.y -= GJGO::Window::deltaTime;
+            plrTransform.position.y -= static_cast<float>(GJGO::Window::deltaTime);
 
         if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_A))
-            plrTransform.position.x -= GJGO::Window::deltaTime;
+            plrTransform.position.x -= static_cast<float>(GJGO::Window::deltaTime);
         else if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_D))
-            plrTransform.position.x += GJGO::Window::deltaTime;
+            plrTransform.position.x += static_cast<float>(GJGO::Window::deltaTime);
 
         if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_UP))
         {
