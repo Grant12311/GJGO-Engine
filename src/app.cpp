@@ -188,7 +188,7 @@ namespace GJGO
         windowPosition[1] = Display::getHeight() - windowPosition[1];
 
         Event* const event = new Event(EventType::mouseMove);
-        event->mousePosition.relative = {static_cast<int>(a_x), windowHeight - static_cast<int>(a_y) - 1};
+        event->mousePosition.relative = {static_cast<int>(a_x), static_cast<int>(windowHeight) - static_cast<int>(a_y) - 1};
 
         event->mousePosition.absolute = {windowPosition[0] + static_cast<int>(a_x), windowPosition[1] + event->mousePosition.relative.y};
 
@@ -237,7 +237,6 @@ namespace GJGO
         #endif // GJGO_BUILD_TARGET_DIST
         GJGO_PROFILE_FUNCTION();
 
-        App::instance = this;
         App::instance = this;
 
         if (!glfwInit())
