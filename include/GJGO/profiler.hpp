@@ -7,9 +7,12 @@
 #include <algorithm>
 #include <chrono>
 
+#define GJGO_TOKEN_PASTE(x, y) x##y
+#define GJGO_CAT(x,y) GJGO_TOKEN_PASTE(x,y)
+
 #ifndef GJGO_BUILD_TARGET_DIST
-    #define GJGO_PROFILE_SCOPE(x) GJGO::ProfilerTimer timer(x)
-    #define GJGO_PROFILE_FUNCTION() GJGO::ProfilerTimer timer(__PRETTY_FUNCTION__)
+    #define GJGO_PROFILE_SCOPE(x) GJGO::ProfilerTimer GJGO_CAT(timer, __LINE__)(x)
+    #define GJGO_PROFILE_FUNCTION() GJGO::ProfilerTimer GJGO_CAT(timer, __LINE__)(__PRETTY_FUNCTION__)
 #else
     #define GJGO_PROFILE_SCOPE(x)
     #define GJGO_PROFILE_FUNCTION()
