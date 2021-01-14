@@ -4,6 +4,7 @@
 #include <GJGO/clipboard.hpp>
 #include <GJGO/display.hpp>
 #include <GJGO/imgui_layer.hpp>
+#include <GJGO/keyboard.hpp>
 #include <GJGO/profiler.hpp>
 #include <GJGO/window.hpp>
 
@@ -27,10 +28,10 @@ namespace GJGO
     {
         GJGO_PROFILE_FUNCTION();
 
-        this->m_ioPtr->KeyCtrl = glfwGetKey(App::instance->windowPtr, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(App::instance->windowPtr, GLFW_KEY_RIGHT_CONTROL);
-        this->m_ioPtr->KeyShift = glfwGetKey(App::instance->windowPtr, GLFW_KEY_LEFT_SHIFT) || glfwGetKey(App::instance->windowPtr, GLFW_KEY_RIGHT_SHIFT);
-        this->m_ioPtr->KeyAlt = glfwGetKey(App::instance->windowPtr, GLFW_KEY_LEFT_ALT) || glfwGetKey(App::instance->windowPtr, GLFW_KEY_RIGHT_ALT);
-        this->m_ioPtr->KeySuper = glfwGetKey(App::instance->windowPtr, GLFW_KEY_LEFT_SUPER) || glfwGetKey(App::instance->windowPtr, GLFW_KEY_RIGHT_SUPER);
+        this->m_ioPtr->KeyCtrl = Keyboard::keyIsDown(GLFW_KEY_LEFT_CONTROL) || Keyboard::keyIsDown(GLFW_KEY_RIGHT_CONTROL);
+        this->m_ioPtr->KeyShift = Keyboard::keyIsDown(GLFW_KEY_LEFT_SHIFT) || Keyboard::keyIsDown(GLFW_KEY_RIGHT_SHIFT);
+        this->m_ioPtr->KeyAlt = Keyboard::keyIsDown(GLFW_KEY_LEFT_ALT) || Keyboard::keyIsDown(GLFW_KEY_RIGHT_ALT);
+        this->m_ioPtr->KeySuper = Keyboard::keyIsDown(GLFW_KEY_LEFT_SUPER) || Keyboard::keyIsDown(GLFW_KEY_RIGHT_SUPER);
 
         this->m_ioPtr->DisplaySize = ImVec2(static_cast<float>(Window::getWidth()), static_cast<float>(Window::getHeight()));
         this->m_ioPtr->DeltaTime = static_cast<float>(Window::deltaTime) / 1000.0f;

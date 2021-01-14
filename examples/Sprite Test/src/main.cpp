@@ -8,6 +8,7 @@
 #include <GJGO/components.hpp>
 #include <GJGO/entity.hpp>
 #include <GJGO/event.hpp>
+#include <GJGO/keyboard.hpp>
 #include <GJGO/layer.hpp>
 #include <GJGO/log.hpp>
 #include <GJGO/profiler.hpp>
@@ -70,47 +71,47 @@ public:
 
         GJGO::Transform2DComponent& plrTransform = this->dinoEntity.getComponentAccess<GJGO::Transform2DComponent>();
 
-        if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_W))
+        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_W))
             plrTransform.position.y += static_cast<float>(GJGO::Window::deltaTime);
-        else if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_S))
+        else if (GJGO::Keyboard::keyIsDown(GLFW_KEY_S))
             plrTransform.position.y -= static_cast<float>(GJGO::Window::deltaTime);
 
-        if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_A))
+        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_A))
             plrTransform.position.x -= static_cast<float>(GJGO::Window::deltaTime);
-        else if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_D))
+        else if (GJGO::Keyboard::keyIsDown(GLFW_KEY_D))
             plrTransform.position.x += static_cast<float>(GJGO::Window::deltaTime);
 
-        if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_UP))
+        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_UP))
         {
             plrTransform.size.x += 10;
             plrTransform.size.y += 10;
-        }else if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_DOWN)){
+        }else if (GJGO::Keyboard::keyIsDown(GLFW_KEY_DOWN)){
             plrTransform.size.x -= 10;
             plrTransform.size.y -= 10;
         }
 
-        if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_RIGHT))
+        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_RIGHT))
             plrTransform.rotation += 1;
-        else if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_LEFT))
+        else if (GJGO::Keyboard::keyIsDown(GLFW_KEY_LEFT))
             plrTransform.rotation -= 1;
 
-        if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_LEFT_BRACKET))
+        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_LEFT_BRACKET))
         {
             for (unsigned char i = 0; i < this->m_textures.size(); i++)
             {
                 this->m_textures[i].setFilters(GL_NEAREST, GL_NEAREST);
             }
-        }else if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_RIGHT_BRACKET)){
+        }else if (GJGO::Keyboard::keyIsDown(GLFW_KEY_RIGHT_BRACKET)){
             for (unsigned char i = 0; i < this->m_textures.size(); i++)
             {
                 this->m_textures[i].setFilters(GL_LINEAR, GL_LINEAR);
             }
         }
 
-        if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_MINUS))
+        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_MINUS))
         {
             this->m_camera.position.z -= 1;
-        }else if (glfwGetKey(GJGO::App::instance->windowPtr, GLFW_KEY_EQUAL)){
+        }else if (GJGO::Keyboard::keyIsDown(GLFW_KEY_EQUAL)){
             this->m_camera.position.z += 1;
         }
     }
