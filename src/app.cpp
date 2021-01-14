@@ -181,16 +181,13 @@ namespace GJGO
     {
         GJGO_PROFILE_FUNCTION();
 
-        std::array<int, 2> windowPosition = Window::getPosition();
+        Position2D windowPosition = Window::getPosition();
         unsigned int windowHeight = Window::getHeight();
-
-        windowPosition[1] += windowHeight;
-        windowPosition[1] = Display::getHeight() - windowPosition[1];
 
         Event* const event = new Event(EventType::mouseMove);
         event->mousePosition.relative = {static_cast<int>(a_x), static_cast<int>(windowHeight) - static_cast<int>(a_y) - 1};
 
-        event->mousePosition.absolute = {windowPosition[0] + static_cast<int>(a_x), windowPosition[1] + event->mousePosition.relative.y};
+        event->mousePosition.absolute = {windowPosition.x + static_cast<int>(a_x), windowPosition.y + event->mousePosition.relative.y};
 
         App::instance->pendingEvents.emplace_back(event);
     }
