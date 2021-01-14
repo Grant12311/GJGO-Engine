@@ -11,6 +11,7 @@
 #include <GJGO/keyboard.hpp>
 #include <GJGO/layer.hpp>
 #include <GJGO/log.hpp>
+#include <GJGO/mouse.hpp>
 #include <GJGO/profiler.hpp>
 #include <GJGO/window.hpp>
 
