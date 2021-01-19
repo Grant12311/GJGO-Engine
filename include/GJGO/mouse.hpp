@@ -7,6 +7,8 @@ namespace GJGO
 {
     namespace Mouse
     {
+        void setPositionRelative(const int a_x, const int a_y);
+        void setPositionAbsolute(const int a_x, const int a_y);
         Position2D getPositionRelative();
         Position2D getPositionAbsolute();
     }
