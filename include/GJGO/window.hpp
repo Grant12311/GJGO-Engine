@@ -13,6 +13,8 @@ namespace GJGO
 
         void setTitle(const char* const a_title);
 
+        int getPositionX();
+        int getPositionY();
         Position2D getPosition();
 
         unsigned int getWidth();

@@ -17,6 +17,20 @@ namespace GJGO
             glfwSetWindowTitle(App::instance->windowPtr, a_title);
         }
 
+        int getPositionX()
+        {
+            GJGO_PROFILE_FUNCTION();
+
+            return getPosition().x;
+        }
+
+        int getPositionY()
+        {
+            GJGO_PROFILE_FUNCTION();
+
+            return getPosition().y;
+        }
+
         Position2D getPosition()
         {
             GJGO_PROFILE_FUNCTION();
