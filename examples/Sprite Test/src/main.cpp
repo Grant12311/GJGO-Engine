@@ -19,7 +19,7 @@ class GameLayer : public GJGO::Layer
 {
 private:
     GJGO::Entity dinoEntity;
-    int m_textureToDraw = 0;
+    int textureIndex = 0;
     std::array<Druid::Texture2D, 24> m_textures = {
         Druid::Texture2D("res/sprites/dinos/blue/1.png",  false, GL_NEAREST, GL_NEAREST),
         Druid::Texture2D("res/sprites/dinos/blue/2.png",  false, GL_NEAREST, GL_NEAREST),
@@ -47,17 +47,6 @@ private:
         Druid::Texture2D("res/sprites/dinos/blue/24.png", false, GL_NEAREST, GL_NEAREST)
     };
 
-    int m_animChoice = 0;
-    tweeny::tween<int> m_animTween = tweeny::from(2).to(8).during(700).onStep([](tweeny::tween<int> &a_tween)
-    {
-        if (a_tween.progress() >= 1.0f)
-        {
-            a_tween.seek(0);
-        }
-
-        return false;
-    });
-
     GJGO::Camera2D m_camera;
 
     std::array<float, 3> m_clearColor = {
@@ -67,8 +56,6 @@ public:
     void onUpdate() override
     {
         GJGO_PROFILE_FUNCTION();
-
-        this->m_textureToDraw = this->m_animTween.step(static_cast<int>(GJGO::Window::deltaTime));
 
         GJGO::Transform2DComponent& plrTransform = this->dinoEntity.getComponentAccess<GJGO::Transform2DComponent>();
 
@@ -154,13 +141,12 @@ public:
         GJGO_PROFILE_FUNCTION();
 
         GJGO::Transform2DComponent& plrTransform = this->dinoEntity.getComponentAccess<GJGO::Transform2DComponent>();
+        GJGO::SpriteComponent& plrSprite = this->dinoEntity.getComponentAccess<GJGO::SpriteComponent>();
 
         ImGuiIO& io = ImGui::GetIO();
 
         ImGui::Begin("Anim");
-        constexpr std::array<const char*, 4> choices = {"Walk", "Jump", "Hurt", "Run"};
-        ImGui::ListBox("Anims", &this->m_animChoice, choices.data(), choices.size());
-        ImGui::SliderInt("Frame", &this->m_textureToDraw, 0, 23);
+        ImGui::SliderInt("Frame", &this->textureIndex, 0, 23);
         ImGui::Separator();
         ImGui::InputFloat2("Pos", &plrTransform.position.x);
         ImGui::InputFloat2("Size", &plrTransform.size.x);
@@ -179,6 +165,7 @@ public:
         ImGui::End();
 
         glClearColor(this->m_clearColor[0], this->m_clearColor[1], this->m_clearColor[2], 1.0f);
+        this->dinoEntity.getComponentAccess<GJGO::SpriteComponent>().texture = this->m_textures[this->textureIndex];
     }
 
     GameLayer()
