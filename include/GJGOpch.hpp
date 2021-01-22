@@ -27,6 +27,11 @@
 
 #include <imgui.h>
 
+#include <mono/jit/jit.h>
+#include <mono/metadata/assembly.h>
+#include <mono/metadata/debug-helpers.h>
+#include <mono/metadata/mono-config.h>
+
 #include <stb/stb_image.h>
 
 #include <tweeny.h>
