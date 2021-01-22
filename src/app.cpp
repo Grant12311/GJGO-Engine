@@ -5,6 +5,7 @@
 
 #include <GJGO/2D/renderer2D.hpp>
 #include <GJGO/app.hpp>
+#include <GJGO/csharp_api.hpp>
 #include <GJGO/display.hpp>
 #include <GJGO/editor_layer.hpp>
 #include <GJGO/event.hpp>
@@ -280,6 +281,8 @@ namespace GJGO
         Renderer::init2D();
 
         this->currentScene = new Scene;
+
+        CSharpAPI::init();
     }
 
     App::~App()
