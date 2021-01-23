@@ -299,6 +299,8 @@ namespace GJGO
         glfwDestroyWindow(this->windowPtr);
         glfwTerminate();
 
+        CSharpAPI::shutdown();
+
         #ifndef GJGO_BUILD_TARGET_DIST
             Profiler::Get().EndSession();
         #endif // GJGO_BUILD_TARGET_DIST
