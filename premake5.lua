@@ -6,8 +6,8 @@ workspace("GJGO")
     platforms({"LinuxARM"})
     startproject("Sprite Test")
 
-    includedirs({"include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip", "vendor/glm", "vendor/tweeny/include/"})
-    links({"X11", "xcb", "xcb-randr", "EGL", "GL", "pthread", "glfw", "dl"})
+    includedirs({"include", "/usr/include/mono-2.0/", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip", "vendor/glm", "vendor/tweeny/include/"})
+    links({"X11", "xcb", "xcb-randr", "EGL", "GL", "pthread", "glfw", "dl", "/usr/lib/pkgconfig/../../lib/libmono-2.0.a"})
 
     flags({"MultiProcessorCompile"})
     buildoptions({"-pipe", "-Wall", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion", "-Wno-switch", "-Wno-unused-variable", "-fuse-ld=gold"})
