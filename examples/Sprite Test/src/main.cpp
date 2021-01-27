@@ -112,7 +112,6 @@ public:
         switch (a_event->type)
         {
             case GJGO::EventType::keyDown:
-                GJGO_LOG_INFO("Key Down: ", a_event->keycode);
                 switch (a_event->keycode)
                 {
                     case GLFW_KEY_0:
@@ -127,12 +126,6 @@ public:
                         GJGO::setFramerateCap(30);
                         break;
                 }
-                break;
-            case GJGO::EventType::keyUp:
-                GJGO_LOG_INFO("Key Up: ", a_event->keycode);
-                break;
-            case GJGO::EventType::mouseWheelScroll:
-                this->m_camera.position.z += 1 * a_event->mouseWheelDirection;
                 break;
         }
     }
