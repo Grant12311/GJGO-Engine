@@ -36,6 +36,5 @@
 #include <Druid/fbo.h>
 #include <Druid/ibo.h>
 #include <Druid/shader.h>
-#include <Druid/texture.h>
 #include <Druid/vao.h>
 #include <Druid/vbo.h>

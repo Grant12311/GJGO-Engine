@@ -6,8 +6,6 @@
 #include <glm/vec2.hpp>
 #include <glm/vec4.hpp>
 
-#include <Druid/texture.h>
-
 namespace GJGO
 {
     struct TagComponent
