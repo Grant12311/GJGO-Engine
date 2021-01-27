@@ -13,6 +13,7 @@
 #include <GJGO/log.hpp>
 #include <GJGO/mouse.hpp>
 #include <GJGO/profiler.hpp>
+#include <GJGO/texture.hpp>
 #include <GJGO/window.hpp>
 
 class GameLayer : public GJGO::Layer
@@ -20,31 +21,31 @@ class GameLayer : public GJGO::Layer
 private:
     GJGO::Entity dinoEntity;
     int textureIndex = 0;
-    std::array<Druid::Texture2D, 24> m_textures = {
-        Druid::Texture2D("res/sprites/dinos/blue/1.png",  false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/2.png",  false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/3.png",  false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/4.png",  false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/5.png",  false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/6.png",  false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/7.png",  false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/8.png",  false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/9.png",  false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/10.png", false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/11.png", false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/12.png", false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/13.png", false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/14.png", false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/15.png", false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/16.png", false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/17.png", false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/18.png", false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/19.png", false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/20.png", false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/21.png", false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/22.png", false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/23.png", false, GL_NEAREST, GL_NEAREST),
-        Druid::Texture2D("res/sprites/dinos/blue/24.png", false, GL_NEAREST, GL_NEAREST)
+    std::array<GJGO::Texture2D*, 24> m_textures = {
+        GJGO::Texture2D::create("res/sprites/dinos/blue/1.png",  false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/2.png",  false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/3.png",  false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/4.png",  false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/5.png",  false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/6.png",  false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/7.png",  false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/8.png",  false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/9.png",  false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/10.png", false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/11.png", false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/12.png", false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/13.png", false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/14.png", false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/15.png", false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/16.png", false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/17.png", false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/18.png", false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/19.png", false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/20.png", false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/21.png", false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/22.png", false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/23.png", false, GL_NEAREST, GL_NEAREST),
+        GJGO::Texture2D::create("res/sprites/dinos/blue/24.png", false, GL_NEAREST, GL_NEAREST)
     };
 
     GJGO::Camera2D m_camera;
@@ -87,12 +88,12 @@ public:
         {
             for (unsigned char i = 0; i < this->m_textures.size(); i++)
             {
-                this->m_textures[i].setFilters(GL_NEAREST, GL_NEAREST);
+                this->m_textures[i]->setFilters(GL_NEAREST, GL_NEAREST);
             }
         }else if (GJGO::Keyboard::keyIsDown(GLFW_KEY_RIGHT_BRACKET)){
             for (unsigned char i = 0; i < this->m_textures.size(); i++)
             {
-                this->m_textures[i].setFilters(GL_LINEAR, GL_LINEAR);
+                this->m_textures[i]->setFilters(GL_LINEAR, GL_LINEAR);
             }
         }
 
@@ -165,7 +166,7 @@ public:
         ImGui::End();
 
         glClearColor(this->m_clearColor[0], this->m_clearColor[1], this->m_clearColor[2], 1.0f);
-        this->dinoEntity.getComponentAccess<GJGO::SpriteComponent>().texture = this->m_textures[this->textureIndex];
+        this->dinoEntity.getComponentAccess<GJGO::SpriteComponent>().texture = this->m_textures[this->textureIndex]->getID();
     }
 
     GameLayer()
@@ -179,7 +180,7 @@ public:
         GJGO::App::instance->currentScene->primaryCamera = &this->m_camera;
         this->dinoEntity = GJGO::App::instance->currentScene->createEntity("Dino");
         this->dinoEntity.addComponent<GJGO::Transform2DComponent>(glm::vec2(100.0f, 100.0f), glm::vec2(100.0f, 100.0f));
-        this->dinoEntity.addComponent<GJGO::SpriteComponent>(static_cast<unsigned int>(this->m_textures[0]), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        this->dinoEntity.addComponent<GJGO::SpriteComponent>(this->m_textures[0]->getID(), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     }
 };
 
