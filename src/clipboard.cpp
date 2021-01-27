@@ -1,5 +1,6 @@
 #include <GJGOpch.hpp>
 
+#include <GJGO/app.hpp>
 #include <GJGO/profiler.hpp>
 
 namespace GJGO
@@ -12,7 +13,7 @@ namespace GJGO
         {
             GJGO_PROFILE_FUNCTION();
 
-            clip::get_text(s_lastRead);
+            s_lastRead = glfwGetClipboardString(App::instance->windowPtr);
             return s_lastRead.c_str();
         }
 
@@ -20,7 +21,7 @@ namespace GJGO
         {
             GJGO_PROFILE_FUNCTION();
 
-            clip::set_text(a_text);
+            glfwSetClipboardString(App::instance->windowPtr, a_text);
         }
     }
 }

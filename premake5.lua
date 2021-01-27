@@ -6,7 +6,7 @@ workspace("GJGO")
     platforms({"LinuxARM"})
     startproject("Sprite Test")
 
-    includedirs({"include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip", "vendor/glm", "vendor/tweeny/include/"})
+    includedirs({"include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/glm", "vendor/tweeny/include/"})
     links({"X11", "xcb", "xcb-randr", "EGL", "GL", "pthread", "glfw", "dl"})
 
     flags({"MultiProcessorCompile"})
@@ -32,7 +32,6 @@ workspace("GJGO")
         defines({"DRUID_DISABLE_GLCALL", "GJGO_BUILD_TARGET_DIST", "NDEBUG"})
 
     include("vendor/imgui/project.lua")
-    include("vendor/clip/project.lua")
     include("vendor/Druid/project.lua")
     include("project.lua")
 
@@ -40,7 +39,7 @@ workspace("GJGO")
         location("examples/%{prj.name}")
         targetdir("%{prj.location}/bin/%{cfg.platform}/%{cfg.buildcfg}")
 
-        links({"GJGO", "Druid", "imgui", "clip"})
+        links({"GJGO", "Druid", "imgui"})
         files({"%{prj.location}/src/*"})
 
         pchheader("GJGOpch.hpp")

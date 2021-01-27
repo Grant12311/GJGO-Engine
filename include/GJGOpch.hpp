@@ -15,8 +15,6 @@
 
 #include <backends/imgui_impl_opengl3.h>
 
-#include <clip.h>
-
 #include <entt/entity/registry.hpp>
 
 #include <GLES3/gl31.h>

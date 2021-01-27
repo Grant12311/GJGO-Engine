@@ -6,7 +6,7 @@ project("GJGO")
     platforms({"LinuxARM"})
     kind("StaticLib")
 
-    includedirs({"include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/clip", "vendor/glm", "vendor/tweeny/include/"})
+    includedirs({"include", "vendor/Druid/include", "vendor/Beacon/include", "vendor/entt/src", "vendor/imgui", "vendor/glm", "vendor/tweeny/include/"})
 
     flags({"MultiProcessorCompile"})
     buildoptions({"-pipe", "-Wall", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion", "-Wno-switch", "-Wno-unused-variable"})
