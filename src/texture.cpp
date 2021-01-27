@@ -22,6 +22,14 @@ namespace GJGO
         return this->p_ID;
     }
 
+    Texture* Texture::get(const std::string &a_path)
+    {
+        GJGO_PROFILE_FUNCTION();
+
+        assert(textures.find(a_path) != textures.end());
+        return textures[a_path].get();
+    }
+
     void Texture2D::bind(const unsigned int a_slot)
     {
         GJGO_PROFILE_FUNCTION();

@@ -21,6 +21,8 @@ namespace GJGO
         virtual void setFilters(const unsigned int a_magFilter, const unsigned int a_minFilter) = 0;
 
         unsigned int getID();
+
+        static Texture* get(const std::string &a_path);
     };
 
     class Texture2D : public Texture
