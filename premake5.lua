@@ -25,13 +25,11 @@ workspace("GJGO")
 
     filter("configurations:Release")
         optimize("On")
-        defines({"DRUID_DISABLE_GLCALL"})
-        defines({"GJGO_BUILD_TARGET_RELEASE"})
+        defines({"DRUID_DISABLE_GLCALL", "GJGO_BUILD_TARGET_RELEASE", "NDEBUG"})
 
     filter("configurations:Dist")
         optimize("On")
-        defines({"DRUID_DISABLE_GLCALL"})
-        defines({"GJGO_BUILD_TARGET_DIST"})
+        defines({"DRUID_DISABLE_GLCALL", "GJGO_BUILD_TARGET_DIST", "NDEBUG"})
 
     include("vendor/imgui/project.lua")
     include("vendor/clip/project.lua")
