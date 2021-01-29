@@ -71,6 +71,8 @@ namespace GJGO
     {
         GJGO_PROFILE_FUNCTION();
 
+        assert(textures.find(a_path) == textures.end());
+
         Texture2D* const texture = new Texture2D;
         textures[a_path].reset(texture);
 
