@@ -79,7 +79,7 @@ namespace GJGO
 
         if (data)
         {
-            texture = create(a_path, data, width, height, bpp, a_minFilter, a_magFilter, a_wrapS, a_wrapT);
+            texture = create(a_path, data, width, height, a_minFilter, a_magFilter, a_wrapS, a_wrapT);
             stbi_image_free(data);
         }else{
             GJGO_LOG_ERROR("Texture at ", a_path, " could not be created!");
@@ -88,7 +88,7 @@ namespace GJGO
         return texture;
     }
 
-    Texture2D* Texture2D::create(const std::string &a_name, unsigned char* const a_data, const int a_width, const int a_height, const int a_bpp, const unsigned int a_minFilter, const unsigned int a_magFilter, const unsigned int a_wrapS, const unsigned int a_wrapT)
+    Texture2D* Texture2D::create(const std::string &a_name, unsigned char* const a_data, const int a_width, const int a_height, const unsigned int a_minFilter, const unsigned int a_magFilter, const unsigned int a_wrapS, const unsigned int a_wrapT)
     {
         GJGO_PROFILE_FUNCTION();
 
@@ -100,7 +100,6 @@ namespace GJGO
 
         texture->p_width = a_width;
         texture->p_height = a_height;
-        texture->p_bpp = a_bpp;
 
         glGenTextures(1, &texture->p_ID);
         texture->bind();
