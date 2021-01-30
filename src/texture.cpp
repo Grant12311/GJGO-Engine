@@ -71,27 +71,44 @@ namespace GJGO
     {
         GJGO_PROFILE_FUNCTION();
 
-        assert(textures.find(a_path) == textures.end());
-
-        Texture2D* const texture = new Texture2D;
-        textures[a_path].reset(texture);
+        Texture2D* texture;
+        int width, height, bpp;
 
         stbi_set_flip_vertically_on_load(a_flipY);
-        unsigned char* const data = stbi_load(a_path.c_str(), &texture->p_width, &texture->p_height, &texture->p_bpp, 4);
+        unsigned char* const data = stbi_load(a_path.c_str(), &width, &height, &bpp, 4);
 
         if (data)
         {
-            glGenTextures(1, &texture->p_ID);
-            texture->bind();
-            texture->setFilters(a_minFilter, a_magFilter);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, a_wrapS);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, a_wrapT);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->p_width, texture->p_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
+            texture = create(a_path, data, width, height, bpp, a_minFilter, a_magFilter, a_wrapS, a_wrapT);
             stbi_image_free(data);
         }else{
             GJGO_LOG_ERROR("Texture at ", a_path, " could not be created!");
         }
+
+        return texture;
+    }
+
+    Texture2D* Texture2D::create(const std::string &a_name, unsigned char* const a_data, const int a_width, const int a_height, const int a_bpp, const unsigned int a_minFilter, const unsigned int a_magFilter, const unsigned int a_wrapS, const unsigned int a_wrapT)
+    {
+        GJGO_PROFILE_FUNCTION();
+
+        assert(textures.find(a_name) == textures.end());
+        assert(a_data);
+
+        Texture2D* const texture = new Texture2D;
+        textures[a_name].reset(texture);
+
+        texture->p_width = a_width;
+        texture->p_height = a_height;
+        texture->p_bpp = a_bpp;
+
+        glGenTextures(1, &texture->p_ID);
+        texture->bind();
+        texture->setFilters(a_minFilter, a_magFilter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, a_wrapS);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, a_wrapT);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->p_width, texture->p_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, a_data);
+        glGenerateMipmap(GL_TEXTURE_2D);
 
         return texture;
     }

@@ -36,6 +36,7 @@ namespace GJGO
         virtual void setFilters(const unsigned int a_minFilter, const unsigned int a_magFilter) override;
 
         static Texture2D* create(const std::string &a_path, const bool a_flipY = false, const unsigned int a_minFilter = GL_LINEAR, const unsigned int a_magFilter = GL_LINEAR, const unsigned int a_wrapS = GL_CLAMP_TO_EDGE, const unsigned int a_wrapT = GL_CLAMP_TO_EDGE);
+        static Texture2D* create(const std::string &a_name, unsigned char* const a_data, const int a_width, const int a_height, const int a_bpp, const unsigned int a_minFilter = GL_LINEAR, const unsigned int a_magFilter = GL_LINEAR, const unsigned int a_wrapS = GL_CLAMP_TO_EDGE, const unsigned int a_wrapT = GL_CLAMP_TO_EDGE);
     };
 }
 
