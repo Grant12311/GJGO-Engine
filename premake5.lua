@@ -40,10 +40,22 @@ workspace "GJGO"
         optimize "On"
 
     project "GJGO"
-        kind "ConsoleApp"
+        kind "StaticLib"
         location "%{wks.location}"
         targetdir "%{prj.location}/bin/%{cfg.platform}/%{cfg.buildcfg}"
 
         files {"%{prj.location}/src/**.cpp", "%{prj.location}/include/**.hpp", "%{prj.location}/include/**.h", "%{prj.location}/premake5.lua"}
 
+    project "One"
+        location "%{wks.location}/examples/one/"
+        targetdir "%{prj.location}/bin/%{cfg.platform}/%{cfg.buildcfg}"
 
+        links {"GJGO"}
+
+        filter "configurations:Debug or Release"
+            kind "ConsoleApp"
+
+        filter "configurations:Dist"
+            kind "WindowedApp"
+
+        files {"%{prj.location}/src/**.cpp", "%{prj.location}/include/**.hpp", "%{prj.location}/include/**.h"}
