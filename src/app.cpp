@@ -4,7 +4,7 @@ namespace GJGO
 {
     App::App()
     {
-
+        App::instance = this;
     }
 
     App::~App()

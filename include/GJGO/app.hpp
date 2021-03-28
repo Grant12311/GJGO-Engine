@@ -8,6 +8,8 @@ namespace GJGO
     public:
         App();
         ~App();
+
+        inline static App* instance;
     };
 }
 
