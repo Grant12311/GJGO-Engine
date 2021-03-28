@@ -21,8 +21,10 @@ workspace "GJGO"
 
     filter "platforms:Linux*"
         system "linux"
+        defines {"GJGO_PLATFORM_LINUX"}
     filter "platforms:Windows*"
         system "windows"
+        defines {"GJGO_PLATFORM_WINDOWS"}
 
     filter "platforms:*ARM"
         architecture "ARM"
@@ -35,9 +37,15 @@ workspace "GJGO"
         symbols "On"
         buildoptions {"-pg", "-fsanitize=address", "-fsanitize=leak", "-static-libasan"}
         linkoptions {"-pg", "-fsanitize=address", "-fsanitize=leak", "-static-libasan"}
+        defines {"GJGO_BUILD_CONFIG_DEBUG"}
 
     filter "configurations:Release"
         optimize "On"
+        defines {"GJGO_BUILD_CONFIG_RELEASE"}
+
+    filter "configurations:Dist"
+        optimize "On"
+        defines {"GJGO_BUILD_CONFIG_DIST"}
 
     project "GJGO"
         kind "StaticLib"
