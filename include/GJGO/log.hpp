@@ -2,9 +2,8 @@
 #define GJGO_LOG_H
 
 #include <iostream>
-#include <memory>
 
-#ifndef GJGO_BUILD_TARGET_DIST
+#ifndef GJGO_BUILD_CONFIG_DIST
     #define GJGO_LOG_INFO(x...) GJGO::Log::logInfo(__FILE__, __PRETTY_FUNCTION__, __LINE__, x)
     #define GJGO_LOG_WARN(x...) GJGO::Log::logWarn(__FILE__, __PRETTY_FUNCTION__, __LINE__, x)
     #define GJGO_LOG_ERROR(x...) GJGO::Log::logError(__FILE__, __PRETTY_FUNCTION__, __LINE__, x)
@@ -32,7 +31,7 @@
     #define GJGO_LOG_SET_PRINT_LINE(x)
 #endif // GJGO_BUILD_TARGET_DIST
 
-#ifndef GJGO_BUILD_TARGET_DIST
+#ifndef GJGO_BUILD_CONFIG_DIST
     namespace GJGO
     {
         namespace Log
@@ -111,6 +110,6 @@
             }
         }
     }
-#endif // GJGO_BUILD_TARGET_DIST
+#endif // GJGO_BUILD_CONFIG_DIST
 
 #endif
