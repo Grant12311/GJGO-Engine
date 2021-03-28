@@ -1,7 +1,7 @@
 workspace "GJGO"
     language "C++"
     cppdialect "C++17"
-    configurations {"Debug", "Release"}
+    configurations {"Debug", "Release", "Dist"}
     platforms {"LinuxX64", "LinuxX86", "LinuxARM", "WindowsARM", "WindowsX86", "WindowsX64"}
     startproject "GJGO"
 
