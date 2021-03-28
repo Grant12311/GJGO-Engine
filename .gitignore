@@ -1,0 +1,11 @@
+bin/
+obj/
+
+gmon.out
+Makefile
+
+*.cbp
+*.depend
+*.layout
+*.make
+*.workspace
