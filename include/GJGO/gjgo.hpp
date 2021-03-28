@@ -2,5 +2,6 @@
 #define GJGO_GJGO_H
 
 #include <GJGO/app.hpp>
+#include <GJGO/log.hpp>
 
 #endif
