@@ -11,4 +11,12 @@ namespace GJGO
     {
 
     }
+
+    void App::run()
+    {
+        while (true)
+        {
+
+        }
+    }
 }

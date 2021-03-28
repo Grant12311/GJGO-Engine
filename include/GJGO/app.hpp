@@ -9,6 +9,8 @@ namespace GJGO
         App();
         ~App();
 
+        void run();
+
         inline static App* instance;
     };
 }
