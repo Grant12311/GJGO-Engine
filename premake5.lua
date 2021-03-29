@@ -9,8 +9,8 @@ workspace "GJGO"
     buildoptions {"-pipe", "-Wall"}
     defines {}
 
-    links {}
-    includedirs {"%{wks.location}/include/", "%{wks.location}/vendor/glm/"}
+    links {"glfw", "GL", "X11"}
+    includedirs {"%{wks.location}/include/", "%{wks.location}/vendor/glm/", "%{wks.location}/vendor/glad/include/"}
 
     filter "action:vs*"
         toolset "msc"
@@ -52,13 +52,13 @@ workspace "GJGO"
         location "%{wks.location}"
         targetdir "%{prj.location}/bin/%{cfg.platform}/%{cfg.buildcfg}"
 
-        files {"%{prj.location}/src/**.cpp", "%{prj.location}/include/**.hpp", "%{prj.location}/include/**.h", "%{prj.location}/premake5.lua"}
+        files {"%{prj.location}/src/**.cpp", "%{prj.location}/include/**.hpp", "%{prj.location}/include/**.h", "%{prj.location}/vendor/glad/src/glad.c", "%{prj.location}/premake5.lua"}
 
     project "One"
         location "%{wks.location}/examples/one/"
         targetdir "%{prj.location}/bin/%{cfg.platform}/%{cfg.buildcfg}"
 
-        links {"GJGO"}
+        links {"GJGO", "glfw", "GL", "X11"}
 
         filter "configurations:Debug or Release"
             kind "ConsoleApp"
