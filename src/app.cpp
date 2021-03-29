@@ -3,6 +3,11 @@
 
 namespace GJGO
 {
+    static void framebufferResizeCallback(GLFWwindow* const a_window, const int a_width, const int a_height)
+    {
+        glViewport(0, 0, a_width, a_height);
+    }
+
     App::App(const AppSettings &a_settings)
     {
         this->instance = this;
@@ -20,7 +25,7 @@ namespace GJGO
         }
         glfwMakeContextCurrent(this->window);
 
-        //glfwSetFramebufferSizeCallback(this->window, windowResizeCallback);
+        glfwSetFramebufferSizeCallback(this->window, framebufferResizeCallback);
 
         if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
         {
@@ -28,6 +33,8 @@ namespace GJGO
         }
 
         std::cout << glGetString(GL_VERSION) << std::endl;
+
+        glViewport(0, 0, a_settings.windowWidth, a_settings.windowHeight);
     }
 
     App::~App()
