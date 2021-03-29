@@ -2,7 +2,9 @@
 
 int main()
 {
-    GJGO::App app;
+    GJGO::AppSettings settings;
+
+    GJGO::App app(settings);
 
     app.run();
 
