@@ -32,7 +32,7 @@ namespace GJGO
             GJGO_LOG_ERROR("Failed to initialize GLAD");
         }
 
-        std::cout << glGetString(GL_VERSION) << std::endl;
+        GJGO_LOG_INFO(glGetString(GL_VERSION));
 
         glViewport(0, 0, a_settings.windowWidth, a_settings.windowHeight);
     }
