@@ -1,4 +1,5 @@
 #include <GJGO/app.hpp>
+#include <GJGO/event.hpp>
 #include <GJGO/log.hpp>
 
 namespace GJGO
@@ -6,6 +7,27 @@ namespace GJGO
     static void framebufferResizeCallback(GLFWwindow* const a_window, const int a_width, const int a_height)
     {
         glViewport(0, 0, a_width, a_height);
+    }
+
+    static void keyCallback(GLFWwindow* const /*a_windowPtr*/, const int a_key, const int /*a_scancode*/, const int a_action, const int /*a_mods*/)
+    {
+        EventType type;
+
+        if (a_action == GLFW_PRESS)
+            type = EventType::keyDown;
+        else if (a_action == GLFW_RELEASE)
+            type = EventType::keyUp;
+
+        Event event(type);
+        event.keycode = a_key;
+        App::instance->pendingEvents.emplace_back(event);
+    }
+
+    static void keyTypedCallback(GLFWwindow* const /*a_windowPtr*/, const unsigned int a_char)
+    {
+        Event event(EventType::keyTypedDown);
+        event.keycode = a_char;
+        App::instance->pendingEvents.emplace_back(event);
     }
 
     App::App(const AppSettings &a_settings)
@@ -26,6 +48,12 @@ namespace GJGO
         glfwMakeContextCurrent(this->window);
 
         glfwSetFramebufferSizeCallback(this->window, framebufferResizeCallback);
+        //glfwSetWindowSizeCallback(this->windowPtr, windowSizeCallback);
+        glfwSetKeyCallback(this->window, keyCallback);
+        glfwSetCharCallback(this->window, keyTypedCallback);
+        //glfwSetCursorPosCallback(this->window, mousePositionCallback);
+        //glfwSetMouseButtonCallback(this->windowPtr, mouseButtonCallback);
+        //glfwSetScrollCallback(this->windowPtr, mouseWheelCallback);
 
         if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
         {
@@ -39,6 +67,11 @@ namespace GJGO
 
     App::~App()
     {
+        for (Layer* const l_layer : this->layers)
+        {
+            delete l_layer;
+        }
+
         glfwDestroyWindow(this->window);
         glfwTerminate();
     }
@@ -49,7 +82,28 @@ namespace GJGO
         {
             glfwPollEvents();
 
-            glClear(GL_COLOR_BUFFER_BIT);
+            for (Layer* const l_layerPtr : this->layers)
+            {
+                l_layerPtr->onUpdate();
+            }
+
+            for (const Event &l_event : this->pendingEvents)
+            {
+                for (auto it = this->layers.rbegin(); it != this->layers.rend(); it++)
+                {
+                    (*it)->onEvent(l_event);
+                    if (l_event.handled)
+                        break;
+                }
+            }
+            this->pendingEvents.clear();
+
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+            for (Layer* const l_layerPtr : this->layers)
+            {
+                l_layerPtr->draw();
+            }
 
             glfwSwapBuffers(this->window);
         }

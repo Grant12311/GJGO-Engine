@@ -1,8 +1,13 @@
 #ifndef GJGO_APP_H
 #define GJGO_APP_H
 
+#include <vector>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+#include <GJGO/event.hpp>
+#include <GJGO/layer.hpp>
 
 namespace GJGO
 {
@@ -23,6 +28,9 @@ namespace GJGO
         inline static App* instance;
 
         GLFWwindow* window;
+
+        std::vector<Event> pendingEvents;
+        std::vector<Layer*> layers;
     };
 }
 
