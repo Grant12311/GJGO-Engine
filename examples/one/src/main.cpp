@@ -35,6 +35,12 @@ public:
             case GJGO::EventType::mouseButtonUp:
                 //GJGO_LOG_INFO("UP  : ", static_cast<unsigned short>(a_event.mouseButton));
                 break;
+            case GJGO::EventType::mouseWheelScroll:
+                GJGO_LOG_INFO("Wheel Dir: ", static_cast<short>(a_event.mouseWheelDirection));
+                break;
+            case GJGO::EventType::windowResize:
+                //GJGO_LOG_INFO("Win Size: ", '(', a_event.windowSize.x, ", ", a_event.windowSize.y, ')');
+                break;
         }
     }
 };

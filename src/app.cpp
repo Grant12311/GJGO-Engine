@@ -10,6 +10,12 @@ namespace GJGO
         glViewport(0, 0, a_width, a_height);
     }
 
+    static void windowSizeCallback(GLFWwindow* const /*a_windowPtr*/, const int a_width, const int a_height)
+    {
+        Event& event = App::instance->pendingEvents.emplace_back(EventType::windowResize);
+        event.windowSize = {a_width, a_height};
+    }
+
     static void keyCallback(GLFWwindow* const /*a_windowPtr*/, const int a_key, const int /*a_scancode*/, const int a_action, const int /*a_mods*/)
     {
         EventType type;
@@ -53,6 +59,12 @@ namespace GJGO
         event.mouseButton = static_cast<unsigned char>(a_button);
     }
 
+    static void mouseWheelCallback(GLFWwindow* const /*a_window*/, const double /*a_xOffset*/, const double a_yOffset)
+    {
+        Event& event = App::instance->pendingEvents.emplace_back(EventType::mouseWheelScroll);
+        event.mouseWheelDirection = static_cast<signed char>(a_yOffset);
+    }
+
     App::App(const AppSettings &a_settings)
     {
         this->instance = this;
@@ -71,12 +83,12 @@ namespace GJGO
         glfwMakeContextCurrent(this->window);
 
         glfwSetFramebufferSizeCallback(this->window, framebufferResizeCallback);
-        //glfwSetWindowSizeCallback(this->windowPtr, windowSizeCallback);
+        glfwSetWindowSizeCallback(this->window, windowSizeCallback);
         glfwSetKeyCallback(this->window, keyCallback);
         glfwSetCharCallback(this->window, keyTypedCallback);
         glfwSetCursorPosCallback(this->window, mousePositionCallback);
         glfwSetMouseButtonCallback(this->window, mouseButtonCallback);
-        //glfwSetScrollCallback(this->windowPtr, mouseWheelCallback);
+        glfwSetScrollCallback(this->window, mouseWheelCallback);
 
         if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
         {
