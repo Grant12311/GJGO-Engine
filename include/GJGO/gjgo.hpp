@@ -3,6 +3,7 @@
 
 #include <GJGO/app.hpp>
 #include <GJGO/event.hpp>
+#include <GJGO/layer.hpp>
 #include <GJGO/log.hpp>
 
 #endif
