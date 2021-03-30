@@ -19,16 +19,14 @@ namespace GJGO
         else if (a_action == GLFW_RELEASE)
             type = EventType::keyUp;
 
-        Event event(type);
+        Event& event = App::instance->pendingEvents.emplace_back(type);
         event.keycode = a_key;
-        App::instance->pendingEvents.emplace_back(event);
     }
 
     static void keyTypedCallback(GLFWwindow* const /*a_windowPtr*/, const unsigned int a_char)
     {
-        Event event(EventType::keyTypedDown);
+        Event& event = App::instance->pendingEvents.emplace_back(EventType::keyTypedDown);
         event.keycode = a_char;
-        App::instance->pendingEvents.emplace_back(event);
     }
 
     static void mousePositionCallback(GLFWwindow* const /*a_windowPtr*/, const double a_x, const double a_y)
@@ -36,12 +34,23 @@ namespace GJGO
         glm::vec2 windowPosition = Window::getPosition();
         int windowHeight = Window::getHeight();
 
-        Event event(EventType::mouseMove);
+        Event& event = App::instance->pendingEvents.emplace_back(EventType::mouseMove);
         event.mousePosition.relative = {static_cast<int>(a_x), static_cast<int>(windowHeight) - static_cast<int>(a_y) - 1};
 
         event.mousePosition.absolute = {windowPosition.x + static_cast<int>(a_x), windowPosition.y + event.mousePosition.relative.y};
+    }
 
-        App::instance->pendingEvents.emplace_back(event);
+    static void mouseButtonCallback(GLFWwindow* const /*a_windowPtr*/, const int a_button, const int a_action, const int /*a_mods*/)
+    {
+        EventType type;
+
+        if (a_action == GLFW_PRESS)
+            type = EventType::mouseButtonDown;
+        else if (a_action == GLFW_RELEASE)
+            type = EventType::mouseButtonUp;
+
+        Event& event = App::instance->pendingEvents.emplace_back(type);
+        event.mouseButton = static_cast<unsigned char>(a_button);
     }
 
     App::App(const AppSettings &a_settings)
@@ -66,7 +75,7 @@ namespace GJGO
         glfwSetKeyCallback(this->window, keyCallback);
         glfwSetCharCallback(this->window, keyTypedCallback);
         glfwSetCursorPosCallback(this->window, mousePositionCallback);
-        //glfwSetMouseButtonCallback(this->windowPtr, mouseButtonCallback);
+        glfwSetMouseButtonCallback(this->window, mouseButtonCallback);
         //glfwSetScrollCallback(this->windowPtr, mouseWheelCallback);
 
         if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))

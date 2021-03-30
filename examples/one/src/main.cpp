@@ -24,9 +24,16 @@ public:
                 GJGO_LOG_INFO("UP  : ", a_event.keycode);
                 break;
             case GJGO::EventType::keyTypedDown:
+                //GJGO_LOG_INFO(a_event.keycode);
                 break;
             case GJGO::EventType::mouseMove:
-                GJGO_LOG_INFO("POS: ", '(', a_event.mousePosition.relative.x, ", ", a_event.mousePosition.relative.y, ')');
+                //GJGO_LOG_INFO("POS: ", '(', a_event.mousePosition.relative.x, ", ", a_event.mousePosition.relative.y, ')');
+                break;
+            case GJGO::EventType::mouseButtonDown:
+                //GJGO_LOG_INFO("DOWN: ", static_cast<unsigned short>(a_event.mouseButton));
+                break;
+            case GJGO::EventType::mouseButtonUp:
+                //GJGO_LOG_INFO("UP  : ", static_cast<unsigned short>(a_event.mouseButton));
                 break;
         }
     }
