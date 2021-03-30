@@ -12,7 +12,7 @@ namespace GJGO
 
         int getHeight()
         {
-            glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
+            return glfwGetVideoMode(glfwGetPrimaryMonitor())->height;
         }
     }
 }
