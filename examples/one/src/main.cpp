@@ -25,6 +25,9 @@ public:
                 break;
             case GJGO::EventType::keyTypedDown:
                 break;
+            case GJGO::EventType::mouseMove:
+                GJGO_LOG_INFO("POS: ", '(', a_event.mousePosition.relative.x, ", ", a_event.mousePosition.relative.y, ')');
+                break;
         }
     }
 };

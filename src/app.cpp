@@ -1,6 +1,7 @@
 #include <GJGO/app.hpp>
 #include <GJGO/event.hpp>
 #include <GJGO/log.hpp>
+#include <GJGO/window.hpp>
 
 namespace GJGO
 {
@@ -30,6 +31,19 @@ namespace GJGO
         App::instance->pendingEvents.emplace_back(event);
     }
 
+    static void mousePositionCallback(GLFWwindow* const /*a_windowPtr*/, const double a_x, const double a_y)
+    {
+        glm::vec2 windowPosition = Window::getPosition();
+        int windowHeight = Window::getHeight();
+
+        Event event(EventType::mouseMove);
+        event.mousePosition.relative = {static_cast<int>(a_x), static_cast<int>(windowHeight) - static_cast<int>(a_y) - 1};
+
+        event.mousePosition.absolute = {windowPosition.x + static_cast<int>(a_x), windowPosition.y + event.mousePosition.relative.y};
+
+        App::instance->pendingEvents.emplace_back(event);
+    }
+
     App::App(const AppSettings &a_settings)
     {
         this->instance = this;
@@ -51,7 +65,7 @@ namespace GJGO
         //glfwSetWindowSizeCallback(this->windowPtr, windowSizeCallback);
         glfwSetKeyCallback(this->window, keyCallback);
         glfwSetCharCallback(this->window, keyTypedCallback);
-        //glfwSetCursorPosCallback(this->window, mousePositionCallback);
+        glfwSetCursorPosCallback(this->window, mousePositionCallback);
         //glfwSetMouseButtonCallback(this->windowPtr, mouseButtonCallback);
         //glfwSetScrollCallback(this->windowPtr, mouseWheelCallback);
 
