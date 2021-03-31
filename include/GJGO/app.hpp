@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <entt/entity/registry.hpp>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -28,6 +30,7 @@ namespace GJGO
         inline static App* instance;
 
         GLFWwindow* window;
+        entt::registry registry;
 
         double deltaTime;
 
