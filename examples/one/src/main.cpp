@@ -10,20 +10,25 @@ public:
 
     virtual void onUpdate() override
     {
+        static double timePassed = 0.0;
         static std::vector<double> times;
 
-        if (times.size() == 100)
-            times.erase(times.begin());
-
-        times.emplace_back(GJGO::App::instance->deltaTime);
-
-        double total;
-        for (const double l_dt : times)
+        if (timePassed >= 100.0)
         {
-            total += l_dt;
-        }
+            double total;
+            for (const double l_dt : times)
+            {
+                total += l_dt;
+            }
 
-        GJGO_LOG_INFO("dt: ", 1.0 / (total / times.size()) * 1000.0);
+            GJGO_LOG_INFO("dt: ", 1.0 / (total / times.size()) * 1000.0);
+
+            timePassed = 0.0;
+            times.clear();
+        }else{
+            times.emplace_back(GJGO::App::instance->deltaTime);
+            timePassed += GJGO::App::instance->deltaTime;
+        }
     }
 
     virtual void onEvent(const GJGO::Event &a_event) override
