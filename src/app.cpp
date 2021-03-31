@@ -84,7 +84,8 @@ namespace GJGO
         }
     }
 
-    App::App(const AppSettings &a_settings)
+    App::App(const AppSettings &a_settings) :
+        deltaTime(0.0)
     {
         this->instance = this;
 
@@ -135,6 +136,8 @@ namespace GJGO
 
     void App::run()
     {
+        double lastTime = glfwGetTime();
+
         while (!glfwWindowShouldClose(this->window))
         {
             glfwPollEvents();
@@ -163,6 +166,9 @@ namespace GJGO
             }
 
             glfwSwapBuffers(this->window);
+
+            this->deltaTime = (glfwGetTime() - lastTime) * 1000.0d;
+            lastTime = glfwGetTime();
         }
     }
 }

@@ -10,7 +10,7 @@ public:
 
     virtual void onUpdate() override
     {
-
+        GJGO_LOG_INFO("dt: ", GJGO::App::instance->deltaTime);
     }
 
     virtual void onEvent(const GJGO::Event &a_event) override

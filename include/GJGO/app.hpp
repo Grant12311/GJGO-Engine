@@ -29,6 +29,8 @@ namespace GJGO
 
         GLFWwindow* window;
 
+        double deltaTime;
+
         std::vector<Event> pendingEvents;
         std::vector<Layer*> layers;
     };
