@@ -102,6 +102,8 @@ namespace GJGO
         }
         glfwMakeContextCurrent(this->window);
 
+        glfwSwapInterval(0);
+
         glfwSetFramebufferSizeCallback(this->window, framebufferResizeCallback);
         glfwSetWindowSizeCallback(this->window, windowSizeCallback);
         glfwSetKeyCallback(this->window, keyCallback);

@@ -10,7 +10,20 @@ public:
 
     virtual void onUpdate() override
     {
-        GJGO_LOG_INFO("dt: ", GJGO::App::instance->deltaTime);
+        static std::vector<double> times;
+
+        if (times.size() == 100)
+            times.erase(times.begin());
+
+        times.emplace_back(GJGO::App::instance->deltaTime);
+
+        double total;
+        for (const double l_dt : times)
+        {
+            total += l_dt;
+        }
+
+        GJGO_LOG_INFO("dt: ", 1.0 / (total / times.size()) * 1000.0);
     }
 
     virtual void onEvent(const GJGO::Event &a_event) override
