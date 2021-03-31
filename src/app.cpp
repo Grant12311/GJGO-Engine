@@ -65,6 +65,25 @@ namespace GJGO
         event.mouseWheelDirection = static_cast<signed char>(a_yOffset);
     }
 
+    static void openglDebugLogger(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity, GLsizei /*length*/, const GLchar* message, const void* /*userParam*/)
+    {
+        switch (severity)
+        {
+            case GL_DEBUG_SEVERITY_HIGH_KHR:
+                GJGO_LOG_ERROR("OpenGL HIGH: ", message);
+                break;
+            case GL_DEBUG_SEVERITY_MEDIUM_KHR:
+                GJGO_LOG_WARN("OpenGL Med: ", message);
+                break;
+            case GL_DEBUG_SEVERITY_LOW_KHR:
+                GJGO_LOG_WARN("OpenGL Low: ", message);
+                break;
+            case GL_DEBUG_SEVERITY_NOTIFICATION_KHR:
+                GJGO_LOG_INFO("OpenGL Info: ", message);
+                break;
+        }
+    }
+
     App::App(const AppSettings &a_settings)
     {
         this->instance = this;
@@ -96,6 +115,9 @@ namespace GJGO
         }
 
         GJGO_LOG_INFO(glGetString(GL_VERSION));
+
+        glEnable(GL_DEBUG_OUTPUT);
+        glDebugMessageCallback(openglDebugLogger, 0);
 
         glViewport(0, 0, a_settings.windowWidth, a_settings.windowHeight);
     }
