@@ -7,6 +7,7 @@
 #include <GJGO/display.hpp>
 #include <GJGO/entity.hpp>
 #include <GJGO/event.hpp>
+#include <GJGO/keyboard.hpp>
 #include <GJGO/layer.hpp>
 #include <GJGO/log.hpp>
 #include <GJGO/renderer2D.hpp>

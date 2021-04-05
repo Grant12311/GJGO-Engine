@@ -32,22 +32,22 @@ public:
             timePassed += GJGO::App::instance->deltaTime;
         }
 
-        if (glfwGetKey(GJGO::App::instance->window, GLFW_KEY_W))
+        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_W))
         {
             this->cam.position.y += 1.0f * GJGO::App::instance->deltaTime;
         }
 
-        if (glfwGetKey(GJGO::App::instance->window, GLFW_KEY_S))
+        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_S))
         {
             this->cam.position.y -= 1.0f * GJGO::App::instance->deltaTime;
         }
 
-        if (glfwGetKey(GJGO::App::instance->window, GLFW_KEY_A))
+        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_A))
         {
             this->cam.position.x -= 1.0f * GJGO::App::instance->deltaTime;
         }
 
-        if (glfwGetKey(GJGO::App::instance->window, GLFW_KEY_D))
+        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_D))
         {
             this->cam.position.x += 1.0f * GJGO::App::instance->deltaTime;
         }
