@@ -9,6 +9,7 @@ namespace GJGO
 {
     enum class EventType
     {
+        none,
         keyDown,
         keyUp,
         keyTypedDown,
