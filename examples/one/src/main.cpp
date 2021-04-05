@@ -4,10 +4,15 @@ class GameLayer : public GJGO::Layer
 {
 public:
     GJGO::Camera2D cam;
+    glm::vec2 pos = glm::vec2(100.0f, 100.0f);
+    glm::vec2 size = glm::vec2(100.0f, 100.0f);
+    float rotation = 0.0f;
 
     GameLayer()
     {
         this->name = "Game Layer";
+
+        GJGO::Texture2D::create("res/wall.jpg", false, GL_NEAREST, GL_NEAREST);
     }
 
     virtual void onUpdate() override
@@ -34,22 +39,42 @@ public:
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_W))
         {
-            this->cam.position.y += 1.0f * GJGO::App::instance->deltaTime;
+            this->pos.y += 1.0f * GJGO::App::instance->deltaTime;
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_S))
         {
-            this->cam.position.y -= 1.0f * GJGO::App::instance->deltaTime;
+            this->pos.y -= 1.0f * GJGO::App::instance->deltaTime;
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_A))
         {
-            this->cam.position.x -= 1.0f * GJGO::App::instance->deltaTime;
+            this->pos.x -= 1.0f * GJGO::App::instance->deltaTime;
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_D))
         {
-            this->cam.position.x += 1.0f * GJGO::App::instance->deltaTime;
+            this->pos.x += 1.0f * GJGO::App::instance->deltaTime;
+        }
+
+        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_UP))
+        {
+            this->size += 1.0f * GJGO::App::instance->deltaTime;
+        }
+
+        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_DOWN))
+        {
+            this->size -= 1.0f * GJGO::App::instance->deltaTime;
+        }
+
+        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_RIGHT))
+        {
+            this->rotation += 0.1f * GJGO::App::instance->deltaTime;
+        }
+
+        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_LEFT))
+        {
+            this->rotation -= 0.1f * GJGO::App::instance->deltaTime;
         }
     }
 
@@ -59,6 +84,17 @@ public:
         {
             case GJGO::EventType::keyDown:
                 GJGO_LOG_INFO("DOWN: ", a_event.keycode);
+                switch (a_event.keycode)
+                {
+                    case GLFW_KEY_LEFT_BRACKET:
+                        GJGO::Texture2D::get("res/wall.jpg")->bind();
+                        GJGO::Texture2D::get("res/wall.jpg")->setFilters(GL_NEAREST, GL_NEAREST);
+                        break;
+                    case GLFW_KEY_RIGHT_BRACKET:
+                        GJGO::Texture2D::get("res/wall.jpg")->bind();
+                        GJGO::Texture2D::get("res/wall.jpg")->setFilters(GL_LINEAR, GL_LINEAR);
+                        break;
+                }
                 break;
             case GJGO::EventType::keyUp:
                 GJGO_LOG_INFO("UP  : ", a_event.keycode);
@@ -88,7 +124,7 @@ public:
     {
         GJGO::Renderer::begin2D(cam, GJGO::Window::getWidth(), GJGO::Window::getHeight());
 
-        GJGO::Renderer::drawQuad({100.0f, 100.0f}, {100.0f, 100.0f});
+        GJGO::Renderer::drawQuad(this->pos, this->size, this->rotation, {1.0f, 1.0f, 1.0f, 1.0f}, GJGO::Texture2D::get("res/wall.jpg"));
     }
 };
 
