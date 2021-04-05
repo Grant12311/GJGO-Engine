@@ -9,8 +9,6 @@ namespace GJGO
 {
     namespace Window
     {
-        inline double deltaTime = 0;
-
         void setTitle(const char* const a_title);
 
         int getPositionX();
