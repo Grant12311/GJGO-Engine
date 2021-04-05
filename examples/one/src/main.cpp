@@ -25,8 +25,6 @@ public:
 
             GJGO::Window::setTitle(std::to_string(1.0 / (total / times.size()) * 1000.0).c_str());
 
-            //GJGO_LOG_INFO("dt: ", 1.0 / (total / times.size()) * 1000.0);
-
             timePassed = 0.0;
             times.clear();
         }else{
