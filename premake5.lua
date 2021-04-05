@@ -10,7 +10,7 @@ workspace "GJGO"
     defines {}
 
     links {"glfw", "GL", "X11", "dl"}
-    includedirs {"%{wks.location}/include/", "%{wks.location}/vendor/glm/", "%{wks.location}/vendor/glad/include/", "%{wks.location}/vendor/entt/src/"}
+    includedirs {"%{wks.location}/include/", "%{wks.location}/vendor/glm/", "%{wks.location}/vendor/glad/include/", "%{wks.location}/vendor/entt/src/", "%{wks.location}/vendor/Druid/include/"}
 
     filter "action:vs*"
         toolset "msc"
@@ -47,6 +47,8 @@ workspace "GJGO"
         optimize "On"
         defines {"GJGO_BUILD_CONFIG_DIST"}
 
+    include "vendor/Druid/project.lua"
+
     project "GJGO"
         kind "StaticLib"
         location "%{wks.location}"
@@ -58,7 +60,7 @@ workspace "GJGO"
         location "%{wks.location}/examples/one/"
         targetdir "%{prj.location}/bin/%{cfg.platform}/%{cfg.buildcfg}"
 
-        links {"GJGO", "glfw", "GL", "X11", "dl"}
+        links {"GJGO", "Druid", "glfw", "GL", "X11", "dl"}
 
         filter "configurations:Debug or Release"
             kind "ConsoleApp"
