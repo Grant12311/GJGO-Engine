@@ -3,6 +3,8 @@
 class GameLayer : public GJGO::Layer
 {
 public:
+    GJGO::Camera2D cam;
+
     GameLayer()
     {
         this->name = "Game Layer";
@@ -21,13 +23,35 @@ public:
                 total += l_dt;
             }
 
-            GJGO_LOG_INFO("dt: ", 1.0 / (total / times.size()) * 1000.0);
+            GJGO::Window::setTitle(std::to_string(1.0 / (total / times.size()) * 1000.0).c_str());
+
+            //GJGO_LOG_INFO("dt: ", 1.0 / (total / times.size()) * 1000.0);
 
             timePassed = 0.0;
             times.clear();
         }else{
             times.emplace_back(GJGO::App::instance->deltaTime);
             timePassed += GJGO::App::instance->deltaTime;
+        }
+
+        if (glfwGetKey(GJGO::App::instance->window, GLFW_KEY_W))
+        {
+            this->cam.position.y += 1.0f * GJGO::App::instance->deltaTime;
+        }
+
+        if (glfwGetKey(GJGO::App::instance->window, GLFW_KEY_S))
+        {
+            this->cam.position.y -= 1.0f * GJGO::App::instance->deltaTime;
+        }
+
+        if (glfwGetKey(GJGO::App::instance->window, GLFW_KEY_A))
+        {
+            this->cam.position.x -= 1.0f * GJGO::App::instance->deltaTime;
+        }
+
+        if (glfwGetKey(GJGO::App::instance->window, GLFW_KEY_D))
+        {
+            this->cam.position.x += 1.0f * GJGO::App::instance->deltaTime;
         }
     }
 
@@ -60,6 +84,13 @@ public:
                 //GJGO_LOG_INFO("Win Size: ", '(', a_event.windowSize.x, ", ", a_event.windowSize.y, ')');
                 break;
         }
+    }
+
+    virtual void draw() override
+    {
+        GJGO::Renderer::begin2D(cam, GJGO::Window::getWidth(), GJGO::Window::getHeight());
+
+        GJGO::Renderer::drawQuad({100.0f, 100.0f}, {100.0f, 100.0f});
     }
 };
 
