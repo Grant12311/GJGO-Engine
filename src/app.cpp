@@ -1,3 +1,6 @@
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
+
 #include <GJGO/app.hpp>
 #include <GJGO/event.hpp>
 #include <GJGO/log.hpp>
