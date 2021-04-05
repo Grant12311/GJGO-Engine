@@ -45,14 +45,13 @@ namespace GJGO
             glViewport(0, 0, a_width, a_height);
         }
 
-        void drawQuad(const glm::vec2 &a_position, const glm::vec2 &a_size, const float a_rotation, const glm::vec4 &a_color, const unsigned int a_texID)
+        void drawQuad(const glm::vec2 &a_position, const glm::vec2 &a_size, const float a_rotation, const glm::vec4 &a_color, GJGO::Texture* const a_texture)
         {
             quadVao->bind();
 
-            if (a_texID)
+            if (a_texture)
             {
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, a_texID);
+                a_texture->bind();
                 spriteShader->fillUniform("useTexture", true);
             }else{
                 spriteShader->fillUniform("useTexture", false);
