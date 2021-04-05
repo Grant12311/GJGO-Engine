@@ -11,6 +11,7 @@
 #include <GJGO/layer.hpp>
 #include <GJGO/log.hpp>
 #include <GJGO/renderer2D.hpp>
+#include <GJGO/texture.hpp>
 #include <GJGO/window.hpp>
 
 #endif
