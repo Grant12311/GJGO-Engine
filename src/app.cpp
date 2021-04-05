@@ -1,6 +1,7 @@
 #include <GJGO/app.hpp>
 #include <GJGO/event.hpp>
 #include <GJGO/log.hpp>
+#include <GJGO/renderer2D.hpp>
 #include <GJGO/window.hpp>
 
 namespace GJGO
@@ -18,15 +19,18 @@ namespace GJGO
 
     static void keyCallback(GLFWwindow* const /*a_windowPtr*/, const int a_key, const int /*a_scancode*/, const int a_action, const int /*a_mods*/)
     {
-        EventType type;
+        EventType type = EventType::none;
 
         if (a_action == GLFW_PRESS)
             type = EventType::keyDown;
         else if (a_action == GLFW_RELEASE)
             type = EventType::keyUp;
 
-        Event& event = App::instance->pendingEvents.emplace_back(type);
-        event.keycode = a_key;
+        if (type != EventType::none)
+        {
+            Event& event = App::instance->pendingEvents.emplace_back(type);
+            event.keycode = a_key;
+        }
     }
 
     static void keyTypedCallback(GLFWwindow* const /*a_windowPtr*/, const unsigned int a_char)
@@ -123,6 +127,8 @@ namespace GJGO
         glDebugMessageCallback(openglDebugLogger, 0);
 
         glViewport(0, 0, a_settings.windowWidth, a_settings.windowHeight);
+
+        Renderer::init2D();
     }
 
     App::~App()
@@ -131,6 +137,8 @@ namespace GJGO
         {
             delete l_layer;
         }
+
+        Renderer::shutdown2D();
 
         glfwDestroyWindow(this->window);
         glfwTerminate();
