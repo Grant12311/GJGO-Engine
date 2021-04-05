@@ -10,7 +10,7 @@ workspace "GJGO"
     defines {}
 
     links {"glfw", "GL", "X11", "dl"}
-    includedirs {"%{wks.location}/include/", "%{wks.location}/vendor/glm/", "%{wks.location}/vendor/glad/include/", "%{wks.location}/vendor/entt/src/", "%{wks.location}/vendor/Druid/include/"}
+    includedirs {"%{wks.location}/include/", "%{wks.location}/vendor/glm/", "%{wks.location}/vendor/", "%{wks.location}/vendor/glad/include/", "%{wks.location}/vendor/entt/src/", "%{wks.location}/vendor/Druid/include/"}
 
     filter "action:vs*"
         toolset "msc"
