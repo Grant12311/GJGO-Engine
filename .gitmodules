@@ -7,3 +7,6 @@
 [submodule "vendor/Druid"]
 	path = vendor/Druid
 	url = https://github.com/grant12311/Druid.git
+[submodule "vendor/stb"]
+	path = vendor/stb
+	url = https://github.com/nothings/stb.git
