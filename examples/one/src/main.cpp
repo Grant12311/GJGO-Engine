@@ -1,18 +1,21 @@
 #include <GJGO/gjgo.hpp>
 
-class GameLayer : public GJGO::Layer
+class GameLayer final : public GJGO::Layer
 {
 public:
-    GJGO::Camera2D cam;
-    glm::vec2 pos = glm::vec2(100.0f, 100.0f);
-    glm::vec2 size = glm::vec2(100.0f, 100.0f);
-    float rotation = 0.0f;
+    GJGO::Entity player;
 
-    GameLayer()
+    GameLayer() :
+        player(GJGO::Entity::create("Plr"))
     {
         this->name = "Game Layer";
 
-        GJGO::Texture2D::create("res/wall.jpg", false, GL_NEAREST, GL_NEAREST);
+        this->player.addComponent<GJGO::Transform2DComponent>(glm::vec2(100.0f, 100.0f), glm::vec2(100.0f, 100.0f));
+        this->player.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/wall.jpg", false, GL_NEAREST, GL_NEAREST));
+
+        GJGO::Entity trans = GJGO::Entity::create();
+        trans.addComponent<GJGO::Transform2DComponent>(glm::vec2(100.0f, 100.0f), glm::vec2(100.0f, 100.0f));
+        trans.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/trans.png", false, GL_NEAREST, GL_NEAREST), glm::vec4(1.0f), 1);
     }
 
     virtual void onUpdate() override
@@ -37,44 +40,48 @@ public:
             timePassed += GJGO::App::instance->deltaTime;
         }
 
+        GJGO::Transform2DComponent& plrTransform = this->player.getComponent<GJGO::Transform2DComponent>();
+
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_W))
         {
-            this->pos.y += 1.0f * GJGO::App::instance->deltaTime;
+            plrTransform.position.y += 1.0f * GJGO::App::instance->deltaTime;
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_S))
         {
-            this->pos.y -= 1.0f * GJGO::App::instance->deltaTime;
+            plrTransform.position.y -= 1.0f * GJGO::App::instance->deltaTime;
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_A))
         {
-            this->pos.x -= 1.0f * GJGO::App::instance->deltaTime;
+            plrTransform.position.x -= 1.0f * GJGO::App::instance->deltaTime;
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_D))
         {
-            this->pos.x += 1.0f * GJGO::App::instance->deltaTime;
+            plrTransform.position.x += 1.0f * GJGO::App::instance->deltaTime;
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_UP))
         {
-            this->size += 1.0f * GJGO::App::instance->deltaTime;
+            plrTransform.size.x += 1.0f * GJGO::App::instance->deltaTime;
+            plrTransform.size.y += 1.0f * GJGO::App::instance->deltaTime;
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_DOWN))
         {
-            this->size -= 1.0f * GJGO::App::instance->deltaTime;
+            plrTransform.size.x -= 1.0f * GJGO::App::instance->deltaTime;
+            plrTransform.size.y -= 1.0f * GJGO::App::instance->deltaTime;
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_RIGHT))
         {
-            this->rotation += 0.1f * GJGO::App::instance->deltaTime;
+            plrTransform.rotation += 0.1f * GJGO::App::instance->deltaTime;
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_LEFT))
         {
-            this->rotation -= 0.1f * GJGO::App::instance->deltaTime;
+            plrTransform.rotation -= 0.1f * GJGO::App::instance->deltaTime;
         }
     }
 
@@ -118,13 +125,6 @@ public:
                 //GJGO_LOG_INFO("Win Size: ", '(', a_event.windowSize.x, ", ", a_event.windowSize.y, ')');
                 break;
         }
-    }
-
-    virtual void draw() override
-    {
-        GJGO::Renderer::begin2D(cam, GJGO::Window::getWidth(), GJGO::Window::getHeight());
-
-        GJGO::Renderer::drawQuad(this->pos, this->size, this->rotation, {1.0f, 1.0f, 1.0f, 1.0f}, GJGO::Texture2D::get("res/wall.jpg"));
     }
 };
 

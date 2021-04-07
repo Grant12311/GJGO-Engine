@@ -1,11 +1,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
-#include <GJGO/app.hpp>
-#include <GJGO/event.hpp>
-#include <GJGO/log.hpp>
-#include <GJGO/renderer2D.hpp>
-#include <GJGO/window.hpp>
+#include <GJGO/gjgo.hpp>
 
 namespace GJGO
 {
@@ -129,6 +125,9 @@ namespace GJGO
         glEnable(GL_DEBUG_OUTPUT);
         glDebugMessageCallback(openglDebugLogger, 0);
 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         glViewport(0, 0, a_settings.windowWidth, a_settings.windowHeight);
 
         Renderer::init2D();
@@ -172,6 +171,29 @@ namespace GJGO
             this->pendingEvents.clear();
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+            std::vector<Entity> spriteEntities;
+            spriteEntities.reserve(this->registry.size<SpriteComponent>());
+            auto view = this->registry.view<Transform2DComponent, SpriteComponent>();
+
+            for (const entt::entity l_entity : view)
+            {
+                spriteEntities.emplace_back(Entity(l_entity));
+            }
+
+            std::sort(spriteEntities.begin(), spriteEntities.end(), [](Entity a_a, Entity a_b) -> bool
+            {
+                return a_a.getComponent<SpriteComponent>().layer < a_b.getComponent<SpriteComponent>().layer;
+            });
+
+            GJGO::Renderer::begin2D(*Camera2D::primary, Window::getWidth(), Window::getHeight());
+
+            for (const Entity l_entity : spriteEntities)
+            {
+                auto[transform, sprite] = view.get<Transform2DComponent, SpriteComponent>(l_entity.getRaw());
+
+                Renderer::drawQuad(transform.position, transform.size, transform.rotation, sprite.color, sprite.texture);
+            }
 
             for (Layer* const l_layerPtr : this->layers)
             {
