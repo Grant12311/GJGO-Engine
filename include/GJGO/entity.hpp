@@ -19,6 +19,8 @@ namespace GJGO
 
         bool isValid;
 
+        inline entt::entity getRaw() const { return this->m_entity; }
+
         template<typename T, typename... ARGS>
         void addComponent(ARGS... a_args)
         {
@@ -32,7 +34,7 @@ namespace GJGO
         }
 
         template<typename T>
-        const T& getComponent()
+        T& getComponent()
         {
             return App::instance->registry.get<T>(this->m_entity);
         }
@@ -41,12 +43,6 @@ namespace GJGO
         bool hasComponent()
         {
             return App::instance->registry.has<T>(this->m_entity);
-        }
-
-        template<typename T>
-        T& getComponentAccess()
-        {
-            return App::instance->registry.get<T>(this->m_entity);
         }
 
         template<typename T, typename... ARGS>
