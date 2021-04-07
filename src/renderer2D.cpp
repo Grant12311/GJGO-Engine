@@ -47,6 +47,11 @@ namespace GJGO
 
         void drawQuad(const glm::vec2 &a_position, const glm::vec2 &a_size, const float a_rotation, const glm::vec4 &a_color, GJGO::Texture* const a_texture)
         {
+            drawQuad(genTransformer2D(a_position, a_size, a_rotation), a_color, a_texture);
+        }
+
+        void drawQuad(const glm::mat4 &a_transform, const glm::vec4 &a_color, GJGO::Texture* const a_texture)
+        {
             quadVao->bind();
 
             if (a_texture)
@@ -57,7 +62,7 @@ namespace GJGO
                 spriteShader->fillUniform("useTexture", false);
             }
 
-            spriteShader->fillUniform("transformer", 1, false, genTransformer2D(a_position, a_size, a_rotation));
+            spriteShader->fillUniform("transformer", 1, false, a_transform);
             spriteShader->fillUniform("quadColor", a_color.r, a_color.g, a_color.b, a_color.a);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         }
