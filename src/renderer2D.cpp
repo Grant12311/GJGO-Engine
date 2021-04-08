@@ -168,7 +168,7 @@ namespace GJGO
                 "in vec3 ourColor;"
                 "in float ourTexIndex;"
 
-                "uniform sampler2D textures[12];"
+                "uniform sampler2D textures[16];"
 
                 "void main()"
                 "{"
@@ -182,7 +182,7 @@ namespace GJGO
 
             batchSpriteShader->bind();
 
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 16; i++)
             {
                 batchSpriteShader->fillUniform((std::string("textures[") + std::to_string(i) + std::string("]")).c_str(), i);
             }
@@ -268,7 +268,7 @@ namespace GJGO
             this->m_vbo.fill(this->m_vertices.size() * sizeof(float), this->m_vertices.data(), GL_STATIC_DRAW);
             this->m_ibo.fill(this->m_indices.size() * sizeof(unsigned int), this->m_indices.data(), GL_STATIC_DRAW);
 
-            for (unsigned int i = 0; i < 12; i++)
+            for (unsigned int i = 0; i < this->textures.size(); i++)
             {
                 if (this->textures[i] != nullptr)
                 {

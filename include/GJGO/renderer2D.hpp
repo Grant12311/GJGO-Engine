@@ -24,7 +24,7 @@ namespace GJGO
         class Batch2D
         {
         public:
-            std::array<Texture2D*, 12> textures;
+            std::array<Texture2D*, 16> textures;
 
             Batch2D();
 
