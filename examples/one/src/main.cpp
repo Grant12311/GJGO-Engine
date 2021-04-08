@@ -145,9 +145,9 @@ public:
         for (unsigned int i = 0; i < 1000; i++)
         {
             if (this->useBatchRenderer)
-                this->batch.addQuad({10.0f * i, 10.0f * i}, {10.0f, 10.0f}, 0.0f, {0.0f , 0.0f, 1.0f, 1.0f});
+                this->batch.addQuad({10.0f * i, 10.0f * i}, {10.0f, 10.0f}, 0.0f, {i / 10.0f , i / 100.0f, i / 1000.0f, 1.0f});
             else
-                GJGO::Renderer::drawQuad({10.0f * i, 10.0f * i}, {10.0f, 10.0f}, 0.0f, {0.0f, 0.0f, 1.0f, 1.0f});
+                GJGO::Renderer::drawQuad({10.0f * i, 10.0f * i}, {10.0f, 10.0f}, 0.0f, {i / 10.0f , i / 100.0f, i / 1000.0f, 1.0f});
         }
 
         if (this->useBatchRenderer)
