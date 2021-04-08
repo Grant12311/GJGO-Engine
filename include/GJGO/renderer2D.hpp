@@ -1,7 +1,10 @@
 #ifndef GJGO_RENDERER2D_H
 #define GJGO_RENDERER2D_H
 
+#include <Druid/ibo.h>
 #include <Druid/shader.h>
+#include <Druid/vao.h>
+#include <Druid/vbo.h>
 
 #include <GJGO/camera2D.hpp>
 #include <GJGO/texture.hpp>
@@ -17,6 +20,27 @@ namespace GJGO
 
         void init2D();
         void shutdown2D();
+
+        class Batch2D
+        {
+        public:
+            Batch2D();
+
+            size_t size() const;
+            void clear();
+
+            void addQuad(const glm::vec2 &a_position, const glm::vec2 &a_size, const float a_rotation = 0.0f, const glm::vec4 &a_color = {1.0f, 1.0f, 1.0f, 1.0f}, GJGO::Texture* const a_texture = nullptr);
+            void addQuad(const glm::mat4 &a_transform, const glm::vec4 &a_color = {1.0f, 1.0f, 1.0f, 1.0f}, GJGO::Texture* const a_texture = nullptr);
+
+            void draw();
+        private:
+            Druid::VAO m_vao;
+            Druid::IBO m_ibo;
+            Druid::VBO m_vbo;
+
+            std::vector<float> m_vertices;
+            std::vector<unsigned int> m_indices;
+        };
     }
 }
 

@@ -139,5 +139,85 @@ namespace GJGO
 
             delete spriteShader;
         }
+
+        Batch2D::Batch2D()
+        {
+            this->m_vao.bind();
+            this->m_vbo.bind();
+            this->m_ibo.bind();
+
+            this->m_vao.setAttrib(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+            this->m_vao.setAttrib(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 2 * sizeof(float));
+        }
+
+        size_t Batch2D::size() const
+        {
+            return this->m_vertices.size() / 16;
+        }
+
+        void Batch2D::clear()
+        {
+            this->m_vertices.clear();
+            this->m_indices.clear();
+        }
+
+        void Batch2D::addQuad(const glm::vec2 &a_position, const glm::vec2 &a_size, const float a_rotation, const glm::vec4 &a_color, GJGO::Texture* const a_texture)
+        {
+            this->addQuad(genTransformer2D(a_position, a_size, a_rotation), a_color, a_texture);
+        }
+
+        void Batch2D::addQuad(const glm::mat4 &a_transform, const glm::vec4 &a_color, GJGO::Texture* const a_texture)
+        {
+            std::array<float, 16> quadVertices = {
+                0, 0, 0.0f, 1.0f, // lower left
+                0, 1, 0.0f, 0.0f, // upper left
+                1, 1, 1.0f, 0.0f, // upper right
+                1, 0, 1.0f, 1.0f  // lower right
+            };
+            std::array<unsigned int, 6> quadIndices = {
+                0 + 4 * this->size(), 1 + 4 * this->size(), 2 + 4 * this->size(),
+                0 + 4 * this->size(), 3 + 4 * this->size(), 2 + 4 * this->size()
+            };
+
+            std::array<glm::vec4, 4> transformedVertexPositions;
+            transformedVertexPositions[0] = a_transform * glm::vec4(quadVertices[0], quadVertices[1], 1.0f, 1.0f);
+            transformedVertexPositions[1] = a_transform * glm::vec4(quadVertices[4], quadVertices[5], 1.0f, 1.0f);
+            transformedVertexPositions[2] = a_transform * glm::vec4(quadVertices[8], quadVertices[9], 1.0f, 1.0f);
+            transformedVertexPositions[3] = a_transform * glm::vec4(quadVertices[12], quadVertices[13], 1.0f, 1.0f);
+
+            quadVertices[0] = transformedVertexPositions[0].x;
+            quadVertices[1] = transformedVertexPositions[0].y;
+            quadVertices[4] = transformedVertexPositions[1].x;
+            quadVertices[5] = transformedVertexPositions[1].y;
+            quadVertices[8] = transformedVertexPositions[2].x;
+            quadVertices[9] = transformedVertexPositions[2].y;
+            quadVertices[12] = transformedVertexPositions[3].x;
+            quadVertices[13] = transformedVertexPositions[3].y;
+
+            this->m_vertices.insert(this->m_vertices.end(), quadVertices.begin(), quadVertices.end());
+            this->m_indices.insert(this->m_indices.end(), quadIndices.begin(), quadIndices.end());
+        }
+
+        void Batch2D::draw()
+        {
+            this->m_vao.bind();
+
+            this->m_vbo.fill(this->m_vertices.size() * sizeof(float), this->m_vertices.data(), GL_STATIC_DRAW);
+            this->m_ibo.fill(this->m_indices.size() * sizeof(unsigned int), this->m_indices.data(), GL_STATIC_DRAW);
+
+            /*if (a_texture)
+            {
+                a_texture->bind();
+                spriteShader->fillUniform("useTexture", true);
+            }else{
+                spriteShader->fillUniform("useTexture", false);
+            }*/
+
+            spriteShader->fillUniform("useTexture", false);
+
+            spriteShader->fillUniform("transformer", 1, false, glm::mat4(1.0f));
+            spriteShader->fillUniform("quadColor", 1.0f, 1.0f, 1.0f, 1.0f);
+            glDrawElements(GL_TRIANGLES, this->m_indices.size(), GL_UNSIGNED_INT, nullptr);
+        }
     }
 }

@@ -4,9 +4,11 @@ class GameLayer final : public GJGO::Layer
 {
 public:
     GJGO::Entity player;
+    GJGO::Renderer::Batch2D batch;
+    bool useBatchRenderer;
 
     GameLayer() :
-        player(GJGO::Entity::create("Plr"))
+        player(GJGO::Entity::create("Plr")), useBatchRenderer(false)
     {
         this->name = "Game Layer";
 
@@ -101,6 +103,12 @@ public:
                         GJGO::Texture2D::get("res/wall.jpg")->bind();
                         GJGO::Texture2D::get("res/wall.jpg")->setFilters(GL_LINEAR, GL_LINEAR);
                         break;
+                    case GLFW_KEY_EQUAL:
+                        this->useBatchRenderer = true;
+                        break;
+                    case GLFW_KEY_MINUS:
+                        this->useBatchRenderer = false;
+                        break;
                 }
                 break;
             case GJGO::EventType::keyUp:
@@ -125,6 +133,25 @@ public:
                 //GJGO_LOG_INFO("Win Size: ", '(', a_event.windowSize.x, ", ", a_event.windowSize.y, ')');
                 break;
         }
+    }
+
+    virtual void draw() override
+    {
+        GJGO::Renderer::begin2D(*GJGO::Camera2D::primary, GJGO::Window::getWidth(), GJGO::Window::getHeight());
+
+        if (this->useBatchRenderer)
+            this->batch.clear();
+
+        for (unsigned int i = 0; i < 1000; i++)
+        {
+            if (this->useBatchRenderer)
+                this->batch.addQuad({10.0f * i, 10.0f * i}, {10.0f, 10.0f});
+            else
+                GJGO::Renderer::drawQuad({10.0f * i, 10.0f * i}, {10.0f, 10.0f});
+        }
+
+        if (this->useBatchRenderer)
+            this->batch.draw();
     }
 };
 
