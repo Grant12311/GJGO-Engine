@@ -18,6 +18,8 @@ public:
         GJGO::Entity trans = GJGO::Entity::create();
         trans.addComponent<GJGO::Transform2DComponent>(glm::vec2(100.0f, 100.0f), glm::vec2(100.0f, 100.0f));
         trans.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/trans.png", false, GL_NEAREST, GL_NEAREST), glm::vec4(1.0f), 1);
+
+        this->batch.textures[0] = (GJGO::Texture2D*)GJGO::Texture2D::get("res/wall.jpg");
     }
 
     virtual void onUpdate() override
@@ -145,9 +147,9 @@ public:
         for (unsigned int i = 0; i < 1000; i++)
         {
             if (this->useBatchRenderer)
-                this->batch.addQuad({10.0f * i, 10.0f * i}, {10.0f, 10.0f}, 0.0f, {i / 10.0f , i / 100.0f, i / 1000.0f, 1.0f});
+                this->batch.addQuad({50.0f * i, 50.0f * i}, {50.0f, 50.0f}, 0.0f, {i / 10.0f , i / 100.0f, i / 1000.0f, 1.0f}, 0.0f);
             else
-                GJGO::Renderer::drawQuad({10.0f * i, 10.0f * i}, {10.0f, 10.0f}, 0.0f, {i / 10.0f , i / 100.0f, i / 1000.0f, 1.0f});
+                GJGO::Renderer::drawQuad({50.0f * i, 50.0f * i}, {50.0f, 50.0f}, 0.0f, {i / 10.0f , i / 100.0f, i / 1000.0f, 1.0f}, GJGO::Texture2D::get("res/wall.jpg"));
         }
 
         if (this->useBatchRenderer)

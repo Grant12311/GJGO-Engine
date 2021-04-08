@@ -24,13 +24,15 @@ namespace GJGO
         class Batch2D
         {
         public:
+            std::array<Texture2D*, 12> textures;
+
             Batch2D();
 
             size_t size() const;
             void clear();
 
-            void addQuad(const glm::vec2 &a_position, const glm::vec2 &a_size, const float a_rotation = 0.0f, const glm::vec4 &a_color = {1.0f, 1.0f, 1.0f, 1.0f}, GJGO::Texture* const a_texture = nullptr);
-            void addQuad(const glm::mat4 &a_transform, const glm::vec4 &a_color = {1.0f, 1.0f, 1.0f, 1.0f}, GJGO::Texture* const a_texture = nullptr);
+            void addQuad(const glm::vec2 &a_position, const glm::vec2 &a_size, const float a_rotation = 0.0f, const glm::vec4 &a_color = {1.0f, 1.0f, 1.0f, 1.0f}, const float a_textureIndex = -1.0f);
+            void addQuad(const glm::mat4 &a_transform, const glm::vec4 &a_color = {1.0f, 1.0f, 1.0f, 1.0f}, const float a_textureIndex = -1.0f);
 
             void draw();
         private:

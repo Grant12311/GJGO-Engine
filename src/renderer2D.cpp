@@ -139,14 +139,16 @@ namespace GJGO
 
             spriteShader = new Druid::Shader(spriteShaderVertexSource, spriteShaderFragmentSource);
 
-            const char* const batchSpriteShaderVertexSource = "#version 330 core\n"
+            const char* const batchSpriteShaderVertexSource = "#version 460 core\n"
                 "precision highp float;"
                 "layout (location = 0) in vec2 aPos;"
                 "layout (location = 1) in vec2 aTexCoord;"
                 "layout (location = 2) in vec3 aColor;"
+                "layout (location = 3) in float aTexIndex;"
 
                 "out vec2 ourTexCoord;"
                 "out vec3 ourColor;"
+                "out float ourTexIndex;"
 
                 "uniform mat4 orthoMatrix;"
 
@@ -154,28 +156,36 @@ namespace GJGO
                 "{"
                 "    ourTexCoord = aTexCoord;"
                 "    ourColor = aColor;"
+                "    ourTexIndex = aTexIndex;"
 
                 "    gl_Position = orthoMatrix * vec4(aPos, 1.0, 1.0);"
                 "}";
 
-            const char* const batchSpriteShaderFragmentSource = "#version 330 core\n"
+            const char* const batchSpriteShaderFragmentSource = "#version 460 core\n"
                 "precision highp float;"
                 "layout (location = 0) out vec4 color;"
                 "in vec2 ourTexCoord;"
                 "in vec3 ourColor;"
+                "in float ourTexIndex;"
 
-                "uniform sampler2D texture1;"
-                "uniform bool useTexture;"
+                "uniform sampler2D textures[12];"
 
                 "void main()"
                 "{"
-                "    if (useTexture)"
-                "        color = texture(texture1, ourTexCoord) * vec4(ourColor, 1.0);"
+                "    if (ourTexIndex != -1.0)"
+                "        color = texture(textures[int(ourTexIndex)], ourTexCoord) * vec4(ourColor, 1.0);"
                 "    else"
                 "        color = vec4(ourColor, 1.0);"
                 "}";
 
             batchSpriteShader = new Druid::Shader(batchSpriteShaderVertexSource, batchSpriteShaderFragmentSource);
+
+            batchSpriteShader->bind();
+
+            for (int i = 0; i < 12; i++)
+            {
+                batchSpriteShader->fillUniform((std::string("textures[") + std::to_string(i) + std::string("]")).c_str(), i);
+            }
         }
 
         void shutdown2D()
@@ -190,18 +200,21 @@ namespace GJGO
 
         Batch2D::Batch2D()
         {
+            std::fill(this->textures.begin(), this->textures.end(), nullptr);
+
             this->m_vao.bind();
             this->m_vbo.bind();
             this->m_ibo.bind();
 
-            this->m_vao.setAttrib(0, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 0);
-            this->m_vao.setAttrib(1, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 2 * sizeof(float));
-            this->m_vao.setAttrib(2, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 4 * sizeof(float));
+            this->m_vao.setAttrib(0, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
+            this->m_vao.setAttrib(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 2 * sizeof(float));
+            this->m_vao.setAttrib(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 4 * sizeof(float));
+            this->m_vao.setAttrib(3, 1, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 7 * sizeof(float));
         }
 
         size_t Batch2D::size() const
         {
-            return this->m_vertices.size() / 28;
+            return this->m_vertices.size() / 32;
         }
 
         void Batch2D::clear()
@@ -210,18 +223,18 @@ namespace GJGO
             this->m_indices.clear();
         }
 
-        void Batch2D::addQuad(const glm::vec2 &a_position, const glm::vec2 &a_size, const float a_rotation, const glm::vec4 &a_color, GJGO::Texture* const a_texture)
+        void Batch2D::addQuad(const glm::vec2 &a_position, const glm::vec2 &a_size, const float a_rotation, const glm::vec4 &a_color, const float a_textureIndex)
         {
-            this->addQuad(genTransformer2D(a_position, a_size, a_rotation), a_color, a_texture);
+            this->addQuad(genTransformer2D(a_position, a_size, a_rotation), a_color, a_textureIndex);
         }
 
-        void Batch2D::addQuad(const glm::mat4 &a_transform, const glm::vec4 &a_color, GJGO::Texture* const a_texture)
+        void Batch2D::addQuad(const glm::mat4 &a_transform, const glm::vec4 &a_color, const float a_textureIndex)
         {
-            std::array<float, 28> quadVertices = {
-                0, 0, 0.0f, 1.0f, a_color.r, a_color.g, a_color.b, // lower left
-                0, 1, 0.0f, 0.0f, a_color.r, a_color.g, a_color.b, // upper left
-                1, 1, 1.0f, 0.0f, a_color.r, a_color.g, a_color.b, // upper right
-                1, 0, 1.0f, 1.0f, a_color.r, a_color.g, a_color.b  // lower right
+            std::array<float, 32> quadVertices = {
+                0, 0, 0.0f, 1.0f, a_color.r, a_color.g, a_color.b, a_textureIndex, // lower left
+                0, 1, 0.0f, 0.0f, a_color.r, a_color.g, a_color.b, a_textureIndex, // upper left
+                1, 1, 1.0f, 0.0f, a_color.r, a_color.g, a_color.b, a_textureIndex, // upper right
+                1, 0, 1.0f, 1.0f, a_color.r, a_color.g, a_color.b, a_textureIndex  // lower right
             };
             std::array<unsigned int, 6> quadIndices = {
                 0 + 4 * this->size(), 1 + 4 * this->size(), 2 + 4 * this->size(),
@@ -230,18 +243,18 @@ namespace GJGO
 
             std::array<glm::vec4, 4> transformedVertexPositions;
             transformedVertexPositions[0] = a_transform * glm::vec4(quadVertices[0], quadVertices[1], 1.0f, 1.0f);
-            transformedVertexPositions[1] = a_transform * glm::vec4(quadVertices[7], quadVertices[8], 1.0f, 1.0f);
-            transformedVertexPositions[2] = a_transform * glm::vec4(quadVertices[14], quadVertices[15], 1.0f, 1.0f);
-            transformedVertexPositions[3] = a_transform * glm::vec4(quadVertices[21], quadVertices[22], 1.0f, 1.0f);
+            transformedVertexPositions[1] = a_transform * glm::vec4(quadVertices[8], quadVertices[9], 1.0f, 1.0f);
+            transformedVertexPositions[2] = a_transform * glm::vec4(quadVertices[16], quadVertices[17], 1.0f, 1.0f);
+            transformedVertexPositions[3] = a_transform * glm::vec4(quadVertices[24], quadVertices[25], 1.0f, 1.0f);
 
             quadVertices[0] = transformedVertexPositions[0].x;
             quadVertices[1] = transformedVertexPositions[0].y;
-            quadVertices[7] = transformedVertexPositions[1].x;
-            quadVertices[8] = transformedVertexPositions[1].y;
-            quadVertices[14] = transformedVertexPositions[2].x;
-            quadVertices[15] = transformedVertexPositions[2].y;
-            quadVertices[21] = transformedVertexPositions[3].x;
-            quadVertices[22] = transformedVertexPositions[3].y;
+            quadVertices[8] = transformedVertexPositions[1].x;
+            quadVertices[9] = transformedVertexPositions[1].y;
+            quadVertices[16] = transformedVertexPositions[2].x;
+            quadVertices[17] = transformedVertexPositions[2].y;
+            quadVertices[24] = transformedVertexPositions[3].x;
+            quadVertices[25] = transformedVertexPositions[3].y;
 
             this->m_vertices.insert(this->m_vertices.end(), quadVertices.begin(), quadVertices.end());
             this->m_indices.insert(this->m_indices.end(), quadIndices.begin(), quadIndices.end());
@@ -255,15 +268,14 @@ namespace GJGO
             this->m_vbo.fill(this->m_vertices.size() * sizeof(float), this->m_vertices.data(), GL_STATIC_DRAW);
             this->m_ibo.fill(this->m_indices.size() * sizeof(unsigned int), this->m_indices.data(), GL_STATIC_DRAW);
 
-            /*if (a_texture)
+            for (unsigned int i = 0; i < 12; i++)
             {
-                a_texture->bind();
-                spriteShader->fillUniform("useTexture", true);
-            }else{
-                spriteShader->fillUniform("useTexture", false);
-            }*/
+                if (this->textures[i] != nullptr)
+                {
+                    this->textures[i]->bind(i);
+                }
+            }
 
-            batchSpriteShader->fillUniform("useTexture", false);
             glDrawElements(GL_TRIANGLES, this->m_indices.size(), GL_UNSIGNED_INT, nullptr);
 
             spriteShader->bind();
