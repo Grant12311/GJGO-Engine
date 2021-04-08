@@ -103,7 +103,7 @@ namespace GJGO
             quadVao->setAttrib(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
             quadVao->setAttrib(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 2 * sizeof(float));
 
-            const char* const spriteShaderVertexSource = "#version 330 core\n"
+            const char* const spriteShaderVertexSource = "#version 400 core\n"
                 "precision highp float;"
                 "layout (location = 0) in vec2 aPos;"
                 "layout (location = 1) in vec2 aTexCoord;"
@@ -120,7 +120,7 @@ namespace GJGO
                 "    gl_Position = orthoMatrix * transformer * vec4(aPos, 1.0, 1.0);"
                 "}";
 
-            const char* const spriteShaderFragmentSource = "#version 330 core\n"
+            const char* const spriteShaderFragmentSource = "#version 400 core\n"
                 "precision highp float;"
                 "layout (location = 0) out vec4 color;"
                 "in vec2 ourTexCoord;"
@@ -139,7 +139,7 @@ namespace GJGO
 
             spriteShader = new Druid::Shader(spriteShaderVertexSource, spriteShaderFragmentSource);
 
-            const char* const batchSpriteShaderVertexSource = "#version 460 core\n"
+            const char* const batchSpriteShaderVertexSource = "#version 400 core\n"
                 "precision highp float;"
                 "layout (location = 0) in vec2 aPos;"
                 "layout (location = 1) in vec2 aTexCoord;"
@@ -161,7 +161,7 @@ namespace GJGO
                 "    gl_Position = orthoMatrix * vec4(aPos, 1.0, 1.0);"
                 "}";
 
-            const char* const batchSpriteShaderFragmentSource = "#version 460 core\n"
+            const char* const batchSpriteShaderFragmentSource = "#version 400 core\n"
                 "precision highp float;"
                 "layout (location = 0) out vec4 color;"
                 "in vec2 ourTexCoord;"
