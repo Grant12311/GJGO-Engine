@@ -17,6 +17,8 @@ namespace GJGO
 {
     namespace Renderer
     {
+        static int maxTextureUnits;
+
         static Druid::VAO* quadVao;
         static Druid::VBO* quadVbo;
         static Druid::IBO* quadIbo;
@@ -74,6 +76,8 @@ namespace GJGO
 
         void init2D()
         {
+            glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureUnits);
+
             std::array<float, 16> quadVertices = {
                 0, 0, 0.0f, 1.0f, // lower left
                 0, 1, 0.0f, 0.0f, // upper left
