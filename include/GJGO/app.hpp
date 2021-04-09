@@ -36,6 +36,8 @@ namespace GJGO
 
         std::vector<Event> pendingEvents;
         std::vector<Layer*> layers;
+    private:
+        void drawEntities();
     };
 }
 

@@ -4,22 +4,25 @@ class GameLayer final : public GJGO::Layer
 {
 public:
     GJGO::Entity player;
-    GJGO::Renderer::Batch2D batch;
-    bool useBatchRenderer;
 
     GameLayer() :
-        player(GJGO::Entity::create("Plr")), useBatchRenderer(false)
+        player(GJGO::Entity::create("Plr"))
     {
         this->name = "Game Layer";
 
         this->player.addComponent<GJGO::Transform2DComponent>(glm::vec2(100.0f, 100.0f), glm::vec2(100.0f, 100.0f));
-        this->player.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/wall.jpg", false, GL_NEAREST, GL_NEAREST));
+        this->player.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/wall.jpg", GJGO::TextureSettings::standard, GL_NEAREST, GL_NEAREST));
 
         GJGO::Entity trans = GJGO::Entity::create();
         trans.addComponent<GJGO::Transform2DComponent>(glm::vec2(100.0f, 100.0f), glm::vec2(100.0f, 100.0f));
-        trans.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/trans.png", false, GL_NEAREST, GL_NEAREST), glm::vec4(1.0f), 1);
+        trans.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/trans.png", GJGO::TextureSettings::hasTransparency, GL_NEAREST, GL_NEAREST), glm::vec4(1.0f), 1);
 
-        this->batch.textures[0] = (GJGO::Texture2D*)GJGO::Texture2D::get("res/wall.jpg");
+        for (unsigned int i = 0; i < 10000; i++)
+        {
+            GJGO::Entity e = GJGO::Entity::create();
+            e.addComponent<GJGO::Transform2DComponent>(glm::vec2(0.0f, 0.0f), glm::vec2(100.0f, 100.0f));
+            e.addComponent<GJGO::SpriteComponent>(nullptr, glm::vec4(1.0f), 0);
+        }
     }
 
     virtual void onUpdate() override
@@ -35,7 +38,7 @@ public:
                 total += l_dt;
             }
 
-            GJGO::Window::setTitle(std::to_string(1.0 / (total / times.size()) * 1000.0).c_str());
+            GJGO::Window::setTitle((std::to_string(1.0 / (total / times.size()) * 1000.0) + std::string(" - ") + std::to_string(GJGO::Renderer::numDrawCallsPerFrame)).c_str());
 
             timePassed = 0.0;
             times.clear();
@@ -106,10 +109,10 @@ public:
                         GJGO::Texture2D::get("res/wall.jpg")->setFilters(GL_LINEAR, GL_LINEAR);
                         break;
                     case GLFW_KEY_EQUAL:
-                        this->useBatchRenderer = true;
+                        GJGO::Renderer::useBatchRendererAsDefault = true;
                         break;
                     case GLFW_KEY_MINUS:
-                        this->useBatchRenderer = false;
+                        GJGO::Renderer::useBatchRendererAsDefault = false;
                         break;
                 }
                 break;
@@ -135,25 +138,6 @@ public:
                 //GJGO_LOG_INFO("Win Size: ", '(', a_event.windowSize.x, ", ", a_event.windowSize.y, ')');
                 break;
         }
-    }
-
-    virtual void draw() override
-    {
-        GJGO::Renderer::begin2D(*GJGO::Camera2D::primary, GJGO::Window::getWidth(), GJGO::Window::getHeight());
-
-        if (this->useBatchRenderer)
-            this->batch.clear();
-
-        for (unsigned int i = 0; i < 1000; i++)
-        {
-            if (this->useBatchRenderer)
-                this->batch.addQuad({50.0f * i, 50.0f * i}, {50.0f, 50.0f}, 0.0f, {i / 10.0f , i / 100.0f, i / 1000.0f, 1.0f}, 0.0f);
-            else
-                GJGO::Renderer::drawQuad({50.0f * i, 50.0f * i}, {50.0f, 50.0f}, 0.0f, {i / 10.0f , i / 100.0f, i / 1000.0f, 1.0f}, GJGO::Texture2D::get("res/wall.jpg"));
-        }
-
-        if (this->useBatchRenderer)
-            this->batch.draw();
     }
 };
 
