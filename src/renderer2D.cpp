@@ -72,6 +72,7 @@ namespace GJGO
             spriteShader->fillUniform("transformer", 1, false, a_transform);
             spriteShader->fillUniform("quadColor", a_color.r, a_color.g, a_color.b, a_color.a);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+            numDrawCallsPerFrame++;
         }
 
         void init2D()
@@ -277,6 +278,7 @@ namespace GJGO
             }
 
             glDrawElements(GL_TRIANGLES, this->m_indices.size(), GL_UNSIGNED_INT, nullptr);
+            numDrawCallsPerFrame++;
 
             spriteShader->bind();
         }
