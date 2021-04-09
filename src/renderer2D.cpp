@@ -28,9 +28,9 @@ namespace GJGO
 
         static glm::mat4 orthoMatrix;
 
-        static glm::mat4 genTransformer2D(const glm::vec2 &a_position, const glm::vec2 &a_size, const float a_rotation)
+        static glm::mat4 genTransformer2D(const glm::vec3 &a_position, const glm::vec2 &a_size, const float a_rotation)
         {
-            glm::mat4 toReturn = glm::translate(glm::mat4(1.0f), glm::vec3(a_position, 0.0f));
+            glm::mat4 toReturn = glm::translate(glm::mat4(1.0f), a_position);
 
             toReturn = glm::translate(toReturn, glm::vec3(a_size.x / 2.0f, a_size.y / 2.0f, 0.0f));
             toReturn = glm::rotate(toReturn, glm::radians(a_rotation * -1.0f), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -52,7 +52,7 @@ namespace GJGO
             glViewport(0, 0, a_width, a_height);
         }
 
-        void drawQuad(const glm::vec2 &a_position, const glm::vec2 &a_size, const float a_rotation, const glm::vec4 &a_color, GJGO::Texture* const a_texture)
+        void drawQuad(const glm::vec3 &a_position, const glm::vec2 &a_size, const float a_rotation, const glm::vec4 &a_color, GJGO::Texture* const a_texture)
         {
             drawQuad(genTransformer2D(a_position, a_size, a_rotation), a_color, a_texture);
         }
@@ -79,11 +79,11 @@ namespace GJGO
         {
             glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureUnits);
 
-            std::array<float, 16> quadVertices = {
-                0, 0, 0.0f, 1.0f, // lower left
-                0, 1, 0.0f, 0.0f, // upper left
-                1, 1, 1.0f, 0.0f, // upper right
-                1, 0, 1.0f, 1.0f  // lower right
+            std::array<float, 20> quadVertices = {
+                0, 0, 0, 0.0f, 1.0f, // lower left
+                0, 1, 0, 0.0f, 0.0f, // upper left
+                1, 1, 0, 1.0f, 0.0f, // upper right
+                1, 0, 0, 1.0f, 1.0f  // lower right
             };
             std::array<unsigned int, 6> quadIndices = {
                 0, 1, 2,
@@ -101,12 +101,12 @@ namespace GJGO
             quadVbo->fill(quadVertices.size() * sizeof(float), quadVertices.data(), GL_STATIC_DRAW);
             quadIbo->fill(quadIndices.size() * sizeof(unsigned int), quadIndices.data(), GL_STATIC_DRAW);
 
-            quadVao->setAttrib(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
-            quadVao->setAttrib(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 2 * sizeof(float));
+            quadVao->setAttrib(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
+            quadVao->setAttrib(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 3 * sizeof(float));
 
             const char* const spriteShaderVertexSource = "#version 400 core\n"
                 "precision highp float;"
-                "layout (location = 0) in vec2 aPos;"
+                "layout (location = 0) in vec3 aPos;"
                 "layout (location = 1) in vec2 aTexCoord;"
 
                 "out vec2 ourTexCoord;"
@@ -118,7 +118,7 @@ namespace GJGO
                 "{"
                 "    ourTexCoord = aTexCoord;"
 
-                "    gl_Position = orthoMatrix * transformer * vec4(aPos, 1.0, 1.0);"
+                "    gl_Position = orthoMatrix * transformer * vec4(aPos, 1.0);"
                 "}";
 
             const char* const spriteShaderFragmentSource = "#version 400 core\n"
@@ -142,7 +142,7 @@ namespace GJGO
 
             const char* const batchSpriteShaderVertexSource = "#version 400 core\n"
                 "precision highp float;"
-                "layout (location = 0) in vec2 aPos;"
+                "layout (location = 0) in vec3 aPos;"
                 "layout (location = 1) in vec2 aTexCoord;"
                 "layout (location = 2) in vec3 aColor;"
                 "layout (location = 3) in float aTexIndex;"
@@ -159,7 +159,7 @@ namespace GJGO
                 "    ourColor = aColor;"
                 "    ourTexIndex = aTexIndex;"
 
-                "    gl_Position = orthoMatrix * vec4(aPos, 1.0, 1.0);"
+                "    gl_Position = orthoMatrix * vec4(aPos, 1.0);"
                 "}";
 
             const char* const batchSpriteShaderFragmentSource = "#version 400 core\n"
@@ -207,15 +207,15 @@ namespace GJGO
             this->m_vbo.bind();
             this->m_ibo.bind();
 
-            this->m_vao.setAttrib(0, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
-            this->m_vao.setAttrib(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 2 * sizeof(float));
-            this->m_vao.setAttrib(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 4 * sizeof(float));
-            this->m_vao.setAttrib(3, 1, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 7 * sizeof(float));
+            this->m_vao.setAttrib(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), 0);
+            this->m_vao.setAttrib(1, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), 3 * sizeof(float));
+            this->m_vao.setAttrib(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), 5 * sizeof(float));
+            this->m_vao.setAttrib(3, 1, GL_FLOAT, GL_FALSE, 9 * sizeof(float), 8 * sizeof(float));
         }
 
         size_t Batch2D::size() const
         {
-            return this->m_vertices.size() / 32;
+            return this->m_vertices.size() / 36;
         }
 
         void Batch2D::clear()
@@ -224,18 +224,18 @@ namespace GJGO
             this->m_indices.clear();
         }
 
-        void Batch2D::addQuad(const glm::vec2 &a_position, const glm::vec2 &a_size, const float a_rotation, const glm::vec4 &a_color, const float a_textureIndex)
+        void Batch2D::addQuad(const glm::vec3 &a_position, const glm::vec2 &a_size, const float a_rotation, const glm::vec4 &a_color, const float a_textureIndex)
         {
             this->addQuad(genTransformer2D(a_position, a_size, a_rotation), a_color, a_textureIndex);
         }
 
         void Batch2D::addQuad(const glm::mat4 &a_transform, const glm::vec4 &a_color, const float a_textureIndex)
         {
-            std::array<float, 32> quadVertices = {
-                0, 0, 0.0f, 1.0f, a_color.r, a_color.g, a_color.b, a_textureIndex, // lower left
-                0, 1, 0.0f, 0.0f, a_color.r, a_color.g, a_color.b, a_textureIndex, // upper left
-                1, 1, 1.0f, 0.0f, a_color.r, a_color.g, a_color.b, a_textureIndex, // upper right
-                1, 0, 1.0f, 1.0f, a_color.r, a_color.g, a_color.b, a_textureIndex  // lower right
+            std::array<float, 36> quadVertices = {
+                0, 0, 0, 0.0f, 1.0f, a_color.r, a_color.g, a_color.b, a_textureIndex, // lower left
+                0, 1, 0, 0.0f, 0.0f, a_color.r, a_color.g, a_color.b, a_textureIndex, // upper left
+                1, 1, 0, 1.0f, 0.0f, a_color.r, a_color.g, a_color.b, a_textureIndex, // upper right
+                1, 0, 0, 1.0f, 1.0f, a_color.r, a_color.g, a_color.b, a_textureIndex  // lower right
             };
             std::array<unsigned int, 6> quadIndices = {
                 0 + 4 * this->size(), 1 + 4 * this->size(), 2 + 4 * this->size(),
@@ -243,19 +243,23 @@ namespace GJGO
             };
 
             std::array<glm::vec4, 4> transformedVertexPositions;
-            transformedVertexPositions[0] = a_transform * glm::vec4(quadVertices[0], quadVertices[1], 1.0f, 1.0f);
-            transformedVertexPositions[1] = a_transform * glm::vec4(quadVertices[8], quadVertices[9], 1.0f, 1.0f);
-            transformedVertexPositions[2] = a_transform * glm::vec4(quadVertices[16], quadVertices[17], 1.0f, 1.0f);
-            transformedVertexPositions[3] = a_transform * glm::vec4(quadVertices[24], quadVertices[25], 1.0f, 1.0f);
+            transformedVertexPositions[0] = a_transform * glm::vec4(quadVertices[0], quadVertices[1], quadVertices[2], 1.0f);
+            transformedVertexPositions[1] = a_transform * glm::vec4(quadVertices[9], quadVertices[10], quadVertices[11], 1.0f);
+            transformedVertexPositions[2] = a_transform * glm::vec4(quadVertices[18], quadVertices[19], quadVertices[20], 1.0f);
+            transformedVertexPositions[3] = a_transform * glm::vec4(quadVertices[27], quadVertices[28], quadVertices[29], 1.0f);
 
             quadVertices[0] = transformedVertexPositions[0].x;
             quadVertices[1] = transformedVertexPositions[0].y;
-            quadVertices[8] = transformedVertexPositions[1].x;
-            quadVertices[9] = transformedVertexPositions[1].y;
-            quadVertices[16] = transformedVertexPositions[2].x;
-            quadVertices[17] = transformedVertexPositions[2].y;
-            quadVertices[24] = transformedVertexPositions[3].x;
-            quadVertices[25] = transformedVertexPositions[3].y;
+            quadVertices[2] = transformedVertexPositions[0].z;
+            quadVertices[9] = transformedVertexPositions[1].x;
+            quadVertices[10] = transformedVertexPositions[1].y;
+            quadVertices[11] = transformedVertexPositions[1].z;
+            quadVertices[18] = transformedVertexPositions[2].x;
+            quadVertices[19] = transformedVertexPositions[2].y;
+            quadVertices[20] = transformedVertexPositions[2].z;
+            quadVertices[27] = transformedVertexPositions[3].x;
+            quadVertices[28] = transformedVertexPositions[3].y;
+            quadVertices[29] = transformedVertexPositions[3].z;
 
             this->m_vertices.insert(this->m_vertices.end(), quadVertices.begin(), quadVertices.end());
             this->m_indices.insert(this->m_indices.end(), quadIndices.begin(), quadIndices.end());

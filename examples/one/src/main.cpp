@@ -10,18 +10,18 @@ public:
     {
         this->name = "Game Layer";
 
-        this->player.addComponent<GJGO::Transform2DComponent>(glm::vec2(100.0f, 100.0f), glm::vec2(100.0f, 100.0f));
+        this->player.addComponent<GJGO::Transform2DComponent>(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec2(100.0f, 100.0f));
         this->player.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/wall.jpg", GJGO::TextureSettings::standard, GL_NEAREST, GL_NEAREST));
 
         GJGO::Entity trans = GJGO::Entity::create();
-        trans.addComponent<GJGO::Transform2DComponent>(glm::vec2(100.0f, 100.0f), glm::vec2(100.0f, 100.0f));
-        trans.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/trans.png", GJGO::TextureSettings::hasTransparency, GL_NEAREST, GL_NEAREST), glm::vec4(1.0f), 1);
+        trans.addComponent<GJGO::Transform2DComponent>(glm::vec3(100.0f, 100.0f, 1.0f), glm::vec2(100.0f, 100.0f));
+        trans.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/trans.png", GJGO::TextureSettings::hasTransparency, GL_NEAREST, GL_NEAREST), glm::vec4(1.0f));
 
         for (unsigned int i = 0; i < 10000; i++)
         {
             GJGO::Entity e = GJGO::Entity::create();
-            e.addComponent<GJGO::Transform2DComponent>(glm::vec2(0.0f, 0.0f), glm::vec2(100.0f, 100.0f));
-            e.addComponent<GJGO::SpriteComponent>(nullptr, glm::vec4(1.0f), 0);
+            e.addComponent<GJGO::Transform2DComponent>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(100.0f, 100.0f));
+            e.addComponent<GJGO::SpriteComponent>(nullptr, glm::vec4(1.0f));
         }
     }
 

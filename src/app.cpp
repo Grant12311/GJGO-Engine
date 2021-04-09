@@ -130,6 +130,8 @@ namespace GJGO
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        glEnable(GL_DEPTH_TEST);
+
         glViewport(0, 0, a_settings.windowWidth, a_settings.windowHeight);
 
         Renderer::init2D();
@@ -246,52 +248,55 @@ namespace GJGO
                 }
             }
 
-            std::sort(spriteEntities.begin(), spriteEntities.end(), [](Entity a_a, Entity a_b) -> bool
-            {
-                return a_a.getComponent<SpriteComponent>().layer < a_b.getComponent<SpriteComponent>().layer;
-            });
             std::sort(spriteEntitiesTransparent.begin(), spriteEntitiesTransparent.end(), [](Entity a_a, Entity a_b) -> bool
             {
-                return a_a.getComponent<SpriteComponent>().layer < a_b.getComponent<SpriteComponent>().layer;
+                return a_a.getComponent<Transform2DComponent>().position.z < a_b.getComponent<Transform2DComponent>().position.z;
             });
 
             drawEntityList(spriteEntities);
             drawEntityList(spriteEntitiesTransparent);
         }else{
-            //std::map<float, std::vector<Entity>> spriteEntities;
-            std::vector<Entity> spriteEntities;
-            spriteEntities.reserve(this->registry.size<SpriteComponent>());
+            std::vector<Entity> transparentEntities;
+
             auto view = this->registry.view<Transform2DComponent, SpriteComponent>();
-
-            for (const entt::entity l_entity : view)
-            {
-                spriteEntities.emplace_back(Entity(l_entity));
-                //spriteEntities[view.get<SpriteComponent>(l_entity).layer].emplace_back(Entity(l_entity));
-            }
-
-            std::sort(spriteEntities.begin(), spriteEntities.end(), [](Entity a_a, Entity a_b) -> bool
-            {
-                return a_a.getComponent<SpriteComponent>().layer < a_b.getComponent<SpriteComponent>().layer;
-            });
 
             GJGO::Renderer::begin2D(*Camera2D::primary, Window::getWidth(), Window::getHeight());
 
-            for (const Entity l_entity : spriteEntities)
+            for (const entt::entity l_entity : view)
             {
-                auto[transform, sprite] = view.get<Transform2DComponent, SpriteComponent>(l_entity.getRaw());
+                auto[transform, sprite] = view.get<Transform2DComponent, SpriteComponent>(l_entity);
+
+                bool textureUsesTransparency = false;
+
+                if (sprite.texture != nullptr)
+                {
+                    textureUsesTransparency = (sprite.texture->getSettings() & TextureSettings::hasTransparency);
+                }
+
+                if (sprite.color.a < 1.0f || textureUsesTransparency)
+                {
+                    transparentEntities.emplace_back(l_entity);
+                    continue;
+                }
 
                 Renderer::drawQuad(transform.position, transform.size, transform.rotation, sprite.color, sprite.texture);
             }
 
-            /*for (const std::pair<float, std::vector<Entity>> &l_pair : spriteEntities)
+            if (transparentEntities.size() > 0)
             {
-                for (const Entity l_entity : l_pair.second)
+                std::sort(transparentEntities.begin(), transparentEntities.end(), [](Entity a_a, Entity a_b) -> bool
                 {
-                    auto[transform, sprite] = view.get<Transform2DComponent, SpriteComponent>(l_entity.getRaw());
+                    return a_a.getComponent<Transform2DComponent>().position.z < a_b.getComponent<Transform2DComponent>().position.z;
+                });
+
+                for (Entity l_entity : transparentEntities)
+                {
+                    const Transform2DComponent& transform = l_entity.getComponent<Transform2DComponent>();
+                    const SpriteComponent& sprite = l_entity.getComponent<SpriteComponent>();
 
                     Renderer::drawQuad(transform.position, transform.size, transform.rotation, sprite.color, sprite.texture);
                 }
-            }*/
+            }
         }
     }
 }
