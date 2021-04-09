@@ -199,7 +199,7 @@ namespace GJGO
             delete batchSpriteShader;
         }
 
-        Batch2D::Batch2D()
+        Batch2D::Batch2D(const unsigned int a_capacity)
         {
             std::fill(this->textures.begin(), this->textures.end(), nullptr);
 
@@ -211,6 +211,9 @@ namespace GJGO
             this->m_vao.setAttrib(1, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), 3 * sizeof(float));
             this->m_vao.setAttrib(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), 5 * sizeof(float));
             this->m_vao.setAttrib(3, 1, GL_FLOAT, GL_FALSE, 9 * sizeof(float), 8 * sizeof(float));
+
+            this->m_vbo.fill(36 * sizeof(float) * a_capacity, nullptr, GL_DYNAMIC_DRAW);
+            this->m_ibo.fill(6 * sizeof(unsigned int) * a_capacity, nullptr, GL_DYNAMIC_DRAW);
         }
 
         size_t Batch2D::size() const
@@ -270,9 +273,6 @@ namespace GJGO
             batchSpriteShader->bind();
             this->m_vao.bind();
 
-            this->m_vbo.fill(this->m_vertices.size() * sizeof(float), this->m_vertices.data(), GL_STATIC_DRAW);
-            this->m_ibo.fill(this->m_indices.size() * sizeof(unsigned int), this->m_indices.data(), GL_STATIC_DRAW);
-
             for (unsigned int i = 0; i < this->textures.size(); i++)
             {
                 if (this->textures[i] != nullptr)
@@ -280,6 +280,9 @@ namespace GJGO
                     this->textures[i]->bind(i);
                 }
             }
+
+            glBufferSubData(GL_ARRAY_BUFFER, 0, this->m_vertices.size() * sizeof(float), this->m_vertices.data());
+            glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, this->m_indices.size() * sizeof(float), this->m_indices.data());
 
             glDrawElements(GL_TRIANGLES, this->m_indices.size(), GL_UNSIGNED_INT, nullptr);
             numDrawCallsPerFrame++;

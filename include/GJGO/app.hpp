@@ -10,6 +10,7 @@
 
 #include <GJGO/event.hpp>
 #include <GJGO/layer.hpp>
+#include <GJGO/renderer2D.hpp>
 
 namespace GJGO
 {
@@ -37,6 +38,8 @@ namespace GJGO
         std::vector<Event> pendingEvents;
         std::vector<Layer*> layers;
     private:
+        Renderer::Batch2D* m_batch;
+
         void drawEntities();
     };
 }

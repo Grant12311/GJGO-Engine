@@ -135,6 +135,8 @@ namespace GJGO
         glViewport(0, 0, a_settings.windowWidth, a_settings.windowHeight);
 
         Renderer::init2D();
+
+        this->m_batch = new Renderer::Batch2D(20000);
     }
 
     App::~App()
@@ -143,6 +145,8 @@ namespace GJGO
         {
             delete l_layer;
         }
+
+        delete this->m_batch;
 
         Renderer::shutdown2D();
 
@@ -192,46 +196,23 @@ namespace GJGO
         }
     }
 
-    static void drawEntityList(const std::vector<Entity> &a_entities)
-    {
-        Renderer::Batch2D batch;
-        unsigned int texturesUsed = 0;
-
-        for (Entity l_entity : a_entities)
-        {
-            const SpriteComponent& sprite = l_entity.getComponent<SpriteComponent>();
-
-            if (std::find(batch.textures.begin(), batch.textures.end(), sprite.texture) == batch.textures.end())
-            {
-                batch.textures[texturesUsed++] = sprite.texture;
-            }
-        }
-
-        Renderer::begin2D(*Camera2D::primary, Window::getWidth(), Window::getHeight());
-
-        for (Entity l_entity : a_entities)
-        {
-            const Transform2DComponent& transform = l_entity.getComponent<Transform2DComponent>();
-            const SpriteComponent& sprite = l_entity.getComponent<SpriteComponent>();
-
-            batch.addQuad(transform.position, transform.size, transform.rotation, sprite.color, sprite.texture != nullptr ? std::distance(batch.textures.begin(), std::find(batch.textures.begin(), batch.textures.end(), sprite.texture)) : -1.0f);
-        }
-
-        batch.draw();
-    }
-
     void App::drawEntities()
     {
+        this->m_batch->clear();
+        unsigned int texturesUsed = 0;
+
         if (Renderer::useBatchRendererAsDefault)
         {
-            std::vector<Entity> spriteEntities;
-            std::vector<Entity> spriteEntitiesTransparent;
-            spriteEntities.reserve(this->registry.size<SpriteComponent>());
+            std::vector<Entity> transparentEntities;
+
             auto view = this->registry.view<Transform2DComponent, SpriteComponent>();
+
+            GJGO::Renderer::begin2D(*Camera2D::primary, Window::getWidth(), Window::getHeight());
 
             for (const entt::entity l_entity : view)
             {
-                const GJGO::SpriteComponent& sprite = view.get<SpriteComponent>(l_entity);
+                const Transform2DComponent& transform = view.get<Transform2DComponent>(l_entity);
+                const SpriteComponent& sprite = view.get<SpriteComponent>(l_entity);
 
                 bool textureUsesTransparency = false;
 
@@ -240,21 +221,47 @@ namespace GJGO
                     textureUsesTransparency = (sprite.texture->getSettings() & TextureSettings::hasTransparency);
                 }
 
-                if (sprite.color.a >= 1.0f && !textureUsesTransparency)
+                if (sprite.color.a < 1.0f || textureUsesTransparency)
                 {
-                    spriteEntities.emplace_back(l_entity);
-                }else{
-                    spriteEntitiesTransparent.emplace_back(l_entity);
+                    transparentEntities.emplace_back(l_entity);
+                    continue;
                 }
+
+                if (std::find(this->m_batch->textures.begin(), this->m_batch->textures.end(), sprite.texture) == this->m_batch->textures.end())
+                {
+                    this->m_batch->textures[texturesUsed++] = sprite.texture;
+                }
+
+                this->m_batch->addQuad(transform.position, transform.size, transform.rotation, sprite.color, sprite.texture != nullptr ? std::distance(this->m_batch->textures.begin(), std::find(this->m_batch->textures.begin(), this->m_batch->textures.end(), sprite.texture)) : -1.0f);
             }
 
-            std::sort(spriteEntitiesTransparent.begin(), spriteEntitiesTransparent.end(), [](Entity a_a, Entity a_b) -> bool
-            {
-                return a_a.getComponent<Transform2DComponent>().position.z < a_b.getComponent<Transform2DComponent>().position.z;
-            });
+            this->m_batch->draw();
 
-            drawEntityList(spriteEntities);
-            drawEntityList(spriteEntitiesTransparent);
+            if (transparentEntities.size() > 0)
+            {
+                this->m_batch->clear();
+                texturesUsed = 0;
+
+                std::sort(transparentEntities.begin(), transparentEntities.end(), [](Entity a_a, Entity a_b) -> bool
+                {
+                    return a_a.getComponent<Transform2DComponent>().position.z < a_b.getComponent<Transform2DComponent>().position.z;
+                });
+
+                for (Entity l_entity : transparentEntities)
+                {
+                    const Transform2DComponent& transform = l_entity.getComponent<Transform2DComponent>();
+                    const SpriteComponent& sprite = l_entity.getComponent<SpriteComponent>();
+
+                    if (std::find(this->m_batch->textures.begin(), this->m_batch->textures.end(), sprite.texture) == this->m_batch->textures.end())
+                    {
+                        this->m_batch->textures[texturesUsed++] = sprite.texture;
+                    }
+
+                    this->m_batch->addQuad(transform.position, transform.size, transform.rotation, sprite.color, sprite.texture != nullptr ? std::distance(this->m_batch->textures.begin(), std::find(this->m_batch->textures.begin(), this->m_batch->textures.end(), sprite.texture)) : -1.0f);
+                }
+
+                this->m_batch->draw();
+            }
         }else{
             std::vector<Entity> transparentEntities;
 

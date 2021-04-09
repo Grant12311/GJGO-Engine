@@ -29,7 +29,7 @@ namespace GJGO
         public:
             std::array<Texture2D*, 16> textures;
 
-            Batch2D();
+            Batch2D(const unsigned int a_capacity);
 
             size_t size() const;
             void clear();
