@@ -1,4 +1,6 @@
 #include <cassert>
+#include <fstream>
+#include <iostream>
 #include <memory>
 #include <unordered_map>
 
@@ -23,10 +25,9 @@ namespace GJGO
         return this->p_ID;
     }
 
-    Texture* Texture::get(const std::string &a_path)
+    unsigned int Texture::getSettings()
     {
-        assert(textures.find(a_path) != textures.end());
-        return textures[a_path];
+        return this->p_settings;
     }
 
     void Texture2D::bind(const unsigned int a_slot)
@@ -56,17 +57,17 @@ namespace GJGO
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, a_magFilter);
     }
 
-    Texture2D* Texture2D::create(const std::string &a_path, const bool a_flipY, const unsigned int a_minFilter, const unsigned int a_magFilter, const unsigned int a_wrapS, const unsigned int a_wrapT)
+    Texture2D* Texture2D::create(const std::string &a_path, const unsigned int a_settings, const unsigned int a_minFilter, const unsigned int a_magFilter, const unsigned int a_wrapS, const unsigned int a_wrapT)
     {
         Texture2D* texture;
         int width, height, bpp;
 
-        stbi_set_flip_vertically_on_load(a_flipY);
+        stbi_set_flip_vertically_on_load(a_settings & TextureSettings::flipY);
         unsigned char* const data = stbi_load(a_path.c_str(), &width, &height, &bpp, 4);
 
         if (data)
         {
-            texture = create(a_path, data, width, height, a_minFilter, a_magFilter, a_wrapS, a_wrapT);
+            texture = create(a_path, data, width, height, a_settings, a_minFilter, a_magFilter, a_wrapS, a_wrapT);
             stbi_image_free(data);
         }else{
             GJGO_LOG_ERROR("Texture at ", a_path, " could not be created!");
@@ -75,7 +76,7 @@ namespace GJGO
         return texture;
     }
 
-    Texture2D* Texture2D::create(const std::string &a_name, unsigned char* const a_data, const int a_width, const int a_height, const unsigned int a_minFilter, const unsigned int a_magFilter, const unsigned int a_wrapS, const unsigned int a_wrapT)
+    Texture2D* Texture2D::create(const std::string &a_name, unsigned char* const a_data, const int a_width, const int a_height, const unsigned int a_settings, const unsigned int a_minFilter, const unsigned int a_magFilter, const unsigned int a_wrapS, const unsigned int a_wrapT)
     {
         assert(textures.find(a_name) == textures.end());
         assert(a_data);
@@ -86,6 +87,8 @@ namespace GJGO
         texture->p_width = a_width;
         texture->p_height = a_height;
 
+        texture->p_settings = a_settings;
+
         glGenTextures(1, &texture->p_ID);
         texture->bind();
         texture->setFilters(a_minFilter, a_magFilter);
@@ -95,5 +98,11 @@ namespace GJGO
         glGenerateMipmap(GL_TEXTURE_2D);
 
         return texture;
+    }
+
+    Texture2D* Texture2D::get(const std::string &a_path)
+    {
+        assert(textures.find(a_path) != textures.end());
+        return static_cast<Texture2D*>(textures[a_path]);
     }
 }
