@@ -43,12 +43,12 @@ namespace GJGO
     static void mousePositionCallback(GLFWwindow* const /*a_windowPtr*/, const double a_x, const double a_y)
     {
         glm::vec2 windowPosition = Window::getPosition();
-        int windowHeight = Window::getHeight();
+        float windowHeight = Window::getHeight();
 
         Event& event = App::instance->pendingEvents.emplace_back(EventType::mouseMove);
         event.mousePosition.relative = {static_cast<int>(a_x), static_cast<int>(windowHeight) - static_cast<int>(a_y) - 1};
 
-        event.mousePosition.absolute = {windowPosition.x + static_cast<int>(a_x), windowPosition.y + event.mousePosition.relative.y};
+        event.mousePosition.absolute = {static_cast<int>(windowPosition.x + a_x), static_cast<int>(windowPosition.y) + event.mousePosition.relative.y};
     }
 
     static void mouseButtonCallback(GLFWwindow* const /*a_windowPtr*/, const int a_button, const int a_action, const int /*a_mods*/)
@@ -207,7 +207,7 @@ namespace GJGO
 
             auto view = this->registry.view<Transform2DComponent, SpriteComponent>();
 
-            GJGO::Renderer::begin2D(*Camera2D::primary, Window::getWidth(), Window::getHeight());
+            GJGO::Renderer::begin2D(*Camera2D::primary, static_cast<unsigned int>(Window::getWidth()), static_cast<unsigned int>(Window::getHeight()));
 
             for (const entt::entity l_entity : view)
             {
@@ -232,7 +232,7 @@ namespace GJGO
                     this->m_batch->textures[texturesUsed++] = sprite.texture;
                 }
 
-                this->m_batch->addQuad(transform.position, transform.size, transform.rotation, sprite.color, sprite.texture != nullptr ? std::distance(this->m_batch->textures.begin(), std::find(this->m_batch->textures.begin(), this->m_batch->textures.end(), sprite.texture)) : -1.0f);
+                this->m_batch->addQuad(transform.position, transform.size, transform.rotation, sprite.color, sprite.texture != nullptr ? static_cast<float>(std::distance(this->m_batch->textures.begin(), std::find(this->m_batch->textures.begin(), this->m_batch->textures.end(), sprite.texture))) : -1.0f);
             }
 
             this->m_batch->draw();
@@ -257,7 +257,7 @@ namespace GJGO
                         this->m_batch->textures[texturesUsed++] = sprite.texture;
                     }
 
-                    this->m_batch->addQuad(transform.position, transform.size, transform.rotation, sprite.color, sprite.texture != nullptr ? std::distance(this->m_batch->textures.begin(), std::find(this->m_batch->textures.begin(), this->m_batch->textures.end(), sprite.texture)) : -1.0f);
+                    this->m_batch->addQuad(transform.position, transform.size, transform.rotation, sprite.color, sprite.texture != nullptr ? static_cast<float>(std::distance(this->m_batch->textures.begin(), std::find(this->m_batch->textures.begin(), this->m_batch->textures.end(), sprite.texture))) : -1.0f);
                 }
 
                 this->m_batch->draw();
