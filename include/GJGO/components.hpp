@@ -34,7 +34,7 @@ namespace GJGO
         Texture2D* texture;
         glm::vec4 color;
 
-        SpriteComponent(Texture2D* const a_texture = nullptr, const glm::vec4 &a_color = glm::vec4(1.0f), const int a_layer = 0) :
+        SpriteComponent(Texture2D* const a_texture = nullptr, const glm::vec4 &a_color = glm::vec4(1.0f)) :
             texture(a_texture), color(a_color) {}
     };
 }
