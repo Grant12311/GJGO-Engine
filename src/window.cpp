@@ -25,7 +25,7 @@ namespace GJGO
         {
             int x, y;
             glfwGetWindowPos(App::instance->window, &x, &y);
-            y = Display::getHeight() - Window::getHeight() - y;
+            y = Display::getHeight() - static_cast<int>(Window::getHeight()) - y;
 
             return {x, y};
         }
