@@ -284,7 +284,7 @@ namespace GJGO
             glBufferSubData(GL_ARRAY_BUFFER, 0, this->m_vertices.size() * sizeof(float), this->m_vertices.data());
             glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, this->m_indices.size() * sizeof(float), this->m_indices.data());
 
-            glDrawElements(GL_TRIANGLES, this->m_indices.size(), GL_UNSIGNED_INT, nullptr);
+            glDrawElements(GL_TRIANGLES, static_cast<int>(this->m_indices.size()), GL_UNSIGNED_INT, nullptr);
             numDrawCallsPerFrame++;
 
             spriteShader->bind();
