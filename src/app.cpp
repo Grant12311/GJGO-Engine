@@ -267,7 +267,7 @@ namespace GJGO
 
             auto view = this->registry.view<Transform2DComponent, SpriteComponent>();
 
-            GJGO::Renderer::begin2D(*Camera2D::primary, Window::getWidth(), Window::getHeight());
+            GJGO::Renderer::begin2D(*Camera2D::primary, static_cast<unsigned int>(Window::getWidth()), static_cast<unsigned int>(Window::getHeight()));
 
             for (const entt::entity l_entity : view)
             {
