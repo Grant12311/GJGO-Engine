@@ -7,7 +7,7 @@
 
 namespace GJGO
 {
-    static void framebufferResizeCallback(GLFWwindow* const a_window, const int a_width, const int a_height)
+    static void framebufferResizeCallback(GLFWwindow* const /*a_window*/, const int a_width, const int a_height)
     {
         glViewport(0, 0, a_width, a_height);
     }
