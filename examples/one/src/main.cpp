@@ -38,7 +38,7 @@ public:
                 total += l_dt;
             }
 
-            GJGO::Window::setTitle((std::to_string(1.0 / (total / times.size()) * 1000.0) + std::string(" - ") + std::to_string(GJGO::Renderer::numDrawCallsPerFrame)).c_str());
+            GJGO::Window::setTitle((std::to_string(1.0 / (total / static_cast<double>(times.size())) * 1000.0) + std::string(" - ") + std::to_string(GJGO::Renderer::numDrawCallsPerFrame)).c_str());
 
             timePassed = 0.0;
             times.clear();
@@ -51,44 +51,44 @@ public:
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_W))
         {
-            plrTransform.position.y += 1.0f * GJGO::App::instance->deltaTime;
+            plrTransform.position.y += static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_S))
         {
-            plrTransform.position.y -= 1.0f * GJGO::App::instance->deltaTime;
+            plrTransform.position.y -= static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_A))
         {
-            plrTransform.position.x -= 1.0f * GJGO::App::instance->deltaTime;
+            plrTransform.position.x -= static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_D))
         {
-            plrTransform.position.x += 1.0f * GJGO::App::instance->deltaTime;
+            plrTransform.position.x += static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_UP))
         {
-            plrTransform.size.x += 1.0f * GJGO::App::instance->deltaTime;
-            plrTransform.size.y += 1.0f * GJGO::App::instance->deltaTime;
+            plrTransform.size.x += static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
+            plrTransform.size.y += static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_DOWN))
         {
-            plrTransform.size.x -= 1.0f * GJGO::App::instance->deltaTime;
-            plrTransform.size.y -= 1.0f * GJGO::App::instance->deltaTime;
+            plrTransform.size.x -= static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
+            plrTransform.size.y -= static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_RIGHT))
         {
-            plrTransform.rotation += 0.1f * GJGO::App::instance->deltaTime;
+            plrTransform.rotation += static_cast<float>(0.1 * GJGO::App::instance->deltaTime);
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_LEFT))
         {
-            plrTransform.rotation -= 0.1f * GJGO::App::instance->deltaTime;
+            plrTransform.rotation -= static_cast<float>(0.1 * GJGO::App::instance->deltaTime);
         }
     }
 
