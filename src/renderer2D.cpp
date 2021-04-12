@@ -241,8 +241,8 @@ namespace GJGO
                 1, 0, 0, 1.0f, 1.0f, a_color.r, a_color.g, a_color.b, a_textureIndex  // lower right
             };
             std::array<unsigned int, 6> quadIndices = {
-                0 + 4 * this->size(), 1 + 4 * this->size(), 2 + 4 * this->size(),
-                0 + 4 * this->size(), 3 + 4 * this->size(), 2 + 4 * this->size()
+                0 + 4 * static_cast<unsigned int>(this->size()), 1 + 4 * static_cast<unsigned int>(this->size()), 2 + 4 * static_cast<unsigned int>(this->size()),
+                0 + 4 * static_cast<unsigned int>(this->size()), 3 + 4 * static_cast<unsigned int>(this->size()), 2 + 4 * static_cast<unsigned int>(this->size())
             };
 
             std::array<glm::vec4, 4> transformedVertexPositions;
