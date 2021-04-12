@@ -11,12 +11,12 @@ namespace GJGO
             glfwSetWindowTitle(App::instance->window, a_title);
         }
 
-        int getPositionX()
+        float getPositionX()
         {
             return getPosition().x;
         }
 
-        int getPositionY()
+        float getPositionY()
         {
             return getPosition().y;
         }
@@ -30,12 +30,12 @@ namespace GJGO
             return {x, y};
         }
 
-        int getWidth()
+        float getWidth()
         {
             return getSize().x;
         }
 
-        int getHeight()
+        float getHeight()
         {
             return getSize().y;
         }

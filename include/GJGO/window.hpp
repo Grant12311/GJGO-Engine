@@ -11,12 +11,12 @@ namespace GJGO
     {
         void setTitle(const char* const a_title);
 
-        int getPositionX();
-        int getPositionY();
+        float getPositionX();
+        float getPositionY();
         glm::vec2 getPosition();
 
-        int getWidth();
-        int getHeight();
+        float getWidth();
+        float getHeight();
         glm::vec2 getSize();
         void setSize(const int a_width, const int a_height);
 
