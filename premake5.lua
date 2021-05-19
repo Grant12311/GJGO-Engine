@@ -17,7 +17,11 @@ workspace "GJGO"
 
     filter "action:not vs*"
         toolset "gcc"
-        buildoptions {"-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion", "-Wno-switch", "-Wno-unused-variable"}
+
+    filter "files:not glad.c"
+        buildoptions {"-Wpedantic", "-Wextra", "-Wnon-virtual-dtor", "-Winline", "-Wunreachable-code", "-Wshadow", "-Wconversion", "-Wno-switch", "-Wno-unused-variable", "-Wold-style-cast",
+                      "-Wcast-align", "-Wunused", "-Woverloaded-virtual", "-Wsign-conversion", "-Wduplicated-cond", "-Wduplicated-branches", "-Wlogical-op", "-Wnull-dereference", "-Wuseless-cast",
+                      "-Wdouble-promotion"}
 
     filter "platforms:Linux*"
         system "linux"
