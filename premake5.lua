@@ -39,8 +39,9 @@ workspace "GJGO"
 
     filter "configurations:Debug"
         symbols "On"
-        buildoptions {"-pg", "-fsanitize=address", "-fsanitize=leak", "-static-libasan"}
-        linkoptions {"-pg", "-fsanitize=address", "-fsanitize=leak", "-static-libasan"}
+        links {"ubsan"}
+        buildoptions {"-pg", "-fsanitize=address", "-fsanitize=leak", "-fsanitize=undefined", "-static-libasan"}
+        linkoptions {"-pg", "-fsanitize=address", "-fsanitize=leak", "-fsanitize=undefined", "-static-libasan"}
         defines {"GJGO_BUILD_CONFIG_DEBUG"}
 
     filter "configurations:Release"
