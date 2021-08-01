@@ -20,11 +20,13 @@ namespace GJGO
         glDeleteTextures(1, &this->p_ID);
     }
 
+    [[nodiscard]]
     unsigned int Texture::getID()
     {
         return this->p_ID;
     }
 
+    [[nodiscard]]
     unsigned int Texture::getSettings()
     {
         return this->p_settings;
@@ -100,6 +102,7 @@ namespace GJGO
         return texture;
     }
 
+    [[nodiscard]]
     Texture2D* Texture2D::get(const std::string &a_path)
     {
         assert(textures.find(a_path) != textures.end());

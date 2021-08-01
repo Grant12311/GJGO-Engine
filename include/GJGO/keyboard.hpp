@@ -5,6 +5,7 @@ namespace GJGO
 {
     namespace Keyboard
     {
+        [[nodiscard]]
         bool keyIsDown(const int a_key);
     }
 }

@@ -5,11 +5,13 @@ namespace GJGO
 {
     namespace Display
     {
+        [[nodiscard]]
         int getWidth()
         {
             return glfwGetVideoMode(glfwGetPrimaryMonitor())->width;
         }
 
+        [[nodiscard]]
         int getHeight()
         {
             return glfwGetVideoMode(glfwGetPrimaryMonitor())->height;

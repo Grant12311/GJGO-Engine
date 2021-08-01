@@ -22,6 +22,7 @@ namespace GJGO
         return App::instance->registry.create();
     }
 
+    [[nodiscard]]
     Entity Entity::getByName(const std::string &a_name)
     {
         auto view = App::instance->registry.view<TagComponent>();

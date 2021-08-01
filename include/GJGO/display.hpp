@@ -5,7 +5,9 @@ namespace GJGO
 {
     namespace Display
     {
+        [[nodiscard]]
         int getWidth();
+        [[nodiscard]]
         int getHeight();
     }
 }

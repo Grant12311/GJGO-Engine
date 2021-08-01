@@ -31,6 +31,7 @@ namespace GJGO
 
             Batch2D(const unsigned int a_capacity);
 
+            [[nodiscard]]
             size_t size() const;
             void clear();
 

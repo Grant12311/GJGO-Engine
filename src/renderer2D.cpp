@@ -28,6 +28,7 @@ namespace GJGO
 
         static glm::mat4 orthoMatrix;
 
+        [[nodiscard]]
         static glm::mat4 genTransformer2D(const glm::vec3 &a_position, const glm::vec2 &a_size, const float a_rotation)
         {
             glm::mat4 toReturn = glm::translate(glm::mat4(1.0f), a_position);
@@ -216,6 +217,7 @@ namespace GJGO
             this->m_ibo.fill(6 * sizeof(unsigned int) * a_capacity, nullptr, GL_DYNAMIC_DRAW);
         }
 
+        [[nodiscard]]
         size_t Batch2D::size() const
         {
             return this->m_vertices.size() / 36;

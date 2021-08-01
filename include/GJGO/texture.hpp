@@ -24,7 +24,9 @@ namespace GJGO
         virtual void setMinFilter(const unsigned int a_minFilter) = 0;
         virtual void setFilters(const unsigned int a_magFilter, const unsigned int a_minFilter) = 0;
 
+        [[nodiscard]]
         unsigned int getID();
+        [[nodiscard]]
         unsigned int getSettings();
     protected:
         unsigned int p_ID;
@@ -45,6 +47,7 @@ namespace GJGO
         static Texture2D* create(const std::string &a_path, const unsigned int a_settings = TextureSettings::hasTransparency, const unsigned int a_minFilter = GL_LINEAR, const unsigned int a_magFilter = GL_LINEAR, const unsigned int a_wrapS = GL_CLAMP_TO_EDGE, const unsigned int a_wrapT = GL_CLAMP_TO_EDGE);
         static Texture2D* create(const std::string &a_name, unsigned char* const a_data, const int a_width, const int a_height, const unsigned int a_settings = TextureSettings::hasTransparency, const unsigned int a_minFilter = GL_LINEAR, const unsigned int a_magFilter = GL_LINEAR, const unsigned int a_wrapS = GL_CLAMP_TO_EDGE, const unsigned int a_wrapT = GL_CLAMP_TO_EDGE);
 
+        [[nodiscard]]
         static Texture2D* get(const std::string &a_path);
     };
 }

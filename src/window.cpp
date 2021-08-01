@@ -11,16 +11,19 @@ namespace GJGO
             glfwSetWindowTitle(App::instance->window, a_title);
         }
 
+        [[nodiscard]]
         float getPositionX()
         {
             return getPosition().x;
         }
 
+        [[nodiscard]]
         float getPositionY()
         {
             return getPosition().y;
         }
 
+        [[nodiscard]]
         glm::vec2 getPosition()
         {
             int x, y;
@@ -30,16 +33,19 @@ namespace GJGO
             return {x, y};
         }
 
+        [[nodiscard]]
         float getWidth()
         {
             return getSize().x;
         }
 
+        [[nodiscard]]
         float getHeight()
         {
             return getSize().y;
         }
 
+        [[nodiscard]]
         glm::vec2 getSize()
         {
             int width;

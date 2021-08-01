@@ -15,11 +15,13 @@ namespace GJGO
         static Entity create(const std::string &a_name);
         static Entity create();
 
+        [[nodiscard]]
         static Entity getByName(const std::string &a_name);
 
         bool isValid;
 
-        inline entt::entity getRaw() const { return this->m_entity; }
+        [[nodiscard]]
+        constexpr entt::entity getRaw() const { return this->m_entity; }
 
         template<typename T, typename... ARGS>
         void addComponent(ARGS... a_args)
@@ -34,12 +36,21 @@ namespace GJGO
         }
 
         template<typename T>
+        [[nodiscard]]
         T& getComponent()
         {
             return App::instance->registry.get<T>(this->m_entity);
         }
 
         template<typename T>
+        [[nodiscard]]
+        const T& getComponent() const
+        {
+            return App::instance->registry.get<T>(this->m_entity);
+        }
+
+        template<typename T>
+        [[nodiscard]]
         bool hasComponent()
         {
             return App::instance->registry.has<T>(this->m_entity);
