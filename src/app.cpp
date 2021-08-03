@@ -1,4 +1,4 @@
-#include <map>
+#include <functional>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -161,6 +161,26 @@ namespace GJGO
         while (!glfwWindowShouldClose(this->window))
         {
             glfwPollEvents();
+
+            // Collision
+            for (entt::entity l_entity1 : this->registry.view<RigidBody2DComponent, Transform2DComponent>())
+            {
+                for (entt::entity l_entity2 : this->registry.view<RigidBody2DComponent, Transform2DComponent>())
+                {
+                    if (l_entity2 != l_entity1)
+                    {
+                        if (rigidBodiesCollied(this->registry.get<Transform2DComponent>(l_entity1), this->registry.get<Transform2DComponent>(l_entity2)))
+                        {
+                            try
+                            {
+                                this->registry.get<RigidBody2DComponent>(l_entity1).action(Entity(l_entity1), Entity(l_entity2));
+                            }catch (std::bad_function_call &e){
+
+                            }
+                        }
+                    }
+                }
+            }
 
             for (Layer* const l_layerPtr : this->layers)
             {

@@ -1,28 +1,33 @@
+#include <algorithm>
+#include <array>
+#include <string>
+#include <vector>
+
 #include <GJGO/gjgo.hpp>
 
 class GameLayer final : public GJGO::Layer
 {
 public:
-    GJGO::Entity player;
+    GJGO::Entity e1;
+    GJGO::Entity e2;
 
     GameLayer() :
-        player(GJGO::Entity::create("Plr"))
+        e1(GJGO::Entity::create("e1")), e2(GJGO::Entity::create("e2"))
     {
         this->name = "Game Layer";
 
-        this->player.addComponent<GJGO::Transform2DComponent>(glm::vec3(100.0f, 100.0f, 0.0f), glm::vec2(100.0f, 100.0f));
-        this->player.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/wall.jpg", GJGO::TextureSettings::standard, GL_NEAREST, GL_NEAREST));
+        e1.addComponent<GJGO::Transform2DComponent>(glm::vec3(100.0, 100.0, 0.0), glm::vec2(100.0, 100.0));
+        e2.addComponent<GJGO::Transform2DComponent>(glm::vec3(215.0, 215.0, 0.0), glm::vec2(100.0, 100.0));
 
-        GJGO::Entity trans = GJGO::Entity::create();
-        trans.addComponent<GJGO::Transform2DComponent>(glm::vec3(100.0f, 100.0f, 1.0f), glm::vec2(100.0f, 100.0f));
-        trans.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/trans.png", GJGO::TextureSettings::hasTransparency, GL_NEAREST, GL_NEAREST), glm::vec4(1.0f));
+        e1.addComponent<GJGO::SpriteComponent>();
+        e2.addComponent<GJGO::SpriteComponent>();
 
-        for (unsigned int i = 0; i < 10; i++)
+        e1.addComponent<GJGO::RigidBody2DComponent>([](const GJGO::Entity a_e1, const GJGO::Entity a_e2)
         {
-            GJGO::Entity e = GJGO::Entity::create();
-            e.addComponent<GJGO::Transform2DComponent>(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(100.0f, 100.0f));
-            e.addComponent<GJGO::SpriteComponent>(nullptr, glm::vec4(1.0f));
-        }
+            std::cout << a_e1.getComponent<GJGO::TagComponent>().name << " <-> " << a_e2.getComponent<GJGO::TagComponent>().name << '\n';
+        });
+
+        e2.addComponent<GJGO::RigidBody2DComponent>();
     }
 
     virtual void onUpdate() override
@@ -32,7 +37,7 @@ public:
 
         if (timePassed >= 100.0)
         {
-            double total;
+            double total = 0.0;
             for (const double l_dt : times)
             {
                 total += l_dt;
@@ -47,48 +52,24 @@ public:
             timePassed += GJGO::App::instance->deltaTime;
         }
 
-        GJGO::Transform2DComponent& plrTransform = this->player.getComponent<GJGO::Transform2DComponent>();
-
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_W))
         {
-            plrTransform.position.y += static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
+            e1.getComponent<GJGO::Transform2DComponent>().position.y += 1.0 * GJGO::App::instance->deltaTime;
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_S))
         {
-            plrTransform.position.y -= static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
+            e1.getComponent<GJGO::Transform2DComponent>().position.y -= 1.0 * GJGO::App::instance->deltaTime;
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_A))
         {
-            plrTransform.position.x -= static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
+            e1.getComponent<GJGO::Transform2DComponent>().position.x -= 1.0 * GJGO::App::instance->deltaTime;
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_D))
         {
-            plrTransform.position.x += static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
-        }
-
-        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_UP))
-        {
-            plrTransform.size.x += static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
-            plrTransform.size.y += static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
-        }
-
-        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_DOWN))
-        {
-            plrTransform.size.x -= static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
-            plrTransform.size.y -= static_cast<float>(1.0 * GJGO::App::instance->deltaTime);
-        }
-
-        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_RIGHT))
-        {
-            plrTransform.rotation += static_cast<float>(0.1 * GJGO::App::instance->deltaTime);
-        }
-
-        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_LEFT))
-        {
-            plrTransform.rotation -= static_cast<float>(0.1 * GJGO::App::instance->deltaTime);
+            e1.getComponent<GJGO::Transform2DComponent>().position.x += 1.0 * GJGO::App::instance->deltaTime;
         }
     }
 
@@ -97,17 +78,8 @@ public:
         switch (a_event.type)
         {
             case GJGO::EventType::keyDown:
-                GJGO_LOG_INFO("DOWN: ", a_event.keycode);
                 switch (a_event.keycode)
                 {
-                    case GLFW_KEY_LEFT_BRACKET:
-                        GJGO::Texture2D::get("res/wall.jpg")->bind();
-                        GJGO::Texture2D::get("res/wall.jpg")->setFilters(GL_NEAREST, GL_NEAREST);
-                        break;
-                    case GLFW_KEY_RIGHT_BRACKET:
-                        GJGO::Texture2D::get("res/wall.jpg")->bind();
-                        GJGO::Texture2D::get("res/wall.jpg")->setFilters(GL_LINEAR, GL_LINEAR);
-                        break;
                     case GLFW_KEY_EQUAL:
                         GJGO::Renderer::useBatchRendererAsDefault = true;
                         break;
@@ -116,34 +88,22 @@ public:
                         break;
                 }
                 break;
-            case GJGO::EventType::keyUp:
-                GJGO_LOG_INFO("UP  : ", a_event.keycode);
-                break;
-            case GJGO::EventType::keyTypedDown:
-                //GJGO_LOG_INFO(a_event.keycode);
-                break;
-            case GJGO::EventType::mouseMove:
-                //GJGO_LOG_INFO("POS: ", '(', a_event.mousePosition.relative.x, ", ", a_event.mousePosition.relative.y, ')');
-                break;
-            case GJGO::EventType::mouseButtonDown:
-                //GJGO_LOG_INFO("DOWN: ", static_cast<unsigned short>(a_event.mouseButton));
-                break;
-            case GJGO::EventType::mouseButtonUp:
-                //GJGO_LOG_INFO("UP  : ", static_cast<unsigned short>(a_event.mouseButton));
-                break;
-            case GJGO::EventType::mouseWheelScroll:
-                GJGO_LOG_INFO("Wheel Dir: ", static_cast<short>(a_event.mouseWheelDirection));
-                break;
-            case GJGO::EventType::windowResize:
-                //GJGO_LOG_INFO("Win Size: ", '(', a_event.windowSize.x, ", ", a_event.windowSize.y, ')');
+            default:
                 break;
         }
+    }
+
+    virtual void draw() override
+    {
+
     }
 };
 
 int main()
 {
     GJGO::AppSettings settings;
+    settings.windowWidth = 768;
+    settings.windowHeight = 432;
 
     GJGO::App app(settings);
 
