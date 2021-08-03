@@ -50,7 +50,7 @@
             inline bool printLine = false;
 
             template<typename... Args>
-            static void logInfo(const char* const a_file, const char* const a_function, const int a_line, Args... args)
+            inline void logInfo(const char* const a_file, const char* const a_function, const int a_line, Args... args)
             {
                 if (level <= Level::INFO)
                 {
@@ -70,7 +70,7 @@
             }
 
             template<typename... Args>
-            static void logWarn(const char* const a_file, const char* const a_function, const int a_line, Args... args)
+            inline void logWarn(const char* const a_file, const char* const a_function, const int a_line, Args... args)
             {
                 if (level <= Level::WARN)
                 {
@@ -90,7 +90,7 @@
             }
 
             template<typename... Args>
-            static void logError(const char* const a_file, const char* const a_function, const int a_line, Args... args)
+            inline void logError(const char* const a_file, const char* const a_function, const int a_line, Args... args)
             {
                 if (level <= Level::ERROR)
                 {
