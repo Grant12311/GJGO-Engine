@@ -19,9 +19,9 @@ namespace GJGO
     {
         static int maxTextureUnits;
 
-        static Druid::VAO* quadVao;
-        static Druid::VBO* quadVbo;
-        static Druid::IBO* quadIbo;
+        static Druid::VAO quadVao(Druid::earlyCreate);
+        static Druid::VBO quadVbo(Druid::earlyCreate);
+        static Druid::IBO quadIbo(Druid::earlyCreate);
 
         static Druid::Shader* spriteShader;
         static Druid::Shader* batchSpriteShader;
@@ -60,7 +60,7 @@ namespace GJGO
 
         void drawQuad(const glm::mat4 &a_transform, const glm::vec4 &a_color, GJGO::Texture* const a_texture)
         {
-            quadVao->bind();
+            quadVao.bind();
 
             if (a_texture)
             {
@@ -80,32 +80,32 @@ namespace GJGO
         {
             glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxTextureUnits);
 
-            std::array<float, 20> quadVertices = {
+            constexpr std::array<float, 20> quadVertices = {
                 0, 0, 0, 0.0f, 1.0f, // lower left
                 0, 1, 0, 0.0f, 0.0f, // upper left
                 1, 1, 0, 1.0f, 0.0f, // upper right
                 1, 0, 0, 1.0f, 1.0f  // lower right
             };
-            std::array<unsigned int, 6> quadIndices = {
+            constexpr std::array<unsigned int, 6> quadIndices = {
                 0, 1, 2,
                 0, 3, 2
             };
 
-            quadVao = new Druid::VAO;
-            quadVbo = new Druid::VBO;
-            quadIbo = new Druid::IBO;
+            quadVao = Druid::VAO();
+            quadVbo = Druid::VBO();
+            quadIbo = Druid::IBO();
 
-            quadVao->bind();
-            quadVbo->bind();
-            quadIbo->bind();
+            quadVao.bind();
+            quadVbo.bind();
+            quadIbo.bind();
 
-            quadVbo->fill(quadVertices.size() * sizeof(float), quadVertices.data(), GL_STATIC_DRAW);
-            quadIbo->fill(quadIndices.size() * sizeof(unsigned int), quadIndices.data(), GL_STATIC_DRAW);
+            quadVbo.fill(quadVertices.size() * sizeof(float), quadVertices.data(), GL_STATIC_DRAW);
+            quadIbo.fill(quadIndices.size() * sizeof(unsigned int), quadIndices.data(), GL_STATIC_DRAW);
 
-            quadVao->setAttrib(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
-            quadVao->setAttrib(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 3 * sizeof(float));
+            quadVao.setAttrib(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
+            quadVao.setAttrib(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 3 * sizeof(float));
 
-            const char* const spriteShaderVertexSource = "#version 400 core\n"
+            constexpr const char* spriteShaderVertexSource = "#version 400 core\n"
                 "precision highp float;"
                 "layout (location = 0) in vec3 aPos;"
                 "layout (location = 1) in vec2 aTexCoord;"
@@ -122,7 +122,7 @@ namespace GJGO
                 "    gl_Position = orthoMatrix * transformer * vec4(aPos, 1.0);"
                 "}";
 
-            const char* const spriteShaderFragmentSource = "#version 400 core\n"
+            constexpr const char* spriteShaderFragmentSource = "#version 400 core\n"
                 "precision highp float;"
                 "layout (location = 0) out vec4 color;"
                 "in vec2 ourTexCoord;"
@@ -141,7 +141,7 @@ namespace GJGO
 
             spriteShader = new Druid::Shader(spriteShaderVertexSource, spriteShaderFragmentSource);
 
-            const char* const batchSpriteShaderVertexSource = "#version 400 core\n"
+            constexpr const char* batchSpriteShaderVertexSource = "#version 400 core\n"
                 "precision highp float;"
                 "layout (location = 0) in vec3 aPos;"
                 "layout (location = 1) in vec2 aTexCoord;"
@@ -163,7 +163,7 @@ namespace GJGO
                 "    gl_Position = orthoMatrix * vec4(aPos, 1.0);"
                 "}";
 
-            const char* const batchSpriteShaderFragmentSource = "#version 400 core\n"
+            constexpr const char* batchSpriteShaderFragmentSource = "#version 400 core\n"
                 "precision highp float;"
                 "layout (location = 0) out vec4 color;"
                 "in vec2 ourTexCoord;"
@@ -192,10 +192,6 @@ namespace GJGO
 
         void shutdown2D()
         {
-            delete quadVao;
-            delete quadVbo;
-            delete quadIbo;
-
             delete spriteShader;
             delete batchSpriteShader;
         }
@@ -242,7 +238,7 @@ namespace GJGO
                 1, 1, 0, 1.0f, 0.0f, a_color.r, a_color.g, a_color.b, a_textureIndex, // upper right
                 1, 0, 0, 1.0f, 1.0f, a_color.r, a_color.g, a_color.b, a_textureIndex  // lower right
             };
-            std::array<unsigned int, 6> quadIndices = {
+            const std::array<unsigned int, 6> quadIndices = {
                 0 + 4 * static_cast<unsigned int>(this->size()), 1 + 4 * static_cast<unsigned int>(this->size()), 2 + 4 * static_cast<unsigned int>(this->size()),
                 0 + 4 * static_cast<unsigned int>(this->size()), 3 + 4 * static_cast<unsigned int>(this->size()), 2 + 4 * static_cast<unsigned int>(this->size())
             };
