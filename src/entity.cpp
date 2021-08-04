@@ -7,19 +7,16 @@
 
 namespace GJGO
 {
+    static unsigned long long int uuidCounter = 0;
+
     Entity::Entity(const entt::entity a_entity) :
         isValid(a_entity == entt::null ? false : true), m_entity(a_entity) {}
 
     Entity Entity::create(const std::string &a_name)
     {
         Entity created = App::instance->registry.create();
-        created.addComponent<TagComponent>(a_name);
+        created.addComponent<TagComponent>(uuidCounter++, a_name);
         return created;
-    }
-
-    Entity Entity::create()
-    {
-        return App::instance->registry.create();
     }
 
     [[nodiscard]]

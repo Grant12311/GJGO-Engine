@@ -12,8 +12,7 @@ namespace GJGO
     public:
         Entity(const entt::entity a_entity = entt::null);
 
-        static Entity create(const std::string &a_name);
-        static Entity create();
+        static Entity create(const std::string &a_name = "");
 
         [[nodiscard]]
         static Entity getByName(const std::string &a_name);
