@@ -7,69 +7,6 @@
 
 namespace GJGO
 {
-    static void framebufferResizeCallback(GLFWwindow* const /*a_window*/, const int a_width, const int a_height)
-    {
-        glViewport(0, 0, a_width, a_height);
-    }
-
-    static void windowSizeCallback(GLFWwindow* const /*a_windowPtr*/, const int a_width, const int a_height)
-    {
-        Event& event = App::instance->pendingEvents.emplace_back(EventType::windowResize);
-        event.windowSize = {a_width, a_height};
-    }
-
-    static void keyCallback(GLFWwindow* const /*a_windowPtr*/, const int a_key, const int /*a_scancode*/, const int a_action, const int /*a_mods*/)
-    {
-        EventType type = EventType::none;
-
-        if (a_action == GLFW_PRESS)
-            type = EventType::keyDown;
-        else if (a_action == GLFW_RELEASE)
-            type = EventType::keyUp;
-
-        if (type != EventType::none)
-        {
-            Event& event = App::instance->pendingEvents.emplace_back(type);
-            event.keycode = a_key;
-        }
-    }
-
-    static void keyTypedCallback(GLFWwindow* const /*a_windowPtr*/, const unsigned int a_char)
-    {
-        Event& event = App::instance->pendingEvents.emplace_back(EventType::keyTypedDown);
-        event.keycode = a_char;
-    }
-
-    static void mousePositionCallback(GLFWwindow* const /*a_windowPtr*/, const double a_x, const double a_y)
-    {
-        glm::vec2 windowPosition = Window::getPosition();
-        float windowHeight = Window::getHeight();
-
-        Event& event = App::instance->pendingEvents.emplace_back(EventType::mouseMove);
-        event.mousePosition.relative = {static_cast<int>(a_x), static_cast<int>(windowHeight) - static_cast<int>(a_y) - 1};
-
-        event.mousePosition.absolute = {static_cast<int>(windowPosition.x + a_x), static_cast<int>(windowPosition.y) + event.mousePosition.relative.y};
-    }
-
-    static void mouseButtonCallback(GLFWwindow* const /*a_windowPtr*/, const int a_button, const int a_action, const int /*a_mods*/)
-    {
-        EventType type;
-
-        if (a_action == GLFW_PRESS)
-            type = EventType::mouseButtonDown;
-        else if (a_action == GLFW_RELEASE)
-            type = EventType::mouseButtonUp;
-
-        Event& event = App::instance->pendingEvents.emplace_back(type);
-        event.mouseButton = static_cast<unsigned char>(a_button);
-    }
-
-    static void mouseWheelCallback(GLFWwindow* const /*a_window*/, const double /*a_xOffset*/, const double a_yOffset)
-    {
-        Event& event = App::instance->pendingEvents.emplace_back(EventType::mouseWheelScroll);
-        event.mouseWheelDirection = static_cast<signed char>(a_yOffset);
-    }
-
     static void openglDebugLogger(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity, GLsizei /*length*/, const GLchar* message, const void* /*userParam*/)
     {
         switch (severity)
@@ -109,13 +46,62 @@ namespace GJGO
 
         glfwSwapInterval(0);
 
-        glfwSetFramebufferSizeCallback(this->window, framebufferResizeCallback);
-        glfwSetWindowSizeCallback(this->window, windowSizeCallback);
-        glfwSetKeyCallback(this->window, keyCallback);
-        glfwSetCharCallback(this->window, keyTypedCallback);
-        glfwSetCursorPosCallback(this->window, mousePositionCallback);
-        glfwSetMouseButtonCallback(this->window, mouseButtonCallback);
-        glfwSetScrollCallback(this->window, mouseWheelCallback);
+        glfwSetFramebufferSizeCallback(this->window, [](GLFWwindow* const /*a_window*/, const int a_width, const int a_height) -> void
+        {
+            glViewport(0, 0, a_width, a_height);
+        });
+        glfwSetWindowSizeCallback(this->window, [](GLFWwindow* const /*a_windowPtr*/, const int a_width, const int a_height) -> void
+        {
+            Event& event = App::instance->pendingEvents.emplace_back(EventType::windowResize);
+            event.windowSize = {a_width, a_height};
+        });
+        glfwSetKeyCallback(this->window, [](GLFWwindow* const /*a_windowPtr*/, const int a_key, const int /*a_scancode*/, const int a_action, const int /*a_mods*/) -> void
+        {
+            EventType type = EventType::none;
+
+            if (a_action == GLFW_PRESS)
+                type = EventType::keyDown;
+            else if (a_action == GLFW_RELEASE)
+                type = EventType::keyUp;
+
+            if (type != EventType::none)
+            {
+                Event& event = App::instance->pendingEvents.emplace_back(type);
+                event.keycode = a_key;
+            }
+        });
+        glfwSetCharCallback(this->window, [](GLFWwindow* const /*a_windowPtr*/, const unsigned int a_char) -> void
+        {
+            Event& event = App::instance->pendingEvents.emplace_back(EventType::keyTypedDown);
+            event.keycode = a_char;
+        });
+        glfwSetCursorPosCallback(this->window, [](GLFWwindow* const /*a_windowPtr*/, const double a_x, const double a_y) -> void
+        {
+            glm::vec2 windowPosition = Window::getPosition();
+            float windowHeight = Window::getHeight();
+
+            Event& event = App::instance->pendingEvents.emplace_back(EventType::mouseMove);
+            event.mousePosition.relative = {static_cast<int>(a_x), static_cast<int>(windowHeight) - static_cast<int>(a_y) - 1};
+
+            event.mousePosition.absolute = {static_cast<int>(windowPosition.x + a_x), static_cast<int>(windowPosition.y) + event.mousePosition.relative.y};
+        });
+        glfwSetMouseButtonCallback(this->window, [](GLFWwindow* const /*a_windowPtr*/, const int a_button, const int a_action, const int /*a_mods*/) -> void
+        {
+            EventType type;
+
+            if (a_action == GLFW_PRESS)
+                type = EventType::mouseButtonDown;
+            else if (a_action == GLFW_RELEASE)
+                type = EventType::mouseButtonUp;
+
+            Event& event = App::instance->pendingEvents.emplace_back(type);
+            event.mouseButton = static_cast<unsigned char>(a_button);
+        });
+        glfwSetScrollCallback(this->window, [](GLFWwindow* const /*a_window*/, const double /*a_xOffset*/, const double a_yOffset) -> void
+        {
+            Event& event = App::instance->pendingEvents.emplace_back(EventType::mouseWheelScroll);
+            event.mouseWheelDirection = static_cast<signed char>(a_yOffset);
+        });
 
         if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
         {
