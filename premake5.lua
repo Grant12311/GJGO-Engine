@@ -47,12 +47,12 @@ workspace "GJGO"
     filter "configurations:Release"
         optimize "Speed"
         flags {"LinkTimeOptimization"}
-        defines {"GJGO_BUILD_CONFIG_RELEASE"}
+        defines {"GJGO_BUILD_CONFIG_RELEASE", "NDEBUG"}
 
     filter "configurations:Dist"
         optimize "Speed"
         flags {"LinkTimeOptimization"}
-        defines {"GJGO_BUILD_CONFIG_DIST"}
+        defines {"GJGO_BUILD_CONFIG_DIST", "NDEBUG"}
 
     include "vendor/Druid/project.lua"
 
