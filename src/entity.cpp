@@ -1,3 +1,5 @@
+#include <cassert>
+#include <limits>
 #include <string>
 
 #include <entt/entity/registry.hpp>
@@ -14,6 +16,8 @@ namespace GJGO
 
     Entity Entity::create(const std::string &a_name)
     {
+        assert(uuidCounter != std::numeric_limits<unsigned long long int>::max());
+
         Entity created = App::instance->registry.create();
         created.addComponent<TagComponent>(uuidCounter++, a_name);
         return created;
