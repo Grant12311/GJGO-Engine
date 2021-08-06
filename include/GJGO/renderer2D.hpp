@@ -1,6 +1,9 @@
 #ifndef GJGO_RENDERER2D_H
 #define GJGO_RENDERER2D_H
 
+#include <array>
+#include <vector>
+
 #include <Druid/ibo.h>
 #include <Druid/shader.h>
 #include <Druid/vao.h>

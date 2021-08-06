@@ -28,9 +28,6 @@ public:
         });
 
         e2.addComponent<GJGO::RigidBody2DComponent>();
-
-        std::cout << e1.getComponent<GJGO::TagComponent>().uuid << '\n';
-        std::cout << e2.getComponent<GJGO::TagComponent>().uuid << '\n';
     }
 
     virtual void onUpdate() override

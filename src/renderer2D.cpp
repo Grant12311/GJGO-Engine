@@ -3,6 +3,7 @@
 
 #include <glad/glad.h>
 
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 
@@ -19,9 +20,9 @@ namespace GJGO
     {
         static int maxTextureUnits;
 
-        static Druid::VAO quadVao(Druid::earlyCreate);
-        static Druid::VBO quadVbo(Druid::earlyCreate);
-        static Druid::IBO quadIbo(Druid::earlyCreate);
+        static Druid::VAO* quadVao;
+        static Druid::VBO* quadVbo;
+        static Druid::IBO* quadIbo;
 
         static Druid::Shader* spriteShader;
         static Druid::Shader* batchSpriteShader;
@@ -46,10 +47,10 @@ namespace GJGO
             orthoMatrix = glm::translate(orthoMatrix, glm::vec3(a_camera.position.x * -1.0f, a_camera.position.y * -1.0f, 0.0f));
 
             batchSpriteShader->bind();
-            batchSpriteShader->fillUniform("orthoMatrix", 1, false, orthoMatrix);
+            batchSpriteShader->fillUniform("orthoMatrix", false, orthoMatrix);
 
             spriteShader->bind();
-            spriteShader->fillUniform("orthoMatrix", 1, false, orthoMatrix);
+            spriteShader->fillUniform("orthoMatrix", false, orthoMatrix);
             glViewport(0, 0, a_width, a_height);
         }
 
@@ -60,7 +61,7 @@ namespace GJGO
 
         void drawQuad(const glm::mat4 &a_transform, const glm::vec4 &a_color, GJGO::Texture* const a_texture)
         {
-            quadVao.bind();
+            quadVao->bind();
 
             if (a_texture)
             {
@@ -70,7 +71,7 @@ namespace GJGO
                 spriteShader->fillUniform("useTexture", false);
             }
 
-            spriteShader->fillUniform("transformer", 1, false, a_transform);
+            spriteShader->fillUniform("transformer", false, a_transform);
             spriteShader->fillUniform("quadColor", a_color.r, a_color.g, a_color.b, a_color.a);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
             numDrawCallsPerFrame++;
@@ -91,19 +92,19 @@ namespace GJGO
                 0, 3, 2
             };
 
-            quadVao = Druid::VAO();
-            quadVbo = Druid::VBO();
-            quadIbo = Druid::IBO();
+            quadVao = new Druid::VAO;
+            quadVbo = new Druid::VBO;
+            quadIbo = new Druid::IBO;
 
-            quadVao.bind();
-            quadVbo.bind();
-            quadIbo.bind();
+            quadVao->bind();
+            quadVbo->bind();
+            quadIbo->bind();
 
-            quadVbo.fill(quadVertices.size() * sizeof(float), quadVertices.data(), GL_STATIC_DRAW);
-            quadIbo.fill(quadIndices.size() * sizeof(unsigned int), quadIndices.data(), GL_STATIC_DRAW);
+            quadVbo->fill(quadVertices.size() * sizeof(float), quadVertices.data(), GL_STATIC_DRAW);
+            quadIbo->fill(quadIndices.size() * sizeof(unsigned int), quadIndices.data(), GL_STATIC_DRAW);
 
-            quadVao.setAttrib(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
-            quadVao.setAttrib(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 3 * sizeof(float));
+            quadVao->setAttrib(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
+            quadVao->setAttrib(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 3 * sizeof(float));
 
             constexpr const char* spriteShaderVertexSource = "#version 400 core\n"
                 "precision highp float;"
@@ -139,7 +140,7 @@ namespace GJGO
                 "        color = quadColor;"
                 "}";
 
-            spriteShader = new Druid::Shader(spriteShaderVertexSource, spriteShaderFragmentSource);
+            spriteShader = new Druid::Shader(Druid::loadFromString, spriteShaderVertexSource, spriteShaderFragmentSource);
 
             constexpr const char* batchSpriteShaderVertexSource = "#version 400 core\n"
                 "precision highp float;"
@@ -180,7 +181,7 @@ namespace GJGO
                 "        color = vec4(ourColor, 1.0);"
                 "}";
 
-            batchSpriteShader = new Druid::Shader(batchSpriteShaderVertexSource, batchSpriteShaderFragmentSource);
+            batchSpriteShader = new Druid::Shader(Druid::loadFromString, batchSpriteShaderVertexSource, batchSpriteShaderFragmentSource);
 
             batchSpriteShader->bind();
 
