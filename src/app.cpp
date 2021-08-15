@@ -1,4 +1,7 @@
+#include <algorithm>
+#include <cstddef>
 #include <functional>
+#include <tuple>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -144,29 +147,11 @@ namespace GJGO
     {
         double lastTime = glfwGetTime();
 
+        std::vector<std::tuple<entt::entity, entt::entity, bool>> collisionHistory;
+
         while (!glfwWindowShouldClose(this->window))
         {
             glfwPollEvents();
-
-            // Collision
-            for (entt::entity l_entity1 : this->registry.view<RigidBody2DComponent, Transform2DComponent>())
-            {
-                for (entt::entity l_entity2 : this->registry.view<RigidBody2DComponent, Transform2DComponent>())
-                {
-                    if (l_entity2 != l_entity1)
-                    {
-                        if (rigidBodiesCollied(this->registry.get<Transform2DComponent>(l_entity1), this->registry.get<Transform2DComponent>(l_entity2)))
-                        {
-                            try
-                            {
-                                this->registry.get<RigidBody2DComponent>(l_entity1).action(Entity(l_entity1), Entity(l_entity2));
-                            }catch (std::bad_function_call &e){
-
-                            }
-                        }
-                    }
-                }
-            }
 
             for (Layer* const l_layerPtr : this->layers)
             {
@@ -183,6 +168,68 @@ namespace GJGO
                 }
             }
             this->pendingEvents.clear();
+
+            for (size_t i = 0; i < collisionHistory.size(); i++)
+            {
+                std::get<2>(collisionHistory[i]) = false;
+            }
+
+            // Collision
+            for (entt::entity l_entity1 : this->registry.view<RigidBody2DComponent, Transform2DComponent>())
+            {
+                for (entt::entity l_entity2 : this->registry.view<RigidBody2DComponent, Transform2DComponent>())
+                {
+                    if (l_entity2 != l_entity1)
+                    {
+                        if (rigidBodiesCollied(this->registry.get<Transform2DComponent>(l_entity1), this->registry.get<Transform2DComponent>(l_entity2)))
+                        {
+                            const std::vector<std::tuple<entt::entity, entt::entity, bool>>::iterator it = std::find_if(collisionHistory.begin(), collisionHistory.end(), [l_entity1, l_entity2](const std::tuple<entt::entity, entt::entity, bool> &a_tuple) -> bool
+                            {
+                                return std::get<0>(a_tuple) == std::min(l_entity1, l_entity2) && std::get<1>(a_tuple) == std::max(l_entity1, l_entity2);
+                            });
+
+                            if (it == collisionHistory.end())
+                            {
+                                collisionHistory.emplace_back(std::min(l_entity1, l_entity2), std::max(l_entity1, l_entity2), true);
+
+                                const std::function<void(Entity, Entity)> &func1 = this->registry.get<RigidBody2DComponent>(l_entity1).onEnter;
+                                const std::function<void(Entity, Entity)> &func2 = this->registry.get<RigidBody2DComponent>(l_entity2).onEnter;
+
+                                if (func1)
+                                    func1(Entity(l_entity1), Entity(l_entity2));
+
+                                if (func2)
+                                    func2(Entity(l_entity2), Entity(l_entity1));
+                            }else{
+                                std::get<2>(*it) = true;
+                            }
+
+                            if (this->registry.get<RigidBody2DComponent>(l_entity1).whileCollide)
+                                this->registry.get<RigidBody2DComponent>(l_entity1).whileCollide(Entity(l_entity1), Entity(l_entity2));
+                        }
+                    }
+                }
+            }
+
+            for (size_t i = 0; i < collisionHistory.size(); i++)
+            {
+                if (!std::get<2>(collisionHistory[i]))
+                {
+                    const entt::entity e1 = std::get<0>(collisionHistory[i]);
+                    const entt::entity e2 = std::get<1>(collisionHistory[i]);
+
+                    const std::function<void(Entity, Entity)> &func1 = this->registry.get<RigidBody2DComponent>(e1).onExit;
+                    const std::function<void(Entity, Entity)> &func2 = this->registry.get<RigidBody2DComponent>(e2).onExit;
+
+                    if (func1)
+                        func1(Entity(e1), Entity(e2));
+
+                    if (func2)
+                        func2(Entity(e2), Entity(e1));
+
+                    collisionHistory.erase(collisionHistory.begin() + i--);
+                }
+            }
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 

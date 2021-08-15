@@ -43,10 +43,10 @@ namespace GJGO
 
     struct RigidBody2DComponent
     {
-        std::function<void(Entity, Entity)> action;
+        std::function<void(Entity, Entity)> whileCollide, onEnter, onExit;
 
-        RigidBody2DComponent(const std::function<void(Entity, Entity)> a_action = {}) :
-            action(a_action) {}
+        RigidBody2DComponent(const std::function<void(Entity, Entity)> a_whileCollide = {}, const std::function<void(Entity, Entity)> a_onEnter = {}, const std::function<void(Entity, Entity)> a_onExit = {}) :
+            whileCollide(a_whileCollide), onEnter(a_onEnter), onExit(a_onExit) {}
     };
 
     [[nodiscard]]

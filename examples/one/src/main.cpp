@@ -16,15 +16,20 @@ public:
     {
         this->name = "Game Layer";
 
-        e1.addComponent<GJGO::Transform2DComponent>(glm::vec3(100.0, 100.0, 0.0), glm::vec2(100.0, 100.0));
+        e1.addComponent<GJGO::Transform2DComponent>(glm::vec3(100.0, 100.0, 1.0), glm::vec2(100.0, 100.0));
         e2.addComponent<GJGO::Transform2DComponent>(glm::vec3(215.0, 215.0, 0.0), glm::vec2(100.0, 100.0));
 
         e1.addComponent<GJGO::SpriteComponent>();
         e2.addComponent<GJGO::SpriteComponent>();
 
-        e1.addComponent<GJGO::RigidBody2DComponent>([](const GJGO::Entity a_e1, const GJGO::Entity a_e2)
+        e1.addComponent<GJGO::RigidBody2DComponent>(std::function<void(GJGO::Entity, GJGO::Entity)>(),
+        [](GJGO::Entity a_e1, GJGO::Entity a_e2) -> void
         {
-            std::cout << a_e1.getComponent<GJGO::TagComponent>().name << " <-> " << a_e2.getComponent<GJGO::TagComponent>().name << '\n';
+            a_e2.getComponent<GJGO::SpriteComponent>().color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+        },
+        [](GJGO::Entity a_e1, GJGO::Entity a_e2) -> void
+        {
+            a_e2.getComponent<GJGO::SpriteComponent>().color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
         });
 
         e2.addComponent<GJGO::RigidBody2DComponent>();
@@ -93,10 +98,10 @@ public:
         }
     }
 
-    virtual void draw() override
+    /*virtual void draw() override
     {
 
-    }
+    }*/
 };
 
 int main()
