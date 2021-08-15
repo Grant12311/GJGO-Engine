@@ -58,24 +58,16 @@ public:
         }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_W))
-        {
             e1.getComponent<GJGO::Transform2DComponent>().position.y += 1.0 * GJGO::App::instance->deltaTime;
-        }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_S))
-        {
             e1.getComponent<GJGO::Transform2DComponent>().position.y -= 1.0 * GJGO::App::instance->deltaTime;
-        }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_A))
-        {
             e1.getComponent<GJGO::Transform2DComponent>().position.x -= 1.0 * GJGO::App::instance->deltaTime;
-        }
 
         if (GJGO::Keyboard::keyIsDown(GLFW_KEY_D))
-        {
             e1.getComponent<GJGO::Transform2DComponent>().position.x += 1.0 * GJGO::App::instance->deltaTime;
-        }
     }
 
     virtual void onEvent(const GJGO::Event &a_event) override
