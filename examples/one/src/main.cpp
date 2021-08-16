@@ -12,10 +12,8 @@ public:
     GJGO::Entity e2;
 
     GameLayer() :
-        e1(GJGO::Entity::create()), e2(GJGO::Entity::create())
+        Layer("Game Layer"), e1(GJGO::Entity::create()), e2(GJGO::Entity::create())
     {
-        this->name = "Game Layer";
-
         e1.addComponent<GJGO::Transform2DComponent>(glm::vec3(100.0, 100.0, 1.0), glm::vec2(100.0, 100.0));
         e2.addComponent<GJGO::Transform2DComponent>(glm::vec3(215.0, 215.0, 0.0), glm::vec2(100.0, 100.0));
 
