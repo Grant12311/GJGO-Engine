@@ -16,14 +16,16 @@ namespace GJGO
 {
     struct AppSettings
     {
-        const char* windowName = "GJGO";
-        int windowWidth = 800, windowHeight = 600;
+        const char* windowName;
+        int windowWidth, windowHeight;
+
+        AppSettings(const char* const a_windowName = "GJGO", const int a_windowWidth = 800, const int a_windowHeight = 600);
     };
 
     class App
     {
     public:
-        App(const AppSettings &a_settings);
+        App(const AppSettings &a_settings = {});
         ~App();
 
         void run();

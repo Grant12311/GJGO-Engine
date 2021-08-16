@@ -98,11 +98,7 @@ public:
 
 int main()
 {
-    GJGO::AppSettings settings;
-    settings.windowWidth = 768;
-    settings.windowHeight = 432;
-
-    GJGO::App app(settings);
+    GJGO::App app;
 
     app.layers.emplace_back(new GameLayer);
 

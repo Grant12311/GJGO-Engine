@@ -29,6 +29,9 @@ namespace GJGO
         }
     }
 
+    AppSettings::AppSettings(const char* const a_windowName, const int a_windowWidth, const int a_windowHeight) :
+        windowName(a_windowName), windowWidth(a_windowWidth), windowHeight(a_windowHeight) {}
+
     App::App(const AppSettings &a_settings) :
         deltaTime(0.0)
     {
