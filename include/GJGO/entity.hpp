@@ -12,15 +12,17 @@ namespace GJGO
     public:
         Entity(const entt::entity a_entity = entt::null);
 
-        static Entity create(const std::string &a_name = "");
+        static Entity create();
+        static Entity create(const std::string &a_name);
 
         [[nodiscard]]
         static Entity getByName(const std::string &a_name);
 
-        bool isValid;
+        [[nodiscard]]
+        bool isValid() const;
 
         [[nodiscard]]
-        constexpr entt::entity getRaw() const { return this->m_entity; }
+        entt::entity getRaw() const;
 
         template<typename T, typename... ARGS>
         void addComponent(ARGS... a_args)

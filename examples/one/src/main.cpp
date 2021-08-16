@@ -12,7 +12,7 @@ public:
     GJGO::Entity e2;
 
     GameLayer() :
-        e1(GJGO::Entity::create("e1")), e2(GJGO::Entity::create("e2"))
+        e1(GJGO::Entity::create()), e2(GJGO::Entity::create())
     {
         this->name = "Game Layer";
 

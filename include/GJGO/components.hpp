@@ -15,11 +15,10 @@ namespace GJGO
 {
     struct TagComponent
     {
-        unsigned long long int uuid;
         std::string name;
 
-        TagComponent(const unsigned long long int a_uuid = 0, const std::string &a_name = "") :
-            uuid(a_uuid), name(a_name) {}
+        TagComponent(const std::string &a_name = "") :
+            name(a_name) {}
     };
 
     struct Transform2DComponent

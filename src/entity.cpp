@@ -9,17 +9,18 @@
 
 namespace GJGO
 {
-    static unsigned long long int uuidCounter = 0;
-
     Entity::Entity(const entt::entity a_entity) :
-        isValid(a_entity == entt::null ? false : true), m_entity(a_entity) {}
+        m_entity(a_entity) {}
+
+    Entity Entity::create()
+    {
+        return App::instance->registry.create();
+    }
 
     Entity Entity::create(const std::string &a_name)
     {
-        assert(uuidCounter != std::numeric_limits<unsigned long long int>::max());
-
         Entity created = App::instance->registry.create();
-        created.addComponent<TagComponent>(uuidCounter++, a_name);
+        created.addComponent<TagComponent>(a_name);
         return created;
     }
 
@@ -35,5 +36,17 @@ namespace GJGO
         }
 
         return Entity();
+    }
+
+    [[nodiscard]]
+    bool Entity::isValid() const
+    {
+        return this->m_entity != entt::null;
+    }
+
+    [[nodiscard]]
+    entt::entity Entity::getRaw() const
+    {
+        return this->m_entity;
     }
 }
