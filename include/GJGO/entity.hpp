@@ -25,9 +25,9 @@ namespace GJGO
         entt::entity getRaw() const;
 
         template<typename T, typename... ARGS>
-        void addComponent(ARGS... a_args)
+        T& addComponent(ARGS... a_args)
         {
-           App::instance->registry.emplace<T>(this->m_entity, a_args...);
+           return App::instance->registry.emplace<T>(this->m_entity, a_args...);
         }
 
         template<typename T>
