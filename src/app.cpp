@@ -29,8 +29,8 @@ namespace GJGO
         }
     }
 
-    AppSettings::AppSettings(const char* const a_windowName, const int a_windowWidth, const int a_windowHeight) :
-        windowName(a_windowName), windowWidth(a_windowWidth), windowHeight(a_windowHeight) {}
+    AppSettings::AppSettings(const char* const a_windowName, const int a_windowWidth, const int a_windowHeight, const bool a_windowResizable) :
+        windowName(a_windowName), windowWidth(a_windowWidth), windowHeight(a_windowHeight), windowResizable(a_windowResizable) {}
 
     App::App(const AppSettings &a_settings) :
         deltaTime(0.0)
@@ -41,6 +41,7 @@ namespace GJGO
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_RESIZABLE, a_settings.windowResizable);
 
         this->window = glfwCreateWindow(a_settings.windowWidth, a_settings.windowHeight, a_settings.windowName, nullptr, nullptr);
         if (this->window == nullptr)

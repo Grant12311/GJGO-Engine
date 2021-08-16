@@ -18,8 +18,9 @@ namespace GJGO
     {
         const char* windowName;
         int windowWidth, windowHeight;
+        bool windowResizable;
 
-        AppSettings(const char* const a_windowName = "GJGO", const int a_windowWidth = 800, const int a_windowHeight = 600);
+        AppSettings(const char* const a_windowName = "GJGO", const int a_windowWidth = 800, const int a_windowHeight = 600, const bool a_windowResizable = true);
     };
 
     class App
