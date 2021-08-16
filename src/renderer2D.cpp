@@ -43,7 +43,7 @@ namespace GJGO
 
         void begin2D(const Camera2D &a_camera, const unsigned int a_width, const unsigned int a_height)
         {
-            orthoMatrix = glm::ortho(0.0f, static_cast<float>(a_width), 0.0f, static_cast<float>(a_height));
+            orthoMatrix = glm::ortho(0.0f, static_cast<float>(a_width), 0.0f, static_cast<float>(a_height), -100.0f, 100.0f);
             orthoMatrix = glm::translate(orthoMatrix, glm::vec3(a_camera.position.x * -1.0f, a_camera.position.y * -1.0f, 0.0f));
 
             batchSpriteShader->bind();
