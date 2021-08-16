@@ -22,7 +22,7 @@ public:
         e1.addComponent<GJGO::SpriteComponent>();
         e2.addComponent<GJGO::SpriteComponent>();
 
-        e1.addComponent<GJGO::RigidBody2DComponent>(std::function<void(GJGO::Entity, GJGO::Entity)>(),
+        e1.addComponent<GJGO::CollisionBox2DComponent>(std::function<void(GJGO::Entity, GJGO::Entity)>(),
         [](GJGO::Entity a_e1, GJGO::Entity a_e2) -> void
         {
             a_e2.getComponent<GJGO::SpriteComponent>().color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
@@ -32,7 +32,7 @@ public:
             a_e2.getComponent<GJGO::SpriteComponent>().color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
         });
 
-        e2.addComponent<GJGO::RigidBody2DComponent>();
+        e2.addComponent<GJGO::CollisionBox2DComponent>();
     }
 
     virtual void onUpdate() override
@@ -99,9 +99,7 @@ public:
 int main()
 {
     GJGO::App app;
-
     app.layers.emplace_back(new GameLayer);
-
     app.run();
 
     return 0;

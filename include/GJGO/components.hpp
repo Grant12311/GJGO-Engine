@@ -40,11 +40,11 @@ namespace GJGO
             texture(a_texture), color(a_color) {}
     };
 
-    struct RigidBody2DComponent
+    struct CollisionBox2DComponent
     {
         std::function<void(Entity, Entity)> whileCollide, onEnter, onExit;
 
-        RigidBody2DComponent(const std::function<void(Entity, Entity)> a_whileCollide = {}, const std::function<void(Entity, Entity)> a_onEnter = {}, const std::function<void(Entity, Entity)> a_onExit = {}) :
+        CollisionBox2DComponent(const std::function<void(Entity, Entity)> a_whileCollide = {}, const std::function<void(Entity, Entity)> a_onEnter = {}, const std::function<void(Entity, Entity)> a_onExit = {}) :
             whileCollide(a_whileCollide), onEnter(a_onEnter), onExit(a_onExit) {}
     };
 

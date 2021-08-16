@@ -178,9 +178,9 @@ namespace GJGO
             }
 
             // Collision
-            for (entt::entity l_entity1 : this->registry.view<RigidBody2DComponent, Transform2DComponent>())
+            for (entt::entity l_entity1 : this->registry.view<CollisionBox2DComponent, Transform2DComponent>())
             {
-                for (entt::entity l_entity2 : this->registry.view<RigidBody2DComponent, Transform2DComponent>())
+                for (entt::entity l_entity2 : this->registry.view<CollisionBox2DComponent, Transform2DComponent>())
                 {
                     if (l_entity2 != l_entity1)
                     {
@@ -195,8 +195,8 @@ namespace GJGO
                             {
                                 collisionHistory.emplace_back(std::min(l_entity1, l_entity2), std::max(l_entity1, l_entity2), true);
 
-                                const std::function<void(Entity, Entity)> &func1 = this->registry.get<RigidBody2DComponent>(l_entity1).onEnter;
-                                const std::function<void(Entity, Entity)> &func2 = this->registry.get<RigidBody2DComponent>(l_entity2).onEnter;
+                                const std::function<void(Entity, Entity)> &func1 = this->registry.get<CollisionBox2DComponent>(l_entity1).onEnter;
+                                const std::function<void(Entity, Entity)> &func2 = this->registry.get<CollisionBox2DComponent>(l_entity2).onEnter;
 
                                 if (func1)
                                     func1(Entity(l_entity1), Entity(l_entity2));
@@ -207,8 +207,8 @@ namespace GJGO
                                 std::get<2>(*it) = true;
                             }
 
-                            if (this->registry.get<RigidBody2DComponent>(l_entity1).whileCollide)
-                                this->registry.get<RigidBody2DComponent>(l_entity1).whileCollide(Entity(l_entity1), Entity(l_entity2));
+                            if (this->registry.get<CollisionBox2DComponent>(l_entity1).whileCollide)
+                                this->registry.get<CollisionBox2DComponent>(l_entity1).whileCollide(Entity(l_entity1), Entity(l_entity2));
                         }
                     }
                 }
@@ -221,8 +221,8 @@ namespace GJGO
                     const entt::entity e1 = std::get<0>(collisionHistory[i]);
                     const entt::entity e2 = std::get<1>(collisionHistory[i]);
 
-                    const std::function<void(Entity, Entity)> &func1 = this->registry.get<RigidBody2DComponent>(e1).onExit;
-                    const std::function<void(Entity, Entity)> &func2 = this->registry.get<RigidBody2DComponent>(e2).onExit;
+                    const std::function<void(Entity, Entity)> &func1 = this->registry.get<CollisionBox2DComponent>(e1).onExit;
+                    const std::function<void(Entity, Entity)> &func2 = this->registry.get<CollisionBox2DComponent>(e2).onExit;
 
                     if (func1)
                         func1(Entity(e1), Entity(e2));
