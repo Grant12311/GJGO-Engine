@@ -42,6 +42,10 @@ public:
         GJGO::Entity outsideBackgroundEntity = GJGO::Entity::create();
         outsideBackgroundEntity.addComponent<GJGO::Transform2DComponent>(glm::vec3(0.0, 0.0, 0.0), glm::vec2(383 * GBA_SCALE, 359 * GBA_SCALE));
         outsideBackgroundEntity.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/Backgrounds/Littleroot Town/outside.png", GJGO::TextureSettings::standard, GL_NEAREST, GL_NEAREST));
+
+        GJGO::Entity labBackgroundEntity = GJGO::Entity::create();
+        labBackgroundEntity.addComponent<GJGO::Transform2DComponent>(glm::vec3(-300.0 * GBA_SCALE, -300.0 * GBA_SCALE, 0.0), glm::vec2(208 * GBA_SCALE, 208 * GBA_SCALE));
+        labBackgroundEntity.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/Backgrounds/Littleroot Town/lab.png", GJGO::TextureSettings::standard, GL_NEAREST, GL_NEAREST));
     }
 
     virtual void onUpdate() override
@@ -99,18 +103,6 @@ public:
                 timeWaited += GJGO::App::instance->deltaTime;
             }
         }
-
-        /*if (GJGO::Keyboard::keyIsDown(GLFW_KEY_W))
-            e1.getComponent<GJGO::Transform2DComponent>().position.y += 1.0 * GJGO::App::instance->deltaTime;
-
-        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_S))
-            e1.getComponent<GJGO::Transform2DComponent>().position.y -= 1.0 * GJGO::App::instance->deltaTime;
-
-        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_A))
-            e1.getComponent<GJGO::Transform2DComponent>().position.x -= 1.0 * GJGO::App::instance->deltaTime;
-
-        if (GJGO::Keyboard::keyIsDown(GLFW_KEY_D))
-            e1.getComponent<GJGO::Transform2DComponent>().position.x += 1.0 * GJGO::App::instance->deltaTime;*/
     }
 
     virtual void onEvent(const GJGO::Event &a_event) override
@@ -155,11 +147,6 @@ public:
                 break;
         }
     }
-
-    /*virtual void draw() override
-    {
-
-    }*/
 };
 
 int main()
