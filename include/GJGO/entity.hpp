@@ -68,6 +68,18 @@ namespace GJGO
         {
             App::instance->registry.emplace_or_replace<T>(this->m_entity, a_args...);
         }
+
+        [[nodiscard]]
+        bool operator==(const GJGO::Entity a_rhs) const
+        {
+            return this->m_entity == a_rhs.m_entity;
+        }
+
+        [[nodiscard]]
+        bool operator!=(const GJGO::Entity a_rhs) const
+        {
+            return this->m_entity != a_rhs.m_entity;
+        }
     private:
         entt::entity m_entity;
     };
