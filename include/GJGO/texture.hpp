@@ -28,6 +28,8 @@ namespace GJGO
         unsigned int getID();
         [[nodiscard]]
         unsigned int getSettings();
+
+        static void shutdown();
     protected:
         unsigned int p_ID;
         int p_width, p_height;

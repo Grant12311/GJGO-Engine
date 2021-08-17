@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 #include <unordered_map>
+#include <utility>
 
 #include <glad/glad.h>
 
@@ -30,6 +31,14 @@ namespace GJGO
     unsigned int Texture::getSettings()
     {
         return this->p_settings;
+    }
+
+    void Texture::shutdown()
+    {
+        for (const std::pair<std::string, Texture*> &a_pair : textures)
+        {
+            delete a_pair.second;
+        }
     }
 
     void Texture2D::bind(const unsigned int a_slot)

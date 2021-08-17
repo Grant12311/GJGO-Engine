@@ -42,16 +42,17 @@ namespace GJGO
 
     struct CollisionBox2DComponent
     {
+        glm::vec2 positionOffset, sizeMod;
         std::function<void(Entity, Entity)> whileCollide, onEnter, onExit;
 
-        CollisionBox2DComponent(const std::function<void(Entity, Entity)> a_whileCollide = {}, const std::function<void(Entity, Entity)> a_onEnter = {}, const std::function<void(Entity, Entity)> a_onExit = {}) :
-            whileCollide(a_whileCollide), onEnter(a_onEnter), onExit(a_onExit) {}
+        CollisionBox2DComponent(const glm::vec2 &a_positionOffset = glm::vec2(0.0, 0.0), const glm::vec2 &a_sizeMod = glm::vec2(1.0, 1.0), const std::function<void(Entity, Entity)> a_whileCollide = {}, const std::function<void(Entity, Entity)> a_onEnter = {}, const std::function<void(Entity, Entity)> a_onExit = {}) :
+            positionOffset(a_positionOffset), sizeMod(a_sizeMod), whileCollide(a_whileCollide), onEnter(a_onEnter), onExit(a_onExit) {}
     };
 
     [[nodiscard]]
-    inline constexpr bool rigidBodiesCollied(const Transform2DComponent &a_x, const Transform2DComponent &a_y)
+    inline constexpr bool rigidBodiesCollied(const glm::vec2 &a_pos1, const glm::vec2 &a_pos2, const glm::vec2 &a_size1, const glm::vec2 &a_size2)
     {
-        return a_x.position.x < a_y.position.x + a_y.size.x && a_x.position.x + a_x.size.x > a_y.position.x && a_x.position.y < a_y.position.y + a_y.size.y && a_x.position.y + a_x.size.y > a_y.position.y;
+        return a_pos1.x < a_pos2.x + a_size2.x && a_pos1.x + a_size1.x > a_pos2.x && a_pos1.y < a_pos2.y + a_size2.y && a_pos1.y + a_size1.y > a_pos2.y;
     }
 }
 

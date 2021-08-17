@@ -141,6 +141,7 @@ namespace GJGO
 
         delete this->m_batch;
 
+        Texture::shutdown();
         Renderer::shutdown2D();
 
         glfwDestroyWindow(this->window);
@@ -185,7 +186,12 @@ namespace GJGO
                 {
                     if (l_entity2 != l_entity1)
                     {
-                        if (rigidBodiesCollied(this->registry.get<Transform2DComponent>(l_entity1), this->registry.get<Transform2DComponent>(l_entity2)))
+                        const Transform2DComponent& transform1 = this->registry.get<Transform2DComponent>(l_entity1);
+                        const Transform2DComponent& transform2 = this->registry.get<Transform2DComponent>(l_entity2);
+                        const CollisionBox2DComponent& collisionBox1 = this->registry.get<CollisionBox2DComponent>(l_entity1);
+                        const CollisionBox2DComponent& collisionBox2 = this->registry.get<CollisionBox2DComponent>(l_entity2);
+
+                        if (rigidBodiesCollied(glm::vec2(transform1.position) + collisionBox1.positionOffset, glm::vec2(transform2.position) + collisionBox2.positionOffset, transform1.size * collisionBox1.sizeMod, transform2.size * collisionBox2.sizeMod))
                         {
                             const std::vector<std::tuple<entt::entity, entt::entity, bool>>::iterator it = std::find_if(collisionHistory.begin(), collisionHistory.end(), [l_entity1, l_entity2](const std::tuple<entt::entity, entt::entity, bool> &a_tuple) -> bool
                             {

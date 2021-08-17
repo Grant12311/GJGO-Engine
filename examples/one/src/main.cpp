@@ -27,6 +27,16 @@ public:
 
         this->player.addComponent<GJGO::Transform2DComponent>(glm::vec3(9 * TILE_SIZE, 4 * TILE_SIZE, 1.0), glm::vec2(14 * GBA_SCALE, 21 * GBA_SCALE));
         this->player.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/Player/Male/standing south.png", GJGO::TextureSettings::standard, GL_NEAREST, GL_NEAREST));
+        this->player.addComponent<GJGO::CollisionBox2DComponent>(glm::vec2(0.0, 0.0), glm::vec2(1.142857143, 0.761904762));
+
+        GJGO::Entity doorEntity = GJGO::Entity::create();
+        doorEntity.addComponent<GJGO::Transform2DComponent>(glm::vec3(9 * TILE_SIZE, 5 * TILE_SIZE, 0.0), glm::vec2(14 * GBA_SCALE, 21 * GBA_SCALE));
+        doorEntity.addComponent<GJGO::CollisionBox2DComponent>(glm::vec2(0, 0), glm::vec2(1.0, 1.0),
+        std::function<void(GJGO::Entity, GJGO::Entity)>(),
+        [this](const GJGO::Entity /*l_entity1*/, const GJGO::Entity l_entity2) -> void
+        {
+            this->doingFadeOut = true;
+        });
 
         GJGO::Entity outsideBackgroundEntity = GJGO::Entity::create();
         outsideBackgroundEntity.addComponent<GJGO::Transform2DComponent>(glm::vec3(0.0, 0.0, 0.0), glm::vec2(383 * GBA_SCALE, 359 * GBA_SCALE));
