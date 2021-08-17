@@ -35,6 +35,7 @@ public:
         std::function<void(GJGO::Entity, GJGO::Entity)>(),
         [this](const GJGO::Entity /*l_entity1*/, const GJGO::Entity l_entity2) -> void
         {
+            this->fadeScreen.getComponent<GJGO::Transform2DComponent>().position = glm::vec3(GJGO::Camera2D::primary->position.x, GJGO::Camera2D::primary->position.y, 50.0);
             this->doingFadeOut = true;
         });
 
@@ -130,15 +131,23 @@ public:
                         break;
                     case GLFW_KEY_W:
                         this->player.getComponent<GJGO::Transform2DComponent>().position.y += TILE_SIZE;
+                        if ((this->player.getComponent<GJGO::Transform2DComponent>().position.y - GJGO::Camera2D::primary->position.y) / TILE_SIZE >= 6)
+                            GJGO::Camera2D::primary->position.y += TILE_SIZE;
                         break;
                     case GLFW_KEY_A:
                         this->player.getComponent<GJGO::Transform2DComponent>().position.x -= TILE_SIZE;
+                        if ((this->player.getComponent<GJGO::Transform2DComponent>().position.x - GJGO::Camera2D::primary->position.x) / TILE_SIZE <= 5)
+                            GJGO::Camera2D::primary->position.x -= TILE_SIZE;
                         break;
                     case GLFW_KEY_S:
                         this->player.getComponent<GJGO::Transform2DComponent>().position.y -= TILE_SIZE;
+                        if ((this->player.getComponent<GJGO::Transform2DComponent>().position.y - GJGO::Camera2D::primary->position.y) / TILE_SIZE <= 3)
+                            GJGO::Camera2D::primary->position.y -= TILE_SIZE;
                         break;
                     case GLFW_KEY_D:
                         this->player.getComponent<GJGO::Transform2DComponent>().position.x += TILE_SIZE;
+                        if ((this->player.getComponent<GJGO::Transform2DComponent>().position.x - GJGO::Camera2D::primary->position.x) / TILE_SIZE >= 10)
+                            GJGO::Camera2D::primary->position.x += TILE_SIZE;
                         break;
                 }
                 break;
