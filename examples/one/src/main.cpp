@@ -151,8 +151,6 @@ public:
 
 int main()
 {
-    GJGO::Renderer::useBatchRendererAsDefault = false;
-
     GJGO::App app(GJGO::AppSettings("PKMN", GBA_SCREEN_WDITH * GBA_SCALE, GBA_SCREEN_HEIGHT * GBA_SCALE, false));
     app.layers.emplace_back(new GameLayer);
     app.run();

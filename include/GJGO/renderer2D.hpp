@@ -17,7 +17,7 @@ namespace GJGO
     namespace Renderer
     {
         inline int numDrawCallsPerFrame = 0;
-        inline bool useBatchRendererAsDefault = true;
+        inline bool useBatchRendererAsDefault = false;
 
         void begin2D(const Camera2D &a_camera, const unsigned int a_width, const unsigned int a_height);
 
