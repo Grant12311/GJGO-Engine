@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include <tweeny/tweeny.h>
+
 #include <GJGO/gjgo.hpp>
 
 constexpr int GBA_SCREEN_WDITH = 240;
@@ -15,14 +17,17 @@ class GameLayer final : public GJGO::Layer
 {
 public:
     GJGO::Entity fadeScreen;
-    bool doingFadeOut, doingFadeIn;
+    bool runFade;
+    tweeny::tween<double> fadeTween = tweeny::from(0.0).to(1.0).during(300).to(0.0).during(750).to(0.0).during(300);
 
     GJGO::Entity player;
 
     GameLayer() :
-        Layer("Game Layer"), fadeScreen(GJGO::Entity::create()), doingFadeOut(false), doingFadeIn(false), player(GJGO::Entity::create())
+        Layer("Game Layer"), fadeScreen(GJGO::Entity::create()), runFade(false), player(GJGO::Entity::create())
     {
-        this->fadeScreen.addComponent<GJGO::Transform2DComponent>(glm::vec3(0.0, 0.0, 50.0), glm::vec2(GBA_SCREEN_WDITH * GBA_SCALE, GBA_SCREEN_HEIGHT * GBA_SCALE));
+        glfwSwapInterval(1);
+
+        this->fadeScreen.addComponent<GJGO::Transform2DComponent>(glm::vec3(-100.0, -100.0, 50.0), glm::vec2(GBA_SCREEN_WDITH * GBA_SCALE * 3, GBA_SCREEN_HEIGHT * GBA_SCALE * 3));
         this->fadeScreen.addComponent<GJGO::SpriteComponent>(nullptr, glm::vec4(0.0, 0.0, 0.0, 0.0));
 
         this->player.addComponent<GJGO::Transform2DComponent>(glm::vec3(9 * TILE_SIZE, 4 * TILE_SIZE, 1.0), glm::vec2(14 * GBA_SCALE, 21 * GBA_SCALE));
@@ -36,7 +41,7 @@ public:
         [this](const GJGO::Entity /*l_entity1*/, const GJGO::Entity l_entity2) -> void
         {
             this->fadeScreen.getComponent<GJGO::Transform2DComponent>().position = glm::vec3(GJGO::Camera2D::primary->position.x, GJGO::Camera2D::primary->position.y, 50.0);
-            this->doingFadeOut = true;
+            this->runFade = true;
         });
 
         GJGO::Entity outsideBackgroundEntity = GJGO::Entity::create();
@@ -70,37 +75,13 @@ public:
             timePassed += GJGO::App::instance->deltaTime;
         }
 
-        constexpr double WAIT_TIME = 500.0;
-        static double timeWaited = 0.0;
-
-        if (this->doingFadeOut)
+        if (this->runFade)
         {
-            GJGO::SpriteComponent& sprite = this->fadeScreen.getComponent<GJGO::SpriteComponent>();
-
-            if (sprite.color.a >= 1.0)
+            this->fadeScreen.getComponent<GJGO::SpriteComponent>().color.a = this->fadeTween.step(static_cast<unsigned int>(GJGO::App::instance->deltaTime));
+            if (this->fadeTween.progress() >= 1.0f)
             {
-                sprite.color.a = 1.0;
-                this->doingFadeOut = false;
-                this->doingFadeIn = true;
-            }else{
-                sprite.color.a += 0.0025 * GJGO::App::instance->deltaTime;
-            }
-        }else if (this->doingFadeIn){
-            if (timeWaited >= WAIT_TIME)
-            {
-                GJGO::SpriteComponent& sprite = this->fadeScreen.getComponent<GJGO::SpriteComponent>();
-
-                if (sprite.color.a <= 0.0)
-                {
-                    sprite.color.a = 0.0;
-                    this->doingFadeOut = false;
-                    this->doingFadeIn = false;
-                    timeWaited = 0.0;
-                }else{
-                    sprite.color.a -= 0.0025 * GJGO::App::instance->deltaTime;
-                }
-            }else{
-                timeWaited += GJGO::App::instance->deltaTime;
+                this->runFade = false;
+                this->fadeTween.seek(0.0f);
             }
         }
     }
@@ -117,9 +98,6 @@ public:
                         break;
                     case GLFW_KEY_MINUS:
                         GJGO::Renderer::useBatchRendererAsDefault = false;
-                        break;
-                    case GLFW_KEY_SPACE:
-                        this->doingFadeOut = true;
                         break;
                     case GLFW_KEY_W:
                         this->player.getComponent<GJGO::Transform2DComponent>().position.y += TILE_SIZE;
