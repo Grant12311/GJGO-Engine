@@ -10,25 +10,6 @@
 
 namespace GJGO
 {
-    static void openglDebugLogger(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity, GLsizei /*length*/, const GLchar* message, const void* /*userParam*/)
-    {
-        switch (severity)
-        {
-            case GL_DEBUG_SEVERITY_HIGH_KHR:
-                GJGO_LOG_ERROR("OpenGL HIGH: ", message);
-                break;
-            case GL_DEBUG_SEVERITY_MEDIUM_KHR:
-                GJGO_LOG_WARN("OpenGL Med: ", message);
-                break;
-            case GL_DEBUG_SEVERITY_LOW_KHR:
-                GJGO_LOG_WARN("OpenGL Low: ", message);
-                break;
-            case GL_DEBUG_SEVERITY_NOTIFICATION_KHR:
-                GJGO_LOG_INFO("OpenGL Info: ", message);
-                break;
-        }
-    }
-
     AppSettings::AppSettings(const char* const a_windowName, const int a_windowWidth, const int a_windowHeight, const bool a_windowResizable) :
         windowName(a_windowName), windowWidth(a_windowWidth), windowHeight(a_windowHeight), windowResizable(a_windowResizable) {}
 
@@ -117,8 +98,27 @@ namespace GJGO
 
         GJGO_LOG_INFO(glGetString(GL_VERSION));
 
-        glEnable(GL_DEBUG_OUTPUT);
-        glDebugMessageCallback(openglDebugLogger, 0);
+        #ifndef GJGO_BUILD_CONFIG_DIST
+            glEnable(GL_DEBUG_OUTPUT);
+            glDebugMessageCallback([](const unsigned int /*a_source*/, const unsigned int /*a_type*/, const unsigned int /*a_id*/, const unsigned int a_severity, int /*a_length*/, const char* const a_msg, const void* const /*a_userParam*/) -> void
+            {
+                switch (a_severity)
+                {
+                    case GL_DEBUG_SEVERITY_HIGH_KHR:
+                        GJGO_LOG_ERROR("OpenGL HIGH: ", a_msg);
+                        break;
+                    case GL_DEBUG_SEVERITY_MEDIUM_KHR:
+                        GJGO_LOG_WARN("OpenGL Med: ", a_msg);
+                        break;
+                    case GL_DEBUG_SEVERITY_LOW_KHR:
+                        GJGO_LOG_WARN("OpenGL Low: ", a_msg);
+                        break;
+                    case GL_DEBUG_SEVERITY_NOTIFICATION_KHR:
+                        GJGO_LOG_INFO("OpenGL Info: ", a_msg);
+                        break;
+                }
+            }, 0);
+        #endif // GJGO_BUILD_CONFIG_DISt
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
