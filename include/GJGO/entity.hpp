@@ -1,6 +1,8 @@
 #ifndef GJGO_ENTITY_H
 #define GJGO_ENTITY_H
 
+#include <optional>
+
 #include <entt/entity/registry.hpp>
 
 #include <GJGO/app.hpp>
@@ -16,7 +18,7 @@ namespace GJGO
         static Entity create(const std::string &a_name);
 
         [[nodiscard]]
-        static Entity getByName(const std::string &a_name);
+        static std::optional<Entity> getByName(const std::string &a_name);
 
         [[nodiscard]]
         bool isValid() const;
@@ -52,7 +54,7 @@ namespace GJGO
 
         template<typename T>
         [[nodiscard]]
-        bool hasComponent()
+        bool hasComponent() const
         {
             return App::instance->registry.has<T>(this->m_entity);
         }

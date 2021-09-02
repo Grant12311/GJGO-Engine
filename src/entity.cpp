@@ -1,6 +1,6 @@
-#include <cassert>
-#include <limits>
+#include <algorithm>
 #include <string>
+#include <optional>
 
 #include <entt/entity/registry.hpp>
 
@@ -25,23 +25,22 @@ namespace GJGO
     }
 
     [[nodiscard]]
-    Entity Entity::getByName(const std::string &a_name)
+    std::optional<Entity> Entity::getByName(const std::string &a_name)
     {
         auto view = App::instance->registry.view<TagComponent>();
 
-        for (const entt::entity l_entity : view)
+        auto it = std::find_if(view.begin(), view.end(), [&view, &a_name](const entt::entity a_entity) -> bool
         {
-            if (view.get<TagComponent>(l_entity).name == a_name)
-                return l_entity;
-        }
+            return view.get<TagComponent>(a_entity).name == a_name;
+        });
 
-        return Entity();
+        return it == view.end() ? std::optional<Entity>() : *it;
     }
 
     [[nodiscard]]
     bool Entity::isValid() const
     {
-        return this->m_entity != entt::null;
+        return App::instance->registry.valid(this->m_entity);
     }
 
     [[nodiscard]]
