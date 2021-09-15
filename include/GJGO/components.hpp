@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <string>
+#include <vector>
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -21,14 +22,39 @@ namespace GJGO
             name(a_name) {}
     };
 
-    struct Transform2DComponent
+    struct RelationsComponent
     {
+        Entity parent;
+        std::vector<Entity> children;
+    };
+
+    class Transform2DComponent
+    {
+    public:
         glm::vec3 position;
         glm::vec2 size;
         float rotation;
 
         constexpr Transform2DComponent(const glm::vec3 &a_position = glm::vec3(1.0f), const glm::vec2 &a_size = glm::vec2(1.0f), const float a_rotation = 0.0f) :
             position(a_position), size(a_size), rotation(a_rotation) {}
+
+        [[nodiscard]]
+        static Transform2DComponent getAbsoluteTransform(const Entity a_entity)
+        {
+            return m_getAbsoluteTransform(a_entity, a_entity.getComponent<Transform2DComponent>());
+        }
+    private:
+        static Transform2DComponent m_getAbsoluteTransform(const Entity a_entity, const Transform2DComponent &a_transform)
+        {
+            const RelationsComponent& relations = a_entity.getComponent<RelationsComponent>();
+
+            if (relations.parent == Entity())
+                return a_transform;
+
+            const Transform2DComponent& parentTransform = relations.parent.hasComponent<Transform2DComponent>() ? relations.parent.getComponent<Transform2DComponent>() : Transform2DComponent();
+
+            return m_getAbsoluteTransform(relations.parent, {a_transform.position + parentTransform.position, a_transform.size/* + parentTransform.size*/, a_transform.rotation + parentTransform.rotation});
+        }
     };
 
     struct SpriteComponent

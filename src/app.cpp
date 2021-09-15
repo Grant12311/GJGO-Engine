@@ -186,8 +186,8 @@ namespace GJGO
                 {
                     if (l_entity2 != l_entity1)
                     {
-                        const Transform2DComponent& transform1 = this->registry.get<Transform2DComponent>(l_entity1);
-                        const Transform2DComponent& transform2 = this->registry.get<Transform2DComponent>(l_entity2);
+                        const Transform2DComponent& transform1 = Transform2DComponent::getAbsoluteTransform(l_entity1);
+                        const Transform2DComponent& transform2 = Transform2DComponent::getAbsoluteTransform(l_entity2);
                         const CollisionBox2DComponent& collisionBox1 = this->registry.get<CollisionBox2DComponent>(l_entity1);
                         const CollisionBox2DComponent& collisionBox2 = this->registry.get<CollisionBox2DComponent>(l_entity2);
 
@@ -349,7 +349,8 @@ namespace GJGO
                     continue;
                 }
 
-                Renderer::drawQuad(transform.position, transform.size, transform.rotation, sprite.color, sprite.texture);
+                const Transform2DComponent absoluteTransform = Transform2DComponent::getAbsoluteTransform(l_entity);
+                Renderer::drawQuad(absoluteTransform.position, absoluteTransform.size, absoluteTransform.rotation, sprite.color, sprite.texture);
             }
 
             if (transparentEntities.size() > 0)
@@ -361,10 +362,10 @@ namespace GJGO
 
                 for (Entity l_entity : transparentEntities)
                 {
-                    const Transform2DComponent& transform = l_entity.getComponent<Transform2DComponent>();
                     const SpriteComponent& sprite = l_entity.getComponent<SpriteComponent>();
 
-                    Renderer::drawQuad(transform.position, transform.size, transform.rotation, sprite.color, sprite.texture);
+                    const Transform2DComponent absoluteTransform = Transform2DComponent::getAbsoluteTransform(l_entity);
+                    Renderer::drawQuad(absoluteTransform.position, absoluteTransform.size, absoluteTransform.rotation, sprite.color, sprite.texture);
                 }
             }
         }

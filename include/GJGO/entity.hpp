@@ -26,6 +26,13 @@ namespace GJGO
         [[nodiscard]]
         entt::entity getRaw() const;
 
+        [[nodiscard]]
+        Entity parent() const;
+        [[nodiscard]]
+        const std::vector<Entity>& children() const;
+
+        void setParent(Entity a_entity);
+
         template<typename T, typename... ARGS>
         T& addComponent(ARGS... a_args)
         {

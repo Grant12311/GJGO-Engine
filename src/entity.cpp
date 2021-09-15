@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cassert>
 #include <string>
 #include <optional>
 
@@ -14,14 +15,18 @@ namespace GJGO
 
     Entity Entity::create()
     {
-        return App::instance->registry.create();
+        Entity result = App::instance->registry.create();
+        result.addComponent<RelationsComponent>();
+
+        return result;
     }
 
     Entity Entity::create(const std::string &a_name)
     {
-        Entity created = App::instance->registry.create();
-        created.addComponent<TagComponent>(a_name);
-        return created;
+        Entity result = Entity::create();
+        result.addComponent<TagComponent>(a_name);
+
+        return result;
     }
 
     [[nodiscard]]
@@ -47,5 +52,28 @@ namespace GJGO
     entt::entity Entity::getRaw() const
     {
         return this->m_entity;
+    }
+
+    [[nodiscard]]
+    Entity Entity::parent() const
+    {
+        return this->getComponent<RelationsComponent>().parent;
+    }
+
+    [[nodiscard]]
+    const std::vector<Entity>& Entity::children() const
+    {
+        return this->getComponent<RelationsComponent>().children;
+    }
+
+    void Entity::setParent(Entity a_entity)
+    {
+        RelationsComponent& relations = this->getComponent<RelationsComponent>();
+        RelationsComponent& relationsParent = a_entity.getComponent<RelationsComponent>();
+
+        assert((std::find(relationsParent.children.begin(), relationsParent.children.end(), a_entity) == relationsParent.children.end()));
+
+        relations.parent = a_entity;
+        relationsParent.children.emplace_back(*this);
     }
 }
