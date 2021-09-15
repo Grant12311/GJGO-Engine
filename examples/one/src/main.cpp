@@ -34,19 +34,14 @@ public:
         this->player.addComponent<GJGO::SpriteComponent>(GJGO::Texture2D::create("res/Player/Male/standing south.png", GJGO::TextureSettings::standard, GL_NEAREST, GL_NEAREST));
         this->player.addComponent<GJGO::CollisionBox2DComponent>(glm::vec2(0.0, 0.0), glm::vec2(1.142857143, 0.761904762));
 
-        GJGO::Entity test = GJGO::Entity::create();
-        test.addComponent<GJGO::Transform2DComponent>(glm::vec3(10.0, 10.0, 0.0), glm::vec2(10.0, 10.0));
-        test.addComponent<GJGO::SpriteComponent>();
-
-        test.setParent(this->player);
-
         GJGO::Entity doorEntity = GJGO::Entity::create();
         doorEntity.addComponent<GJGO::Transform2DComponent>(glm::vec3(9 * TILE_SIZE, 5 * TILE_SIZE, 0.0), glm::vec2(14 * GBA_SCALE, 21 * GBA_SCALE));
         doorEntity.addComponent<GJGO::CollisionBox2DComponent>(glm::vec2(0.0, 0.0), glm::vec2(1.0, 1.0),
         std::function<void(GJGO::Entity, GJGO::Entity)>(),
         [this](const GJGO::Entity /*l_entity1*/, const GJGO::Entity l_entity2) -> void
         {
-            this->fadeScreen.getComponent<GJGO::Transform2DComponent>().position = glm::vec3(GJGO::Camera2D::primary->position.x, GJGO::Camera2D::primary->position.y, 50.0);
+            const GJGO::Transform2DComponent& cameraTransform = GJGO::Camera::getPrimary().getComponent<GJGO::Transform2DComponent>();
+            this->fadeScreen.getComponent<GJGO::Transform2DComponent>().position = glm::vec3(cameraTransform.position.x, cameraTransform.position.y, 50.0);
             this->runFade = true;
         });
 
@@ -94,6 +89,8 @@ public:
 
     virtual void onEvent(const GJGO::Event &a_event) override
     {
+        GJGO::Transform2DComponent& cameraTransform = GJGO::Camera::getPrimary().getComponent<GJGO::Transform2DComponent>();
+
         switch (a_event.type)
         {
             case GJGO::EventType::keyDown:
@@ -107,23 +104,23 @@ public:
                         break;
                     case GLFW_KEY_W:
                         this->player.getComponent<GJGO::Transform2DComponent>().position.y += TILE_SIZE;
-                        if ((this->player.getComponent<GJGO::Transform2DComponent>().position.y - GJGO::Camera2D::primary->position.y) / TILE_SIZE >= 6)
-                            GJGO::Camera2D::primary->position.y += TILE_SIZE;
+                        if ((this->player.getComponent<GJGO::Transform2DComponent>().position.y - cameraTransform.position.y) / TILE_SIZE >= 6)
+                            cameraTransform.position.y += TILE_SIZE;
                         break;
                     case GLFW_KEY_A:
                         this->player.getComponent<GJGO::Transform2DComponent>().position.x -= TILE_SIZE;
-                        if ((this->player.getComponent<GJGO::Transform2DComponent>().position.x - GJGO::Camera2D::primary->position.x) / TILE_SIZE <= 5)
-                            GJGO::Camera2D::primary->position.x -= TILE_SIZE;
+                        if ((this->player.getComponent<GJGO::Transform2DComponent>().position.x - cameraTransform.position.x) / TILE_SIZE <= 5)
+                            cameraTransform.position.x -= TILE_SIZE;
                         break;
                     case GLFW_KEY_S:
                         this->player.getComponent<GJGO::Transform2DComponent>().position.y -= TILE_SIZE;
-                        if ((this->player.getComponent<GJGO::Transform2DComponent>().position.y - GJGO::Camera2D::primary->position.y) / TILE_SIZE <= 3)
-                            GJGO::Camera2D::primary->position.y -= TILE_SIZE;
+                        if ((this->player.getComponent<GJGO::Transform2DComponent>().position.y - cameraTransform.position.y) / TILE_SIZE <= 3)
+                            cameraTransform.position.y -= TILE_SIZE;
                         break;
                     case GLFW_KEY_D:
                         this->player.getComponent<GJGO::Transform2DComponent>().position.x += TILE_SIZE;
-                        if ((this->player.getComponent<GJGO::Transform2DComponent>().position.x - GJGO::Camera2D::primary->position.x) / TILE_SIZE >= 10)
-                            GJGO::Camera2D::primary->position.x += TILE_SIZE;
+                        if ((this->player.getComponent<GJGO::Transform2DComponent>().position.x - cameraTransform.position.x) / TILE_SIZE >= 10)
+                            cameraTransform.position.x += TILE_SIZE;
                         break;
                 }
                 break;

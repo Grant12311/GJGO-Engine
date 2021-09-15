@@ -11,7 +11,8 @@
 #include <Druid/vao.h>
 #include <Druid/vbo.h>
 
-#include <GJGO/camera2D.hpp>
+#include <GJGO/camera.hpp>
+#include <GJGO/components.hpp>
 #include <GJGO/renderer2D.hpp>
 
 namespace GJGO
@@ -41,17 +42,19 @@ namespace GJGO
             return glm::scale(toReturn, glm::vec3((1.0f + a_size.x) / 1.0f, (1.0f + a_size.y) / 1.0f, 1.0f));
         }
 
-        void begin2D(const Camera2D &a_camera, const unsigned int a_width, const unsigned int a_height)
+        void begin2D()
         {
-            orthoMatrix = glm::ortho(0.0f, static_cast<float>(a_width), 0.0f, static_cast<float>(a_height), -100.0f, 100.0f);
-            orthoMatrix = glm::translate(orthoMatrix, glm::vec3(a_camera.position.x * -1.0f, a_camera.position.y * -1.0f, 0.0f));
+            const Camera2DComponent& cameraComponent = Camera::getPrimary().getComponent<Camera2DComponent>();
+            const Transform2DComponent& transformComponent = Camera::getPrimary().getComponent<Transform2DComponent>();
+
+            orthoMatrix = glm::translate(cameraComponent.getOrthoMatrix(), glm::vec3(transformComponent.position.x * -1.0f, transformComponent.position.y * -1.0f, 0.0f));
 
             batchSpriteShader->bind();
             batchSpriteShader->fillUniform("orthoMatrix", false, orthoMatrix);
 
             spriteShader->bind();
             spriteShader->fillUniform("orthoMatrix", false, orthoMatrix);
-            glViewport(0, 0, a_width, a_height);
+            glViewport(0, 0, cameraComponent.viewportSize.x, cameraComponent.viewportSize.y);
         }
 
         void drawQuad(const glm::vec3 &a_position, const glm::vec2 &a_size, const float a_rotation, const glm::vec4 &a_color, GJGO::Texture* const a_texture)

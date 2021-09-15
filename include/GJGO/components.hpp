@@ -10,7 +10,6 @@
 #include <glm/vec4.hpp>
 
 #include <GJGO/entity.hpp>
-#include <GJGO/texture.hpp>
 
 namespace GJGO
 {
@@ -18,8 +17,7 @@ namespace GJGO
     {
         std::string name;
 
-        TagComponent(const std::string &a_name = "") :
-            name(a_name) {}
+        TagComponent(const std::string &a_name = "");
     };
 
     struct RelationsComponent
@@ -35,26 +33,13 @@ namespace GJGO
         glm::vec2 size;
         float rotation;
 
-        constexpr Transform2DComponent(const glm::vec3 &a_position = glm::vec3(1.0f), const glm::vec2 &a_size = glm::vec2(1.0f), const float a_rotation = 0.0f) :
-            position(a_position), size(a_size), rotation(a_rotation) {}
+        Transform2DComponent(const glm::vec3 &a_position = glm::vec3(1.0f), const glm::vec2 &a_size = glm::vec2(1.0f), const float a_rotation = 0.0f);
 
         [[nodiscard]]
-        static Transform2DComponent getAbsoluteTransform(const Entity a_entity)
-        {
-            return m_getAbsoluteTransform(a_entity, a_entity.getComponent<Transform2DComponent>());
-        }
+        static Transform2DComponent getAbsoluteTransform(const Entity a_entity);
     private:
-        static Transform2DComponent m_getAbsoluteTransform(const Entity a_entity, const Transform2DComponent &a_transform)
-        {
-            const RelationsComponent& relations = a_entity.getComponent<RelationsComponent>();
-
-            if (relations.parent == Entity())
-                return a_transform;
-
-            const Transform2DComponent& parentTransform = relations.parent.hasComponent<Transform2DComponent>() ? relations.parent.getComponent<Transform2DComponent>() : Transform2DComponent();
-
-            return m_getAbsoluteTransform(relations.parent, {a_transform.position + parentTransform.position, a_transform.size/* + parentTransform.size*/, a_transform.rotation + parentTransform.rotation});
-        }
+        [[nodiscard]]
+        static Transform2DComponent m_getAbsoluteTransform(const Entity a_entity, const Transform2DComponent &a_transform);
     };
 
     struct SpriteComponent
@@ -62,8 +47,17 @@ namespace GJGO
         Texture2D* texture;
         glm::vec4 color;
 
-        constexpr SpriteComponent(Texture2D* const a_texture = nullptr, const glm::vec4 &a_color = glm::vec4(1.0f)) :
-            texture(a_texture), color(a_color) {}
+        SpriteComponent(Texture2D* const a_texture = nullptr, const glm::vec4 &a_color = glm::vec4(1.0f));
+    };
+
+    struct Camera2DComponent
+    {
+        glm::vec2 viewportSize;
+
+        Camera2DComponent(const glm::vec2 &a_viewportSize = glm::vec2(0.0));
+
+        [[nodiscard]]
+        glm::mat4 getOrthoMatrix() const;
     };
 
     struct CollisionBox2DComponent
@@ -71,8 +65,7 @@ namespace GJGO
         glm::vec2 positionOffset, sizeMod;
         std::function<void(Entity, Entity)> whileCollide, onEnter, onExit;
 
-        CollisionBox2DComponent(const glm::vec2 &a_positionOffset = glm::vec2(0.0, 0.0), const glm::vec2 &a_sizeMod = glm::vec2(1.0, 1.0), const std::function<void(Entity, Entity)> a_whileCollide = {}, const std::function<void(Entity, Entity)> a_onEnter = {}, const std::function<void(Entity, Entity)> a_onExit = {}) :
-            positionOffset(a_positionOffset), sizeMod(a_sizeMod), whileCollide(a_whileCollide), onEnter(a_onEnter), onExit(a_onExit) {}
+        CollisionBox2DComponent(const glm::vec2 &a_positionOffset = glm::vec2(0.0, 0.0), const glm::vec2 &a_sizeMod = glm::vec2(1.0, 1.0), const std::function<void(Entity, Entity)> a_whileCollide = {}, const std::function<void(Entity, Entity)> a_onEnter = {}, const std::function<void(Entity, Entity)> a_onExit = {});
     };
 
     [[nodiscard]]

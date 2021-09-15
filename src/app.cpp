@@ -130,6 +130,12 @@ namespace GJGO
         Renderer::init2D();
 
         this->m_batch = new Renderer::Batch2D(20000);
+
+        Entity camera = Entity::create("Camera");
+        camera.addComponent<Transform2DComponent>();
+        camera.addComponent<Camera2DComponent>();
+
+        Camera::makePrimary(camera);
     }
 
     App::~App()
@@ -270,7 +276,8 @@ namespace GJGO
 
             auto view = this->registry.view<Transform2DComponent, SpriteComponent>();
 
-            GJGO::Renderer::begin2D(*Camera2D::primary, static_cast<unsigned int>(Window::getWidth()), static_cast<unsigned int>(Window::getHeight()));
+            Camera::getPrimary().getComponent<Camera2DComponent>().viewportSize = Window::getSize();
+            GJGO::Renderer::begin2D();
 
             for (const entt::entity l_entity : view)
             {
@@ -330,7 +337,8 @@ namespace GJGO
 
             auto view = this->registry.view<Transform2DComponent, SpriteComponent>();
 
-            GJGO::Renderer::begin2D(*Camera2D::primary, static_cast<unsigned int>(Window::getWidth()), static_cast<unsigned int>(Window::getHeight()));
+            Camera::getPrimary().getComponent<Camera2DComponent>().viewportSize = Window::getSize();
+            GJGO::Renderer::begin2D();
 
             for (const entt::entity l_entity : view)
             {

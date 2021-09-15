@@ -2,7 +2,7 @@
 #define GJGO_GJGO_H
 
 #include <GJGO/app.hpp>
-#include <GJGO/camera2D.hpp>
+#include <GJGO/camera.hpp>
 #include <GJGO/components.hpp>
 #include <GJGO/display.hpp>
 #include <GJGO/entity.hpp>
